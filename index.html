@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thamco360 — Immersive 3D Spatial Virtual Experiences</title>
+  <meta name="description" content="Thamco360 turns 360° photography and photogrammetry into fully navigable, scroll-driven virtual 3D spatial home tours. Book your spatial scan today.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- CDNs for Smooth Scroll & 3D & GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="tier-full">
+
+  <!-- Ambient WebGL Shader Background -->
+  <canvas id="shaderCanvas" class="shader-canvas"></canvas>
+
+  <!-- =====================================================================
+       1. FIXED TOP BAR (Brand + Nav + Live Scroll Tag)
+  ====================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <span class="logo-mark">
+          <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/>
+            <path d="M12 20C12 15.58 15.58 12 20 12C24.42 12 28 15.58 28 20C28 24.42 24.42 28 20 28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="20" cy="20" r="4" fill="#8b5cf6"/>
+          </svg>
+          <span>THAMCO<em>360</em></span>
+        </span>
+        <span class="logo-tagline">Bridging the physical and digital worlds with seamless virtual customer experiences.</span>
+      </a>
+
+      <!-- Live Room/Section Indicator Tag -->
+      <div class="live-scroll-tag" id="liveScrollTag">
+        <span class="dot-live"></span>
+        <span id="activeTagLabel">01 · Hero Experience</span>
+      </div>
+
+      <nav class="main-nav">
+        <a href="#virtual-tour" class="nav-a">Tour</a>
+        <a href="#process" class="nav-a">Process</a>
+        <a href="#models" class="nav-a">3D Models</a>
+        <a href="#portfolio" class="nav-a">Portfolio</a>
+        <a href="#spatial-tech" class="nav-a">Technology</a>
+        <a href="#pricing" class="nav-a">Pricing</a>
+        <a href="#contact" class="nav-a">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I%20want%20to%20book%20a%203D%20Spatial%20Scan%20for%20my%20property." target="_blank" class="btn-pill">
+          <span>Book 3D Scan</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       2. HERO SECTION — FULL VIEWPORT 360° VIRTUAL TOUR
+  ====================================================================== -->
+  <section id="virtual-tour" class="hero-tour-section">
+    <canvas id="tourCanvas" class="tour-canvas"></canvas>
+
+    <!-- Initial Entry Hero Overlay -->
+    <div class="hero-overlay" id="heroOverlay">
+      <div class="hero-overlay-inner">
+        <div class="pre-label reveal-up">
+          <span class="dot-live"></span>
+          Spatial Capture &amp; 3D Reconstruction · Thamco360
+        </div>
+        <h1 class="hero-h1 reveal-up">
+          Spatial Photography.<br>
+          <span class="gradient-text">Living Virtual Worlds.</span>
+        </h1>
+        <p class="hero-p reveal-up">
+          We turn 360° photography and photogrammetry into scroll-driven 3D virtual home experiences. Step inside, look around, or let the spatial journey unfold.
+        </p>
+        <div class="hero-btns reveal-up">
+          <button class="btn-enter-tour" id="btnEnterTour">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+            Enter Interactive Tour
+          </button>
+          <button class="btn-scroll-hint" id="btnScrollHint">
+            <span>Scroll for Home Walkthrough</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FULL TOUR MANUAL CONTROLS UI ===== -->
+    <div class="tour-ui hidden" id="tourUI">
+      <!-- Room Title (Top Left) -->
+      <div class="room-title-bar">
+        <div class="room-dot"></div>
+        <div class="room-title-text">
+          <span class="room-floor">Ground Floor</span>
+          <span class="room-name" id="currentRoomName">Grand Living Room</span>
+        </div>
+      </div>
+
+      <!-- Exit Button (Top Center) -->
+      <button class="exit-tour-btn" id="btnExitTour">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        Exit Tour Mode
+      </button>
+
+      <!-- Compass (Top Right) -->
+      <div class="compass-ui">
+        <div class="compass-ring">
+          <span>N</span>
+          <div class="compass-needle" id="compassNeedle"></div>
+        </div>
+        <div class="compass-label">Facing <span id="compassDir">North</span></div>
+      </div>
+
+      <!-- Drag Hint -->
+      <div class="drag-hint">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span>Click &amp; drag to look around</span>
+      </div>
+
+      <!-- Floor Plan Room Selector (Bottom Center) -->
+      <div class="floor-nav">
+        <div class="floor-nav-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+          Floorplan Navigation
+        </div>
+        <div class="room-nodes">
+          <button class="room-node active" data-room="0">Living</button>
+          <button class="room-node" data-room="1">Kitchen</button>
+          <button class="room-node" data-room="2">Bedroom</button>
+          <button class="room-node" data-room="3">Bathroom</button>
+          <button class="room-node" data-room="4">Terrace</button>
+        </div>
+      </div>
+
+      <!-- Look Control D-Pad (Right Side) -->
+      <div class="look-controls">
+        <button class="look-btn" data-dir="up" title="Look Up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
+        <div class="look-row">
+          <button class="look-btn" data-dir="left" title="Look Left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="look-btn look-center" id="btnAutoRotate" title="Toggle Auto Rotate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></button>
+          <button class="look-btn" data-dir="right" title="Look Right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+        <button class="look-btn" data-dir="down" title="Look Down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
+      </div>
+
+      <!-- Zoom Slider (Left Side) -->
+      <div class="zoom-panel">
+        <button class="zoom-btn" id="btnZoomIn" title="Zoom In"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
+        <input type="range" id="fovSlider" class="fov-slider" min="30" max="100" value="75" orient="vertical">
+        <button class="zoom-btn" id="btnZoomOut" title="Zoom Out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
+      </div>
+
+      <!-- Spatial Hotspot Layer -->
+      <div class="hotspot-layer" id="hotspotLayer"></div>
+
+      <!-- Hotspot Details Card -->
+      <div class="hotspot-popup hidden" id="hotspotPopup">
+        <button class="popup-close" id="popupClose"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <div class="popup-icon" id="popupIcon">🛋️</div>
+        <h4 id="popupTitle">Feature</h4>
+        <p id="popupDesc">Details...</p>
+      </div>
+    </div>
+
+    <!-- Room Transition Overlay -->
+    <div class="room-transition-overlay hidden" id="roomTransition">
+      <div class="rt-floor" id="rtFloor">Upper Floor</div>
+      <div class="rt-name" id="rtName">Master Bedroom Suite</div>
+    </div>
+  </section>
+
+  <!-- Pinned Scroll Track Driver -->
+  <div class="tour-scroll-driver" id="tourScrollDriver"></div>
+
+  <!-- =====================================================================
+       3. WORK & RITUAL SEQUENCE (5 Alternating Chapters)
+  ====================================================================== -->
+  <section class="section sequence-section" id="process">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">The Spatial Pipeline</p>
+        <h2 class="section-h2 reveal-up">Five Steps to a Living 3D Space</h2>
+        <p class="section-p reveal-up">From high-resolution field capture to full 3D reconstruction and interactive web delivery.</p>
+      </div>
+
+      <div class="chapter-list">
+        <!-- Chapter 1 -->
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">01 · FIELD CAPTURE</span>
+            <h3 class="ch-title">8K HDR Spatial Scan</h3>
+          </div>
+          <div class="chapter-content">
+            <p>Our scan technicians deploy high-resolution 360° HDR camera rigs and LiDAR sensors. Every corner, architectural beam, and natural lighting condition is digitized with sub-millimeter precision.</p>
+          </div>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">02 · 3D PROCESSING</span>
+            <h3 class="ch-title">Immersive 3D Reconstruction</h3>
+          </div>
+          <div class="chapter-content">
+            <p>We process raw imagery into a realistic, navigable 3D volume. Surfaces lose their flat 2D nature and become spatial spaces with true optical depth.</p>
+          </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">03 · 3D MODELING</span>
+            <h3 class="ch-title">3D Architectural Geometry</h3>
+          </div>
+          <div class="chapter-content">
+            <p>Detailed 3D models and realistic textures are generated automatically, ready for use in AR, VR, and web applications.</p>
+          </div>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">04 · HOTSPOT INTEGRATION</span>
+            <h3 class="ch-title">Spatial Hotspots &amp; Analytics</h3>
+          </div>
+          <div class="chapter-content">
+            <p>Embed interactive product tags, floorplan radar nodes, audio guides, and e-commerce checkout links directly inside the 3D space.</p>
+          </div>
+        </div>
+
+        <!-- Chapter 5 -->
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">05 · WEBGL DELIVERY</span>
+            <h3 class="ch-title">Scroll-Driven Web Launch</h3>
+          </div>
+          <div class="chapter-content">
+            <p>Your tour launches directly in any modern browser at 60fps — desktop, smartphone, or VR headset. Single-line embed code for instant site integration.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. INTERACTIVE 3D MODEL VIEWER + ABOUT SECTION
+  ====================================================================== -->
+  <section class="section models-section" id="models">
+    <div class="inner">
+      <div class="models-layout">
+        <div class="models-left">
+          <p class="section-kicker reveal-up">Spatial Geometry</p>
+          <h2 class="section-h2 reveal-up">Interactive 3D Preview</h2>
+          <p class="section-p reveal-up">Inspect the raw 3D model and materials generated by our capture engine. Rotate, zoom, and toggle rendering modes in real-time.</p>
+
+          <div class="model-tech-tags reveal-up">
+            <span>glTF 2.0</span>
+            <span>USDZ / ARKit</span>
+            <span>Web 3D Ready</span>
+          </div>
+
+          <div class="model-ui-controls reveal-up">
+            <button class="ctrl-btn active" id="ctrlWireframe"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg> Wireframe</button>
+            <button class="ctrl-btn" id="ctrlSolid"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Solid</button>
+            <button class="ctrl-btn" id="ctrlOrbit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Auto Orbit</button>
+          </div>
+
+          <!-- Procedural Rose / Core Sphere Canvas -->
+          <div class="procedural-rose-box reveal-up">
+            <h4>Procedural Spatial Geometry Core</h4>
+            <canvas id="roseCanvas" class="rose-canvas"></canvas>
+          </div>
+        </div>
+
+        <div class="models-right reveal-up">
+          <div class="model-canvas-wrapper" id="modelWrapper">
+            <canvas id="modelCanvas"></canvas>
+            <div class="model-drag-hint">Drag to rotate · Scroll to zoom</div>
+          </div>
+          <div class="model-meta">
+            <div class="meta-pill">245K Vertices</div>
+            <div class="meta-pill">8K PBR Textures</div>
+            <div class="meta-pill">Sub-mm Accuracy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       PORTFOLIO / CASE STUDIES
+  ====================================================================== -->
+  <section class="section portfolio-section" id="portfolio">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">Our Work</p>
+        <h2 class="section-h2 reveal-up">Spatial Portfolio</h2>
+        <p class="section-p reveal-up">A look at the spaces we've brought to life with immersive 360° virtual experiences.</p>
+      </div>
+
+      <div class="portfolio-grid">
+        <div class="portfolio-card featured reveal-up">
+          <div class="portfolio-media">
+            <span class="portfolio-tag">Healthcare</span>
+            <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 5v10M7 12h10"/></svg>
+          </div>
+          <div class="portfolio-body">
+            <h3>Dassappa Hospital</h3>
+            <div class="portfolio-loc">Google 360° Virtual Tour · Healthcare Facility</div>
+            <p>A full facility walkthrough capturing wards, OPD corridors, and reception areas — published directly to the hospital's Google Business Profile for patients to explore before they arrive.</p>
+            <div class="portfolio-stats">
+              <div><strong>360°</strong><span>Full Facility Scan</span></div>
+              <div><strong>Google</strong><span>Business Profile Ready</span></div>
+              <div><strong>24/7</strong><span>Always Viewable</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-card reveal-up">
+          <div class="portfolio-soon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+            <h4>Real Estate &amp; Hospitality</h4>
+            <p>More case studies coming soon.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       5. SPATIAL TECH (2D to 3D Comparison)
+  ====================================================================== -->
+  <section class="section ba-section" id="spatial-tech">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">Optical Transformation</p>
+        <h2 class="section-h2 reveal-up">Flat 2D Photograph vs 3D Spatial Experience</h2>
+      </div>
+
+      <div class="ba-wrapper reveal-up">
+        <div class="ba-container" id="baContainer">
+          <div class="ba-before">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85" alt="Flat 2D Photograph">
+            <div class="ba-badge before">Standard 2D Photo</div>
+          </div>
+          <div class="ba-after" id="baAfter">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85" alt="Thamco360 3D Spatial Experience">
+            <div class="ba-badge after">Thamco360 3D Space</div>
+          </div>
+          <div class="ba-handle" id="baHandle">
+            <div class="ba-line"></div>
+            <div class="ba-grip">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7H3M21 12H3M21 17H3"/></svg>
+            </div>
+            <div class="ba-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       6. PRICING PLANS
+  ====================================================================== -->
+  <section class="section pricing-section" id="pricing">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">Transparent Pricing</p>
+        <h2 class="section-h2 reveal-up">Choose Your Virtual Experience Package</h2>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card reveal-up">
+          <h3>Real Estate 360</h3>
+          <div class="price-amt">$499<span>/property</span></div>
+          <p>Ideal for luxury residential listings up to 4,000 sq ft.</p>
+          <ul>
+            <li>8K HDR Panoramic Capture</li>
+            <li>Scroll-driven virtual tour</li>
+            <li>10 interactive hotspots</li>
+            <li>Floorplan navigation overlay</li>
+            <li>1-year WebGL embed hosting</li>
+          </ul>
+          <a href="#contact" class="btn-card">Book Package →</a>
+        </div>
+
+        <div class="price-card featured reveal-up">
+          <div class="featured-label">Most Popular</div>
+          <h3>Immersive 3D Spatial</h3>
+          <div class="price-amt">$1,299<span>/experience</span></div>
+          <p>Full 3D reconstruction &amp; AR delivery.</p>
+          <ul>
+            <li>All Rooms · Unlimited Sq Ft</li>
+            <li>Full 3D Volume Reconstruction</li>
+            <li>Scroll-driven walkthrough</li>
+            <li>glTF + USDZ export files</li>
+            <li>AR Quick Look (iOS &amp; Android)</li>
+            <li>VR headset compatibility</li>
+          </ul>
+          <a href="#contact" class="btn-card primary">Book Package →</a>
+        </div>
+
+        <div class="price-card reveal-up">
+          <h3>Enterprise &amp; Resort</h3>
+          <div class="price-amt">Custom<span>/portfolio</span></div>
+          <p>For hotel chains, commercial complexes, and museum portfolios.</p>
+          <ul>
+            <li>Dedicated spatial capture crew</li>
+            <li>White-label custom player</li>
+            <li>E-commerce hotspot checkout</li>
+            <li>Multi-location architecture</li>
+            <li>SLA &amp; API access</li>
+          </ul>
+          <a href="#contact" class="btn-card">Talk to Sales →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       WHY GOOGLE VIRTUAL TOURS
+  ====================================================================== -->
+  <section class="section gvt-section" id="google-virtual-tour">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">Why It Works</p>
+        <h2 class="section-h2 reveal-up">Why Your Business Needs a Google Virtual Tour</h2>
+        <p class="section-p reveal-up">A Google Virtual Tour is an effective way to showcase your business online and attract more customers. Here are the key benefits.</p>
+      </div>
+
+      <div class="gvt-benefits-grid">
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div><h4>Boosts Online Visibility</h4><p>Businesses with virtual tours often attract more attention on Google Search and Google Maps.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg></div>
+          <div><h4>Builds Customer Trust</h4><p>A 360° tour lets potential customers explore your premises before visiting, increasing confidence in your business.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+          <div><h4>Increases Customer Engagement</h4><p>Interactive tours keep visitors on your Google Business Profile or website longer.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><h4>Improves Booking &amp; Inquiry Rates</h4><p>Customers are more likely to contact or visit a business after seeing your showroom.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><h4>Available 24/7</h4><p>Your business can be viewed anytime, globally.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div><h4>Showcases Your Space</h4><p>Highlight interiors, ambiance, and products in an immersive way.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.09 6.26L20 9l-5 4.14L16.18 20 12 16.5 7.82 20 9 13.14 4 9l5.91-.74z"/></svg></div>
+          <div><h4>Competitive Advantage</h4><p>A professional virtual tour helps your business stand out from competitors who have none.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <div><h4>Supports Marketing Efforts</h4><p>Virtual tours can be shared on websites, social media, email campaigns, and digital advertisements.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><h4>Enhances Local SEO</h4><p>A well-optimized Google Business Profile with engaging content can improve local search performance.</p></div>
+        </div>
+        <div class="gvt-benefit-card reveal-up">
+          <div class="gvt-benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><h4>Cost-Effective Promotion</h4><p>Once created, a virtual tour provides long-term marketing value with minimal ongoing maintenance.</p></div>
+        </div>
+      </div>
+
+      <div class="gvt-cta reveal-up">
+        <p>Google Virtual Tours give customers a realistic preview of your location. <strong>Call back for more details.</strong></p>
+        <a href="tel:+917090111360" class="btn-pill"><span>+91 7090 111 360</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       7. CONTACT & INQUIRY FORM
+  ====================================================================== -->
+  <section class="section contact-section" id="contact">
+    <div class="inner">
+      <div class="contact-grid">
+        <div class="contact-left">
+          <p class="section-kicker reveal-up">Get In Touch</p>
+          <h2 class="section-h2 reveal-up">Book Your 3D Spatial Scan</h2>
+          <p class="section-p reveal-up">Contact our team to digitize your space. We deploy scan crews within 48 hours.</p>
+
+          <div class="contact-details reveal-up">
+            <div class="cd-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              100 Spatial Plaza, Studio 360, Los Angeles CA
+            </div>
+            <div class="cd-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              +91 86182 71183
+            </div>
+            <div class="cd-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              hello@thamco360.com
+            </div>
+          </div>
+        </div>
+
+        <form class="contact-form reveal-up" id="contactForm">
+          <div class="form-row">
+            <div class="fg">
+              <label>Full Name</label>
+              <input type="text" id="contactName" placeholder="Alex Mercer" required>
+            </div>
+            <div class="fg">
+              <label>Phone / WhatsApp</label>
+              <input type="tel" id="contactPhone" placeholder="+91 98765 43210" required>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Property Type</label>
+            <select id="contactType">
+              <option>Luxury Residential Villa</option>
+              <option>Commercial Complex / Office</option>
+              <option>Hotel / Resort</option>
+              <option>Museum / Gallery</option>
+              <option>Retail Showroom</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Property Location &amp; Sq Ft Details</label>
+            <textarea id="contactMsg" rows="4" placeholder="Square footage, number of rooms, location..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">
+            <span>Send Inquiry via WhatsApp</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       8. FLOATING WHATSAPP BUTTON (Always visible bottom-right)
+  ====================================================================== -->
+  <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I'm%20interested%20in%20a%203D%20Spatial%20Scan." target="_blank" class="floating-wa" title="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill="#25D366" stroke="#25D366"/></svg>
+  </a>
+
+  <!-- =====================================================================
+       FOOTER
+  ====================================================================== -->
+  <footer class="site-footer">
+    <div class="inner footer-inner">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><path d="M12 20C12 15.58 15.58 12 20 12C24.42 12 28 15.58 28 20C28 24.42 24.42 28 20 28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="20" cy="20" r="4" fill="#8b5cf6"/></svg>
+          <span>THAMCO<em>360</em></span>
+        </a>
+        <p>Transforming physical spaces into living 3D virtual experiences. Culture-first. Craft-obsessed.</p>
+        <p class="footer-value">At Thamco 360, we combine quality, transparency, and innovation to create digital spaces as vibrant and authentic as real life. Powered by advanced 360° capture technology, we give your business a true competitive edge.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="fl-col">
+          <h5>Services</h5>
+          <a href="#virtual-tour">360 Virtual Tour</a>
+          <a href="#process">Gaussian Splatting</a>
+          <a href="#models">3D Mesh Explorer</a>
+          <a href="#spatial-tech">NeRF Reconstruction</a>
+        </div>
+        <div class="fl-col">
+          <h5>Industries</h5>
+          <a href="#">Real Estate</a>
+          <a href="#">Hospitality</a>
+          <a href="#">Architecture</a>
+          <a href="#">Museums &amp; Galleries</a>
+        </div>
+        <div class="fl-col">
+          <h5>Company</h5>
+          <a href="#">About Thamco360</a>
+          <a href="#">Case Studies</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="inner">
+        <span>© 2026 Thamco360 Inc. All Rights Reserved.</span>
+        <span>Privacy · Terms</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript Engine -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — Thamco360 | 360° Spatial Experiences by Industry</title>
+  <meta name="description" content="Four industries, four different immersive real-time 3D tour experiences: Real Estate, Hospitality, Weddings &amp; Events, and Museums &amp; Galleries. Drag to look around, live in the browser.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Italianno&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="tier-full">
+
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <canvas id="shaderCanvas" class="shader-canvas"></canvas>
+
+  <!-- =====================================================================
+       HEADER
+  ====================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
+      </a>
+
+      <nav class="main-nav">
+        <a href="index.html#virtual-tour" class="nav-a">Tour</a>
+        <a href="index.html#process" class="nav-a">Process</a>
+        <a href="services.html" class="nav-a">Services</a>
+        <a href="index.html#spatial-tech" class="nav-a">Technology</a>
+        <a href="index.html#pricing" class="nav-a">Pricing</a>
+        <a href="index.html#contact" class="nav-a">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I%20want%20to%20book%20a%203D%20Spatial%20Scan%20for%20my%20property." target="_blank" class="btn-pill magnetic">
+          <span>Book 3D Scan</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       PAGE HERO
+  ====================================================================== -->
+  <section class="section services-hero">
+    <div class="inner">
+      <p class="section-kicker reveal-up">Four Industries, Four Experiences</p>
+      <h1 class="section-h2 reveal-up">Every space tells a <span class="gradient-text">different story.</span></h1>
+      <p class="section-p reveal-up">Real estate, hospitality, weddings and museums don't move the same way through a room — so their tours shouldn't either. Each one below is a live, real-time 3D panorama running right in this page. Drag to look around.</p>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       1. REAL ESTATE
+  ====================================================================== -->
+  <section class="section" id="real-estate" style="padding-top: 0; padding-bottom: 0;">
+    <div class="inner">
+      <div class="service-block">
+        <div class="service-content">
+          <span class="service-badge"><span class="dot-live"></span> Real Estate</span>
+          <h2 class="section-h2">Listings buyers can walk before they visit</h2>
+          <p>8K HDR spatial capture for residential and commercial listings. Buyers self-tour every room from a link — no scheduling, no wasted showings, no imagination required.</p>
+          <div class="model-tech-tags" style="margin-bottom: 20px;">
+            <span>Floorplan navigation</span>
+            <span>10 hotspots</span>
+            <span>1-yr hosting</span>
+          </div>
+          <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I%27d%20like%20a%20Real%20Estate%20360%20tour%20for%20my%20listing." target="_blank" class="btn-card primary magnetic" style="display: inline-block; width: auto; padding: 12px 28px;">Book a Real Estate Scan →</a>
+        </div>
+        <div class="service-media">
+          <div class="service-tour-wrap">
+            <canvas class="service-tour-canvas" data-panorama="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=85"></canvas>
+            <div class="service-drag-hint">Drag to look around</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       2. HOSPITALITY
+  ====================================================================== -->
+  <section class="section" id="hospitality" style="padding-top: 0; padding-bottom: 0;">
+    <div class="inner">
+      <div class="service-block reverse">
+        <div class="service-content">
+          <span class="service-badge"><span class="dot-live"></span> Hospitality</span>
+          <h2 class="section-h2">Resorts and hotels, felt before they're booked</h2>
+          <p>Pool decks at dusk, lobby light, the view from the terrace — the details that convert a browsing guest into a booking. Delivered as an embeddable tour for your own site or OTA listing.</p>
+          <div class="model-tech-tags" style="margin-bottom: 20px;">
+            <span>Multi-location</span>
+            <span>White-label player</span>
+            <span>API access</span>
+          </div>
+          <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I%27d%20like%20a%20Hospitality%20360%20tour%20for%20my%20property." target="_blank" class="btn-card primary magnetic" style="display: inline-block; width: auto; padding: 12px 28px;">Book a Hospitality Scan →</a>
+        </div>
+        <div class="service-media">
+          <div class="service-tour-wrap">
+            <canvas class="service-tour-canvas" data-panorama="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=2400&q=85"></canvas>
+            <div class="service-drag-hint">Drag to look around</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       3. WEDDINGS & EVENTS
+  ====================================================================== -->
+  <section class="section" id="weddings-events" style="padding-top: 0; padding-bottom: 0;">
+    <div class="inner">
+      <div class="service-block">
+        <div class="service-content">
+          <span class="service-badge"><span class="dot-live"></span> Weddings &amp; Events</span>
+          <h2 class="section-h2">Walk the venue before a single chair is placed</h2>
+          <p>Show couples and planners the hall as it will actually feel — chandeliers, table spacing, sightlines to the stage — so the venue decision happens with confidence, not a floorplan sketch.</p>
+          <div class="model-tech-tags" style="margin-bottom: 20px;">
+            <span>10 hotspots</span>
+            <span>Scroll-driven walkthrough</span>
+            <span>Same-day capture</span>
+          </div>
+          <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I%27d%20like%20a%20Wedding%20%2F%20Event%20360%20tour%20for%20my%20venue." target="_blank" class="btn-card primary magnetic" style="display: inline-block; width: auto; padding: 12px 28px;">Book a Venue Scan →</a>
+        </div>
+        <div class="service-media">
+          <div class="service-tour-wrap">
+            <canvas class="service-tour-canvas" data-panorama="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=2400&q=85"></canvas>
+            <div class="service-drag-hint">Drag to look around</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. MUSEUMS & GALLERIES
+  ====================================================================== -->
+  <section class="section" id="museums-galleries" style="padding-top: 0; padding-bottom: 100px;">
+    <div class="inner">
+      <div class="service-block reverse">
+        <div class="service-content">
+          <span class="service-badge"><span class="dot-live"></span> Museums &amp; Galleries</span>
+          <h2 class="section-h2">Collections that travel beyond the building</h2>
+          <p>Extend a physical exhibit into a permanent, navigable online archive — every wall, every placard, still in its real spatial relationship to the next piece.</p>
+          <div class="model-tech-tags" style="margin-bottom: 20px;">
+            <span>Audio guide hotspots</span>
+            <span>AR Quick Look</span>
+            <span>SLA support</span>
+          </div>
+          <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I%27d%20like%20a%20Museum%20%2F%20Gallery%20360%20tour." target="_blank" class="btn-card primary magnetic" style="display: inline-block; width: auto; padding: 12px 28px;">Book a Gallery Scan →</a>
+        </div>
+        <div class="service-media">
+          <div class="service-tour-wrap">
+            <canvas class="service-tour-canvas" data-panorama="https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=2400&q=85"></canvas>
+            <div class="service-drag-hint">Drag to look around</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       CLOSING CTA
+  ====================================================================== -->
+  <section class="section services-hero" style="padding-top: 40px;">
+    <div class="inner">
+      <h2 class="section-h2 reveal-up">Not sure which fits your space?</h2>
+      <p class="section-p reveal-up">Tell us what you're capturing and we'll recommend the right package.</p>
+      <a href="index.html#contact" class="btn-enter-tour magnetic" style="margin-top: 24px; text-decoration: none;">
+        <span>Go to Contact &amp; Pricing</span>
+      </a>
+    </div>
+  </section>
+
+  <a href="https://wa.me/918618271183?text=Hi%20Thamco360!%20I'm%20interested%20in%20a%203D%20Spatial%20Scan." target="_blank" class="floating-wa" title="Chat on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill="#25D366" stroke="#25D366"/></svg>
+  </a>
+
+  <!-- =====================================================================
+       FOOTER
+  ====================================================================== -->
+  <footer class="site-footer">
+    <div class="inner footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <img src="assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="130" height="84">
+        </a>
+        <p>Transforming physical spaces into living 3D virtual experiences. Culture-first. Craft-obsessed.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="fl-col">
+          <h5>Services</h5>
+          <a href="index.html#virtual-tour">360 Virtual Tour</a>
+          <a href="index.html#process">Gaussian Splatting</a>
+          <a href="index.html#models">3D Mesh Explorer</a>
+          <a href="index.html#spatial-tech">NeRF Reconstruction</a>
+        </div>
+        <div class="fl-col">
+          <h5>Industries</h5>
+          <a href="services.html#real-estate">Real Estate</a>
+          <a href="services.html#hospitality">Hospitality</a>
+          <a href="services.html#weddings-events">Weddings &amp; Events</a>
+          <a href="services.html#museums-galleries">Museums &amp; Galleries</a>
+        </div>
+        <div class="fl-col">
+          <h5>Company</h5>
+          <a href="index.html">About Thamco360</a>
+          <a href="services.html">Case Studies</a>
+          <a href="index.html#pricing">Pricing</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="inner">
+        <span>&copy; 2026 Thamco360 Inc. All Rights Reserved.</span>
+        <span>Privacy &middot; Terms</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
