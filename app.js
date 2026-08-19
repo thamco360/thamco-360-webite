@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
+
+    // Lenis virtualizes scroll rather than driving native scrollTop, so
+    // ScrollTrigger (used below for the hero room driver and the service
+    // tour pins) needs to be told explicitly when Lenis moves the page —
+    // without this, pinned sections desync from the actual scroll position.
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on('scroll', ScrollTrigger.update);
+    }
   } catch (e) {
     console.log('Lenis fallback');
   }
@@ -27,9 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackgroundShader();
   initHeroVirtualTour();
   initCinematicTextReveals();
+  initModelViewer();
+  initProceduralRoseCore();
   initBeforeAfterSlider();
   initContactForm();
   initLiveScrollObserver();
+  initSpatialCursor();
+  initMagneticButtons();
+  initServiceTours();
+  initServicePinning();
 });
 
 /* ── 1. Live Header Scroll Indicator & Header Transparency ── */
@@ -47,9 +61,11 @@ function initLiveScrollObserver() {
 
   const sections = [
     { id: 'virtual-tour', name: '01 · Hero Virtual Tour' },
-    { id: 'portfolio', name: '02 · Spatial Portfolio' },
-    { id: 'process', name: '03 · Spatial Pipeline' },
-    { id: 'contact', name: '04 · Book 3D Scan' }
+    { id: 'process', name: '02 · Spatial Pipeline' },
+    { id: 'models', name: '03 · 3D Mesh Explorer' },
+    { id: 'spatial-tech', name: '04 · 2D to 3D Optical' },
+    { id: 'pricing', name: '05 · Pricing Packages' },
+    { id: 'contact', name: '06 · Book 3D Scan' }
   ];
 
   const observer = new IntersectionObserver((entries) => {
@@ -112,9 +128,9 @@ function initBackgroundShader() {
     void main() {
       vec2 st = gl_FragCoord.xy / u_resolution.xy;
       float d = length(st - vec2(0.5));
-      vec3 col1 = vec3(0.04, 0.02, 0.1);
-      vec3 col2 = vec3(0.54, 0.36, 0.96);
-      vec3 col3 = vec3(0.02, 0.71, 0.83);
+      vec3 col1 = vec3(0.98, 0.96, 0.93);
+      vec3 col2 = vec3(0.85, 0.65, 0.30);
+      vec3 col3 = vec3(0.93, 0.80, 0.55);
 
       float wave = sin(st.x * 6.0 + u_time * 0.8) * cos(st.y * 6.0 + u_time * 0.8);
       vec3 finalCol = mix(col1, col2, wave * 0.3 + 0.3);
@@ -290,7 +306,7 @@ function initHeroVirtualTour() {
   if (btnAutoRotate) {
     btnAutoRotate.addEventListener('click', () => {
       autoRotate = !autoRotate;
-      btnAutoRotate.style.color = autoRotate ? '#8b5cf6' : '#fff';
+      btnAutoRotate.style.color = autoRotate ? '#c9962f' : '#fff';
     });
   }
 
@@ -357,7 +373,126 @@ function initHeroVirtualTour() {
   }
 }
 
-/* ── 5. Before / After Interactive Slider ── */
+/* ── 5. Interactive 3D Model Mesh Explorer ── */
+function initModelViewer() {
+  const container = document.getElementById('modelWrapper');
+  const canvas = document.getElementById('modelCanvas');
+  if (!canvas || !container) return;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.set(4, 3, 5);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  let controls;
+  if (window.THREE.OrbitControls) {
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 2.0;
+  }
+
+  // Lighting
+  const ambLight = new THREE.AmbientLight(0xffffff, 0.8);
+  scene.add(ambLight);
+
+  const dirLight = new THREE.DirectionalLight(0xc9962f, 1.5);
+  dirLight.position.set(5, 10, 7);
+  scene.add(dirLight);
+
+  // Architectural Villa Placeholder Model
+  const villaGroup = new THREE.Group();
+
+  // Base
+  const baseGeo = new THREE.BoxGeometry(4, 0.2, 3);
+  const baseMat = new THREE.MeshStandardMaterial({ color: 0x1e1b4b, wireframe: true });
+  const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+  villaGroup.add(baseMesh);
+
+  // Structure
+  const houseGeo = new THREE.BoxGeometry(3, 2, 2);
+  const houseMat = new THREE.MeshStandardMaterial({ color: 0xc9962f, wireframe: true });
+  const houseMesh = new THREE.Mesh(houseGeo, houseMat);
+  houseMesh.position.y = 1.1;
+  villaGroup.add(houseMesh);
+
+  scene.add(villaGroup);
+
+  // Toggle buttons
+  const btnWireframe = document.getElementById('ctrlWireframe');
+  const btnSolid = document.getElementById('ctrlSolid');
+  const btnOrbit = document.getElementById('ctrlOrbit');
+
+  if (btnWireframe) {
+    btnWireframe.addEventListener('click', () => {
+      baseMat.wireframe = true;
+      houseMat.wireframe = true;
+      btnWireframe.classList.add('active');
+      btnSolid.classList.remove('active');
+    });
+  }
+
+  if (btnSolid) {
+    btnSolid.addEventListener('click', () => {
+      baseMat.wireframe = false;
+      houseMat.wireframe = false;
+      btnSolid.classList.add('active');
+      btnWireframe.classList.remove('active');
+    });
+  }
+
+  if (btnOrbit && controls) {
+    btnOrbit.addEventListener('click', () => {
+      controls.autoRotate = !controls.autoRotate;
+      btnOrbit.classList.toggle('active', controls.autoRotate);
+    });
+  }
+
+  function render() {
+    requestAnimationFrame(render);
+    if (controls) controls.update();
+    renderer.render(scene, camera);
+  }
+  render();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+}
+
+/* ── 6. Procedural Spatial Geometry Core (Rose-like Procedural Canvas) ── */
+function initProceduralRoseCore() {
+  const canvas = document.getElementById('roseCanvas');
+  if (!canvas) return;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+  camera.position.set(0, 0, 3.5);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+  // Procedural Petal Torus Knot / Spiral Mesh
+  const geo = new THREE.TorusKnotGeometry(0.8, 0.25, 120, 16);
+  const mat = new THREE.MeshNormalMaterial({ wireframe: true });
+  const mesh = new THREE.Mesh(geo, mat);
+  scene.add(mesh);
+
+  function animate() {
+    requestAnimationFrame(animate);
+    mesh.rotation.x += 0.01;
+    mesh.rotation.y += 0.015;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+/* ── 7. Before / After Interactive Slider ── */
 function initBeforeAfterSlider() {
   const container = document.getElementById('baContainer');
   const after = document.getElementById('baAfter');
@@ -388,7 +523,194 @@ function initBeforeAfterSlider() {
   window.addEventListener('pointerup', () => { isDragging = false; });
 }
 
-/* ── 6. WhatsApp Inquiry Form Handoff ── */
+/* ── 9. Spatial Cursor Reticle ── */
+function initSpatialCursor() {
+  // Overlay only — never hides the native cursor, so tour-canvas grab,
+  // the before/after handle and the FOV slider keep working normally.
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  if (!dot || !ring) return;
+
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let ringX = mouseX, ringY = mouseY;
+
+  window.addEventListener('pointermove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.left = `${mouseX}px`;
+    dot.style.top = `${mouseY}px`;
+  });
+
+  (function raf() {
+    ringX += (mouseX - ringX) * 0.18;
+    ringY += (mouseY - ringY) * 0.18;
+    ring.style.left = `${ringX}px`;
+    ring.style.top = `${ringY}px`;
+    requestAnimationFrame(raf);
+  })();
+
+  const hoverSelector = 'a, button, input, select, textarea, .room-node, .look-btn, .zoom-btn, .price-card';
+  document.addEventListener('pointerover', (e) => {
+    if (e.target.closest(hoverSelector)) ring.classList.add('hover');
+  });
+  document.addEventListener('pointerout', (e) => {
+    if (e.target.closest(hoverSelector)) ring.classList.remove('hover');
+  });
+
+  window.addEventListener('pointerdown', (e) => {
+    const ripple = document.createElement('div');
+    ripple.className = 'cursor-ripple';
+    ripple.style.left = `${e.clientX}px`;
+    ripple.style.top = `${e.clientY}px`;
+    document.body.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove());
+  });
+}
+
+/* ── 10. Magnetic Buttons — pull toward the cursor within their own bounds ── */
+function initMagneticButtons() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  const strength = 0.35;
+
+  document.querySelectorAll('.magnetic').forEach((el) => {
+    const useGsap = !!window.gsap;
+    const setX = useGsap ? gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' }) : null;
+    const setY = useGsap ? gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' }) : null;
+
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const moveX = (e.clientX - rect.left - rect.width / 2) * strength;
+      const moveY = (e.clientY - rect.top - rect.height / 2) * strength;
+      if (useGsap) {
+        setX(moveX);
+        setY(moveY);
+      } else {
+        el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      }
+    });
+
+    el.addEventListener('mouseleave', () => {
+      if (useGsap) {
+        setX(0);
+        setY(0);
+      } else {
+        el.style.transform = 'translate(0, 0)';
+      }
+    });
+  });
+}
+
+/* ── 11. Reusable Mini 360° Panorama (Services page, one per industry) ── */
+function initServiceTours() {
+  document.querySelectorAll('.service-tour-canvas').forEach((canvas) => {
+    const url = canvas.dataset.panorama;
+    if (!url || !window.THREE) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    camera.position.set(0, 0, 0.1);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    const geometry = new THREE.SphereGeometry(500, 48, 32);
+    geometry.scale(-1, 1, 1);
+    const texture = new THREE.TextureLoader().load(url);
+    const sphere = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture }));
+    scene.add(sphere);
+
+    let isDragging = false, autoRotate = true;
+    let startX = 0, startY = 0, lon = 180, startLon = 0, lat = 0, startLat = 0;
+    let lastScrollProgress = 0;
+
+    // Exposed so initServicePinning() can drive this same panorama's pan
+    // from the pinned scroll progress, without either module reaching
+    // into the other's closure state directly.
+    canvas.panoramaAPI = {
+      setAutoRotate(v) { autoRotate = v; },
+      setScrollProgress(p) {
+        lon += (p - lastScrollProgress) * 260;
+        lastScrollProgress = p;
+      },
+    };
+
+    canvas.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      autoRotate = false;
+      startX = e.clientX; startY = e.clientY;
+      startLon = lon; startLat = lat;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      lon = (startX - e.clientX) * 0.15 + startLon;
+      lat = (e.clientY - startY) * 0.15 + startLat;
+    });
+    window.addEventListener('pointerup', () => { isDragging = false; });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      if (autoRotate) lon += 0.035;
+      lat = Math.max(-75, Math.min(75, lat));
+      const phi = THREE.MathUtils.degToRad(90 - lat);
+      const theta = THREE.MathUtils.degToRad(lon);
+      camera.target = new THREE.Vector3(
+        500 * Math.sin(phi) * Math.cos(theta),
+        500 * Math.cos(phi),
+        500 * Math.sin(phi) * Math.sin(theta)
+      );
+      camera.lookAt(camera.target);
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    const observer = new ResizeObserver(() => {
+      if (!canvas.clientWidth || !canvas.clientHeight) return;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    });
+    observer.observe(canvas);
+  });
+}
+
+/* ── 12. Service Section Scroll-Pin — hold the tour, then release ──
+   Each service block pins in place for one viewport height of extra
+   scroll: the panorama pans through it in sync with the scrub, then
+   once that allotment is used up the section unpins and normal page
+   scroll carries on to the next one. Desktop only — stacking a scroll
+   hijack on top of native touch-scroll gestures is exactly the kind of
+   thing that feels broken on a phone, so touch devices just keep plain
+   drag-to-look-around with no pinning. */
+function initServicePinning() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('.service-block').forEach((block) => {
+    const canvas = block.querySelector('.service-tour-canvas');
+    if (!canvas) return;
+
+    ScrollTrigger.create({
+      trigger: block,
+      start: 'top top',
+      end: '+=100%',
+      pin: true,
+      scrub: 1,
+      onUpdate: (self) => canvas.panoramaAPI?.setScrollProgress(self.progress),
+      onEnter: () => canvas.panoramaAPI?.setAutoRotate(false),
+      onEnterBack: () => canvas.panoramaAPI?.setAutoRotate(false),
+      onLeave: () => canvas.panoramaAPI?.setAutoRotate(true),
+      onLeaveBack: () => canvas.panoramaAPI?.setAutoRotate(true),
+    });
+  });
+}
+
+/* ── 8. WhatsApp Inquiry Form Handoff ── */
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
@@ -400,9 +722,17 @@ function initContactForm() {
     const type = document.getElementById('contactType').value;
     const msg = document.getElementById('contactMsg').value;
 
-    const text = `Hi Thamco360! I would like to book a 3D Spatial Scan.\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Property Type:* ${type}\n*Details:* ${msg}`;
-    const url = `https://wa.me/918618271183?text=${encodeURIComponent(text)}`;
+    const subject = `3D Spatial Scan Inquiry — ${name}`;
+    const body =
+      `Name: ${name}\n` +
+      `Phone: ${phone}\n` +
+      `Property Type: ${type}\n` +
+      `Details: ${msg}`;
 
-    window.open(url, '_blank');
+    // mailto is the only inquiry channel a static site can offer without a
+    // backend — it opens the visitor's own mail client pre-filled, rather
+    // than silently posting the form somewhere.
+    window.location.href =
+      `mailto:thamco360@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 }
