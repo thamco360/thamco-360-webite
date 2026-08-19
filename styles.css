@@ -672,103 +672,13 @@ body {
 
 .chapter-content p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
 
-/* ── MODELS SECTION & PROCEDURAL ROSE ─────────────────────── */
-.models-section { background: var(--bg-subtle); }
-
-.models-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 56px;
-  align-items: center;
-}
-
+/* ── SERVICE TECH TAGS (Services page industry pills) ──────── */
 .model-tech-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
 
 .model-tech-tags span {
   padding: 5px 12px;
   background: rgba(201, 150, 47, 0.12);
   border: 1px solid rgba(201, 150, 47, 0.25);
-  border-radius: 100px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--accent-ink);
-}
-
-.model-ui-controls { display: flex; gap: 10px; margin-bottom: 28px; }
-
-.ctrl-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 10px;
-  background: rgba(36, 28, 18, 0.04);
-  border: 1px solid rgba(36, 28, 18, 0.14);
-  color: var(--text-muted);
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.ctrl-btn.active, .ctrl-btn:hover {
-  background: rgba(201, 150, 47, 0.35);
-  border-color: var(--primary);
-  color: #3a2c0f;
-}
-
-/* Display bezel for the procedural mesh canvas — kept warm-dark on
-   purpose (frames a wireframe render better than pale cream would),
-   independent of the rest of the page having flipped to a light theme. */
-.procedural-rose-box {
-  padding: 24px;
-  background: rgba(42, 30, 16, 0.75);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  margin-top: 10px;
-}
-
-.procedural-rose-box h4 {
-  font-family: var(--font-heading);
-  font-size: 0.92rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: rgba(245, 239, 224, 0.7);
-}
-
-.rose-canvas {
-  width: 100%; height: 160px;
-  display: block;
-  border-radius: 12px;
-  background: radial-gradient(circle, rgba(201, 150, 47, 0.15) 0%, transparent 70%);
-}
-
-.model-canvas-wrapper {
-  position: relative;
-  width: 100%; height: 480px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: radial-gradient(circle at center, rgba(201, 150, 47, 0.15), rgba(42, 30, 16, 0.95));
-  border: 1px solid var(--border);
-}
-
-#modelCanvas { width: 100%; height: 100%; display: block; }
-
-.model-drag-hint {
-  position: absolute;
-  bottom: 14px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.85);
-  padding: 5px 14px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 100px;
-}
-
-.model-meta { display: flex; gap: 10px; margin-top: 14px; }
-.meta-pill {
-  padding: 5px 13px;
-  background: rgba(77, 132, 184, 0.1);
-  border: 1px solid rgba(77, 132, 184, 0.3);
   border-radius: 100px;
   font-size: 0.78rem;
   font-weight: 600;
@@ -805,36 +715,6 @@ body {
   display: flex; align-items: center; justify-content: center; color: #fff;
 }
 
-/* ── PRICING ───────────────────────────────────────────────── */
-.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-.price-card {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid var(--border);
-  border-radius: 20px; padding: 36px 28px;
-  display: flex; flex-direction: column; position: relative;
-  transition: all 0.3s ease;
-}
-
-.price-card:hover { border-color: rgba(201, 150, 47, 0.4); transform: translateY(-4px); }
-.price-card.featured { border-color: var(--primary); box-shadow: 0 0 40px rgba(201, 150, 47, 0.25); }
-
-.featured-label {
-  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: #fff; font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
-  padding: 4px 14px; border-radius: 100px;
-}
-
-.price-card h3 { font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 10px; }
-.price-amt { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 700; margin-bottom: 10px; }
-.price-amt span { font-size: 0.88rem; color: var(--text-muted); font-weight: 400; }
-.price-card p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px; }
-
-.price-card ul { list-style: none; flex: 1; margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
-.price-card ul li { font-size: 0.88rem; color: var(--text-muted); padding-left: 20px; position: relative; }
-.price-card ul li::before { content: '✓'; position: absolute; left: 0; color: var(--accent-ink); font-weight: 700; }
-
 .btn-card {
   display: block; text-align: center; padding: 12px;
   border-radius: 12px; background: rgba(36, 28, 18, 0.05);
@@ -844,6 +724,71 @@ body {
 }
 
 .btn-card.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* ── HOOK SECTION — pinned scroll reveal into Services ──────
+   Taller than the viewport on purpose: GSAP pins it at `top top` for
+   the full scroll distance so each word gets its own slice of scroll
+   before the section releases and Contact scrolls in underneath. */
+.hook-section {
+  position: relative;
+  height: 220vh;
+  background: #241c12;
+}
+
+.hook-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.hook-words {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.28em;
+  max-width: 1000px;
+}
+
+.hook-word {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6.5vw, 5.4rem);
+  font-weight: 400;
+  color: #f5efe0;
+  line-height: 1.1;
+  will-change: transform, opacity, color;
+}
+
+.hook-word.script {
+  font-family: var(--font-script);
+  font-size: clamp(3.2rem, 8.5vw, 7rem);
+  color: #f5efe0;
+}
+
+.hook-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 52px;
+  padding: 15px 32px;
+  background: transparent;
+  border: 1px solid rgba(245, 239, 224, 0.3);
+  border-radius: 100px;
+  color: #f5efe0;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.hook-cta:hover { background: rgba(245, 239, 224, 0.08); border-color: var(--primary); }
 
 /* ── CONTACT & FLOATING WHATSAPP ───────────────────────────── */
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; }
@@ -1106,8 +1051,6 @@ body {
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .chapter-row { grid-template-columns: 1fr; gap: 16px; }
-  .models-layout { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
 }

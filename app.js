@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMagneticButtons();
   initServiceTours();
   initServicePinning();
+  initHookReveal();
 });
 
 /* ── 1. Live Header Scroll Indicator & Header Transparency ── */
@@ -584,6 +585,44 @@ function initServicePinning() {
       onLeaveBack: () => canvas.panoramaAPI?.setAutoRotate(true),
     });
   });
+}
+
+/* ── 13. Hook Section — pinned word-by-word reveal into Services ──
+   Pins for the section's full scroll distance and staggers each word
+   in on its own slice of that scroll, ending on the CTA into
+   services.html. Falls back to a plain static (fully visible, unpinned)
+   section when GSAP/ScrollTrigger is unavailable, on touch devices, or
+   under prefers-reduced-motion — same guard pattern as
+   initServicePinning(), since pinning is a desktop enhancement, not a
+   requirement for the content to be readable. */
+function initHookReveal() {
+  const section = document.getElementById('hook');
+  if (!section) return;
+
+  const words = section.querySelectorAll('.hook-word');
+  const cta = section.querySelector('.hook-cta');
+
+  if (!window.gsap || !window.ScrollTrigger || window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.set(words, { opacity: 0.14, y: '0.4em' });
+  gsap.set(cta, { opacity: 0, y: 16 });
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.6,
+      pin: '.hook-pin',
+    }
+  });
+
+  tl.to(words, { opacity: 1, y: 0, stagger: 0.4, ease: 'power2.out' })
+    .to(cta, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '+=0.2');
 }
 
 /* ── 8. WhatsApp Inquiry Form Handoff ── */
