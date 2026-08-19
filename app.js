@@ -625,29 +625,50 @@ function initHookReveal() {
     .to(cta, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '+=0.2');
 }
 
-/* ── 8. WhatsApp Inquiry Form Handoff ── */
+/* ── 8. Inquiry Form — one-click submit via /api/contact ──
+   Posts straight to the serverless endpoint so the enquiry lands in
+   thamco360@gmail.com without the visitor ever leaving the page or
+   touching their own mail client. */
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  const btn = document.getElementById('contactSubmitBtn');
+  const status = document.getElementById('contactStatus');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('contactName').value;
-    const phone = document.getElementById('contactPhone').value;
-    const type = document.getElementById('contactType').value;
-    const msg = document.getElementById('contactMsg').value;
 
-    const subject = `3D Spatial Scan Inquiry — ${name}`;
-    const body =
-      `Name: ${name}\n` +
-      `Phone: ${phone}\n` +
-      `Property Type: ${type}\n` +
-      `Details: ${msg}`;
+    const payload = {
+      name: document.getElementById('contactName').value.trim(),
+      phone: document.getElementById('contactPhone').value.trim(),
+      propertyType: document.getElementById('contactType').value,
+      message: document.getElementById('contactMsg').value.trim(),
+      company: document.getElementById('contactCompany').value, // honeypot
+    };
 
-    // mailto is the only inquiry channel a static site can offer without a
-    // backend — it opens the visitor's own mail client pre-filled, rather
-    // than silently posting the form somewhere.
-    window.location.href =
-      `mailto:thamco360@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    btn.disabled = true;
+    status.className = 'form-status';
+    status.textContent = 'Sending…';
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) throw new Error(data.error || 'Something went wrong. Please try WhatsApp instead.');
+
+      status.className = 'form-status success';
+      status.textContent = "Thanks — we've got your enquiry and will be in touch shortly.";
+      form.reset();
+    } catch (err) {
+      status.className = 'form-status error';
+      status.textContent = err.message || 'Could not send right now. Please try WhatsApp instead.';
+    } finally {
+      btn.disabled = false;
+    }
   });
 }

@@ -824,6 +824,27 @@ body {
 }
 
 .btn-submit:hover { background: #20ba5a; transform: translateY(-2px); }
+.btn-submit:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
+/* Honeypot — off-screen, not display:none, so most bot form-fillers
+   that check computed visibility still populate it. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  min-height: 1.2em;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.form-status.success { color: #1f9d55; }
+.form-status.error { color: #c0392b; }
 
 .form-alt-hint {
   margin-top: 12px;
