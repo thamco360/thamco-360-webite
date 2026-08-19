@@ -92,21 +92,6 @@ body {
 .logo-mark { display: block; height: 42px; width: auto; }
 .footer-brand .logo-mark { height: 38px; }
 
-.logo-tagline {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 2px;
-  max-width: 240px;
-  font-family: var(--font-body);
-  font-size: 0.66rem;
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.3;
-  color: var(--text-muted);
-  white-space: normal;
-}
-
 /* Live Scroll Tag in Header */
 .live-scroll-tag {
   display: inline-flex;
