@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackgroundShader();
   initHeroVirtualTour();
   initCinematicTextReveals();
-  initModelViewer();
-  initProceduralRoseCore();
   initBeforeAfterSlider();
   initContactForm();
   initLiveScrollObserver();
@@ -49,11 +47,9 @@ function initLiveScrollObserver() {
 
   const sections = [
     { id: 'virtual-tour', name: '01 · Hero Virtual Tour' },
-    { id: 'process', name: '02 · Spatial Pipeline' },
-    { id: 'models', name: '03 · Interactive 3D Preview' },
-    { id: 'spatial-tech', name: '04 · 2D to 3D Optical' },
-    { id: 'pricing', name: '05 · Pricing Packages' },
-    { id: 'contact', name: '06 · Book 3D Scan' }
+    { id: 'portfolio', name: '02 · Spatial Portfolio' },
+    { id: 'process', name: '03 · Spatial Pipeline' },
+    { id: 'contact', name: '04 · Book 3D Scan' }
   ];
 
   const observer = new IntersectionObserver((entries) => {
@@ -361,126 +357,7 @@ function initHeroVirtualTour() {
   }
 }
 
-/* ── 5. Interactive 3D Model Mesh Explorer ── */
-function initModelViewer() {
-  const container = document.getElementById('modelWrapper');
-  const canvas = document.getElementById('modelCanvas');
-  if (!canvas || !container) return;
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-  camera.position.set(4, 3, 5);
-
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-  let controls;
-  if (window.THREE.OrbitControls) {
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 2.0;
-  }
-
-  // Lighting
-  const ambLight = new THREE.AmbientLight(0xffffff, 0.8);
-  scene.add(ambLight);
-
-  const dirLight = new THREE.DirectionalLight(0x8b5cf6, 1.5);
-  dirLight.position.set(5, 10, 7);
-  scene.add(dirLight);
-
-  // Architectural Villa Placeholder Model
-  const villaGroup = new THREE.Group();
-
-  // Base
-  const baseGeo = new THREE.BoxGeometry(4, 0.2, 3);
-  const baseMat = new THREE.MeshStandardMaterial({ color: 0x1e1b4b, wireframe: true });
-  const baseMesh = new THREE.Mesh(baseGeo, baseMat);
-  villaGroup.add(baseMesh);
-
-  // Structure
-  const houseGeo = new THREE.BoxGeometry(3, 2, 2);
-  const houseMat = new THREE.MeshStandardMaterial({ color: 0x8b5cf6, wireframe: true });
-  const houseMesh = new THREE.Mesh(houseGeo, houseMat);
-  houseMesh.position.y = 1.1;
-  villaGroup.add(houseMesh);
-
-  scene.add(villaGroup);
-
-  // Toggle buttons
-  const btnWireframe = document.getElementById('ctrlWireframe');
-  const btnSolid = document.getElementById('ctrlSolid');
-  const btnOrbit = document.getElementById('ctrlOrbit');
-
-  if (btnWireframe) {
-    btnWireframe.addEventListener('click', () => {
-      baseMat.wireframe = true;
-      houseMat.wireframe = true;
-      btnWireframe.classList.add('active');
-      btnSolid.classList.remove('active');
-    });
-  }
-
-  if (btnSolid) {
-    btnSolid.addEventListener('click', () => {
-      baseMat.wireframe = false;
-      houseMat.wireframe = false;
-      btnSolid.classList.add('active');
-      btnWireframe.classList.remove('active');
-    });
-  }
-
-  if (btnOrbit && controls) {
-    btnOrbit.addEventListener('click', () => {
-      controls.autoRotate = !controls.autoRotate;
-      btnOrbit.classList.toggle('active', controls.autoRotate);
-    });
-  }
-
-  function render() {
-    requestAnimationFrame(render);
-    if (controls) controls.update();
-    renderer.render(scene, camera);
-  }
-  render();
-
-  window.addEventListener('resize', () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-  });
-}
-
-/* ── 6. Procedural Spatial Geometry Core (Rose-like Procedural Canvas) ── */
-function initProceduralRoseCore() {
-  const canvas = document.getElementById('roseCanvas');
-  if (!canvas) return;
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-  camera.position.set(0, 0, 3.5);
-
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-  // Procedural Petal Torus Knot / Spiral Mesh
-  const geo = new THREE.TorusKnotGeometry(0.8, 0.25, 120, 16);
-  const mat = new THREE.MeshNormalMaterial({ wireframe: true });
-  const mesh = new THREE.Mesh(geo, mat);
-  scene.add(mesh);
-
-  function animate() {
-    requestAnimationFrame(animate);
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.015;
-    renderer.render(scene, camera);
-  }
-  animate();
-}
-
-/* ── 7. Before / After Interactive Slider ── */
+/* ── 5. Before / After Interactive Slider ── */
 function initBeforeAfterSlider() {
   const container = document.getElementById('baContainer');
   const after = document.getElementById('baAfter');
@@ -511,7 +388,7 @@ function initBeforeAfterSlider() {
   window.addEventListener('pointerup', () => { isDragging = false; });
 }
 
-/* ── 8. WhatsApp Inquiry Form Handoff ── */
+/* ── 6. WhatsApp Inquiry Form Handoff ── */
 function initContactForm() {
   const form = document.getElementById('contactForm');
   if (!form) return;
