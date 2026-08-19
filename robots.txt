@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# AI search crawlers — explicitly allowed for AI Overviews / ChatGPT / Perplexity visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.thamco360.com/sitemap.xml

@@ -1,0 +1,12 @@
+# Thamco360
+> Bengaluru-based 360° photography and photogrammetry studio. We turn on-site captures into scroll-driven, navigable 3D virtual tours for real estate, hospitality, weddings & events, and museums & galleries. We travel to the client's property — no showroom.
+
+## Main sections
+- [Home](https://www.thamco360.com/): Hero 360° tour, spatial capture pipeline, FAQ, and enquiry form.
+- [Services](https://www.thamco360.com/services.html): Per-industry breakdown — Real Estate, Hospitality, Weddings & Events, Museums & Galleries.
+
+## Key facts
+- Based in Bengaluru, Karnataka, India; service-area business, no fixed storefront.
+- Contact: +91 70901 11360 (WhatsApp/phone), thamco360@gmail.com.
+- Scan crews deploy within 48 hours of booking.
+- Services: 360° Virtual Tour, Website Development, Web 3D Development (Immersive).
