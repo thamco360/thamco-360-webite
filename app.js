@@ -50,7 +50,7 @@ function initLiveScrollObserver() {
   const sections = [
     { id: 'virtual-tour', name: '01 · Hero Virtual Tour' },
     { id: 'process', name: '02 · Spatial Pipeline' },
-    { id: 'models', name: '03 · 3D Mesh Explorer' },
+    { id: 'models', name: '03 · Interactive 3D Preview' },
     { id: 'spatial-tech', name: '04 · 2D to 3D Optical' },
     { id: 'pricing', name: '05 · Pricing Packages' },
     { id: 'contact', name: '06 · Book 3D Scan' }
