@@ -59,9 +59,10 @@ function initLiveScrollObserver() {
   });
 
   const sections = [
-    { id: 'virtual-tour', name: '01 · Hero Virtual Tour' },
-    { id: 'process', name: '02 · Spatial Pipeline' },
-    { id: 'contact', name: '03 · Book 3D Scan' }
+    { id: 'virtual-tour', name: 'Live Tour' },
+    { id: 'portfolio', name: 'Portfolio' },
+    { id: 'process', name: 'Spatial Pipeline' },
+    { id: 'contact', name: 'Book 3D Scan' }
   ];
 
   const observer = new IntersectionObserver((entries) => {
