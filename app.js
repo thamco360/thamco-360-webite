@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initBeforeAfterSlider();
   initContactForm();
   initLiveScrollObserver();
-  initSpatialCursor();
+  initCursorReticle();
   initMagneticButtons();
   initServiceTours();
   initServicePinning();
@@ -61,7 +61,7 @@ function initLiveScrollObserver() {
   const sections = [
     { id: 'virtual-tour', name: 'Live Tour' },
     { id: 'portfolio', name: 'Portfolio' },
-    { id: 'process', name: 'Spatial Pipeline' },
+    { id: 'process', name: 'Capture Pipeline' },
     { id: 'contact', name: 'Book 3D Scan' }
   ];
 
@@ -401,8 +401,8 @@ function initBeforeAfterSlider() {
   window.addEventListener('pointerup', () => { isDragging = false; });
 }
 
-/* ── 9. Spatial Cursor Reticle ── */
-function initSpatialCursor() {
+/* ── 9. Cursor Reticle ── */
+function initCursorReticle() {
   // Overlay only — never hides the native cursor, so tour-canvas grab,
   // the before/after handle and the FOV slider keep working normally.
   if (window.matchMedia('(pointer: coarse)').matches) return;

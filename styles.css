@@ -1,6 +1,6 @@
 /* ================================================================
    THAMCO360 — Design System & Stylesheet
-   Craft-Obsessed Luxury 3D Spatial Experience
+   Craft-Obsessed Luxury 3D Experience
    ================================================================ */
 
 :root {
@@ -1006,7 +1006,7 @@ body {
   .service-tour-wrap { height: 320px; }
 }
 
-/* ── SPATIAL CURSOR RETICLE ─────────────────────────────────────
+/* ── CURSOR RETICLE ─────────────────────────────────────
    HUD-style dot + reticle ring that trails the pointer. Deliberately
    layered on TOP of the native cursor rather than replacing it (no
    `cursor: none` on body) — the tour canvas, before/after handle and
