@@ -43,6 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceTours();
   initServicePinning();
   initHookReveal();
+
+  // ScrollTrigger caches pin start/end pixel ranges at creation time.
+  // This page has several lazy-loaded images (industries grid, property
+  // showcase) that resize the document after that, which leaves pins
+  // (hero room driver, service tours, hook) releasing too early. Refresh
+  // once everything — including images — has actually finished loading.
+  if (window.ScrollTrigger) {
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+  }
 });
 
 /* ── 1. Live Header Scroll Indicator & Header Transparency ── */
@@ -61,8 +70,10 @@ function initLiveScrollObserver() {
   const sections = [
     { id: 'virtual-tour', name: 'Live Tour' },
     { id: 'portfolio', name: 'Portfolio' },
-    { id: 'process', name: 'Capture Pipeline' },
-    { id: 'contact', name: 'Book 3D Scan' }
+    { id: 'process', name: 'From Capture to Experience' },
+    { id: 'services', name: 'Services' },
+    { id: 'real-estate', name: 'By Industry' },
+    { id: 'contact', name: 'Book Your 360° Tour' }
   ];
 
   const observer = new IntersectionObserver((entries) => {
@@ -350,14 +361,23 @@ function initHeroVirtualTour() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  // GSAP ScrollTrigger for room walkthrough transitions
-  if (window.gsap && window.ScrollTrigger) {
+  // GSAP ScrollTrigger for room walkthrough transitions. Pinning is
+  // skipped on touch/reduced-motion devices (same rule as
+  // initServicePinning) — on those, #tourScrollDriver's CSS height
+  // collapses to 0 instead, so there's no dead unpinned scroll gap;
+  // room switching there still works via the floor-nav buttons.
+  const canPinHero = window.gsap && window.ScrollTrigger
+    && !window.matchMedia('(pointer: coarse)').matches
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (canPinHero) {
     gsap.registerPlugin(ScrollTrigger);
 
     ScrollTrigger.create({
       trigger: '#tourScrollDriver',
       start: 'top top',
       end: 'bottom bottom',
+      pin: '#virtual-tour',
       scrub: 1,
       onUpdate: (self) => {
         const roomCount = roomData.length;

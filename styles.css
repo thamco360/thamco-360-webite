@@ -613,6 +613,14 @@ body {
 
 .tour-scroll-driver { position: relative; height: 300vh; margin-top: -100vh; pointer-events: none; z-index: -1; }
 
+/* This driver only does anything when app.js pins #virtual-tour to it
+   (desktop, motion allowed). On touch/reduced-motion devices that pin
+   is skipped, so collapse the driver too — otherwise it leaves a blank
+   ~200vh dead-scroll gap with nothing pinned to fill it. */
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .tour-scroll-driver { height: 0; margin-top: 0; }
+}
+
 /* ── WORK & SEQUENCE CHAPTERS ──────────────────────────────── */
 .section { padding: 120px 0; position: relative; }
 .inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
