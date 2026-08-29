@@ -611,15 +611,12 @@ body {
 .rt-floor { font-size: 0.8rem; text-transform: uppercase; color: var(--accent); font-weight: 700; }
 .rt-name { font-family: var(--font-display); font-size: 2.2rem; font-weight: 400; }
 
-.tour-scroll-driver { position: relative; height: 300vh; margin-top: -100vh; pointer-events: none; z-index: -1; }
-
-/* This driver only does anything when app.js pins #virtual-tour to it
-   (desktop, motion allowed). On touch/reduced-motion devices that pin
-   is skipped, so collapse the driver too — otherwise it leaves a blank
-   ~200vh dead-scroll gap with nothing pinned to fill it. */
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .tour-scroll-driver { height: 0; margin-top: 0; }
-}
+/* Formerly a 300vh scroll-jack driver for a pinned room walkthrough —
+   removed in favor of the hero's own timer-driven auto-cycle (see
+   restartRoomBanner in app.js), which doesn't eat scroll distance.
+   Kept at zero height rather than deleting the element/selector in
+   case anything still references #tourScrollDriver. */
+.tour-scroll-driver { height: 0; margin-top: 0; pointer-events: none; }
 
 /* ── WORK & SEQUENCE CHAPTERS ──────────────────────────────── */
 .section { padding: 120px 0; position: relative; }

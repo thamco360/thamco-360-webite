@@ -266,6 +266,8 @@ function initHeroVirtualTour() {
           node.classList.toggle('active', nIdx === idx);
         });
 
+        restartRoomBanner();
+
         setTimeout(() => {
           overlay.classList.remove('show');
           setTimeout(() => overlay.classList.add('hidden'), 350);
@@ -361,33 +363,26 @@ function initHeroVirtualTour() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  // GSAP ScrollTrigger for room walkthrough transitions. Pinning is
-  // skipped on touch/reduced-motion devices (same rule as
-  // initServicePinning) — on those, #tourScrollDriver's CSS height
-  // collapses to 0 instead, so there's no dead unpinned scroll gap;
-  // room switching there still works via the floor-nav buttons.
-  const canPinHero = window.gsap && window.ScrollTrigger
-    && !window.matchMedia('(pointer: coarse)').matches
-    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Moving banner: auto-cycle through every room (Living Room, Kitchen,
+  // Terrace, etc.) right in the hero, on a timer — no scroll required.
+  // Replaces the old scroll-jacked pin, which reserved a large dead
+  // scroll range and read as a blank/stuck page rather than a tour.
+  // Pauses while the visitor is actively dragging to look around, and
+  // restarts its countdown whenever a room changes for any reason
+  // (auto or a manual floor-nav click) so the two never fight.
+  const ROOM_BANNER_INTERVAL_MS = 5000;
+  let roomBannerTimer = null;
 
-  if (canPinHero) {
-    gsap.registerPlugin(ScrollTrigger);
-
-    ScrollTrigger.create({
-      trigger: '#tourScrollDriver',
-      start: 'top top',
-      end: 'bottom bottom',
-      pin: '#virtual-tour',
-      scrub: 1,
-      onUpdate: (self) => {
-        const roomCount = roomData.length;
-        const targetRoom = Math.min(roomCount - 1, Math.floor(self.progress * roomCount));
-        if (targetRoom !== currentRoomIdx) {
-          switchRoom(targetRoom);
-        }
-      }
-    });
+  function restartRoomBanner() {
+    if (roomBannerTimer) clearInterval(roomBannerTimer);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    roomBannerTimer = setInterval(() => {
+      if (isUserInteracting) return;
+      switchRoom((currentRoomIdx + 1) % roomData.length);
+    }, ROOM_BANNER_INTERVAL_MS);
   }
+
+  restartRoomBanner();
 }
 
 /* ── 5. Before / After Interactive Slider ── */
