@@ -6,7 +6,7 @@
 
 const nodemailer = require('nodemailer');
 
-const MAX_LEN = { name: 100, phone: 30, propertyType: 60, message: 2000 };
+const MAX_LEN = { name: 100, phone: 30, propertyType: 60, propertySize: 60, message: 2000 };
 
 // Best-effort only: each serverless instance has its own memory and gets
 // recycled/cold-started freely, so this does not enforce a real global
@@ -58,6 +58,7 @@ module.exports = async function handler(req, res) {
   const name = clean(body.name, MAX_LEN.name);
   const phone = clean(body.phone, MAX_LEN.phone);
   const propertyType = clean(body.propertyType, MAX_LEN.propertyType);
+  const propertySize = clean(body.propertySize, MAX_LEN.propertySize);
   const message = clean(body.message, MAX_LEN.message);
 
   if (!name || !phone) {
@@ -85,6 +86,7 @@ module.exports = async function handler(req, res) {
         `Name: ${name}\n` +
         `Phone: ${phone}\n` +
         `Property Type: ${propertyType || '—'}\n` +
+        `Property Size: ${propertySize || '—'}\n` +
         `Details: ${message || '—'}`,
     });
 

@@ -15,9 +15,9 @@
   --accent-ink: #2d5a82;
   --text: #241c12;
   --text-muted: #6b5d47;
-  --font-display: 'Cinzel', serif;
-  --font-script: 'Italianno', cursive;
-  --font-heading: 'Space Grotesk', sans-serif;
+  --font-display: 'Instrument Sans', sans-serif;
+  --font-script: 'Instrument Sans', sans-serif;
+  --font-heading: 'Instrument Sans', sans-serif;
   --font-body: 'Instrument Sans', sans-serif;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --glass: rgba(42, 30, 16, 0.85);
@@ -257,9 +257,10 @@ body {
 
 .hero-btns {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 4px;
 }
 
 .btn-enter-tour {
@@ -302,6 +303,13 @@ body {
 .btn-scroll-hint:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
+}
+
+.hero-subtext {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(245, 241, 230, 0.65);
 }
 
 /* ── TOUR UI CONTROLS ──────────────────────────────────────── */
@@ -684,6 +692,15 @@ body {
 }
 .portfolio-embed iframe { display: block; width: 100%; }
 
+.portfolio-name {
+  padding: 18px 20px;
+  background: var(--surface);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
 /* ── SERVICE TECH TAGS (Services page industry pills) ──────── */
 .model-tech-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
 
@@ -779,7 +796,7 @@ body {
 
 .hook-word.script {
   font-family: var(--font-script);
-  font-size: clamp(3.2rem, 8.5vw, 7rem);
+  font-style: italic;
   color: #f5efe0;
 }
 
@@ -893,6 +910,18 @@ body {
 }
 .form-alt-hint a { color: var(--accent-ink); text-decoration: none; }
 .form-alt-hint a:hover { text-decoration: underline; }
+
+.sample-tours-link {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 40px;
+}
+.sample-tours-link a {
+  color: var(--accent-ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+.sample-tours-link a:hover { text-decoration: underline; }
 
 /* Floating WhatsApp */
 .floating-wa {
