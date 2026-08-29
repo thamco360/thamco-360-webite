@@ -244,36 +244,52 @@ function initHeroVirtualTour() {
 
   window.addEventListener('pointerup', () => { isUserInteracting = false; });
 
-  function switchRoom(idx) {
+  // silent=true (the auto-cycle banner) skips the "GROUND FLOOR / Grand
+  // Living Room" title card entirely and just crossfades the canvas
+  // straight to the next room — reads as continuous live movement
+  // rather than a slideshow. Manual floor-nav clicks still get the
+  // card, since naming the room someone explicitly picked is useful.
+  function switchRoom(idx, { silent = false } = {}) {
     if (idx === currentRoomIdx) return;
+    const nameEl = document.getElementById('currentRoomName');
+
+    function applyRoom() {
+      sphere.material = materials[idx];
+      currentRoomIdx = idx;
+      if (nameEl) nameEl.textContent = roomData[idx].name;
+      document.querySelectorAll('.room-node').forEach((node, nIdx) => {
+        node.classList.toggle('active', nIdx === idx);
+      });
+      restartRoomBanner();
+    }
+
+    if (silent) {
+      canvas.style.transition = 'opacity 0.6s ease';
+      canvas.style.opacity = '0';
+      setTimeout(() => {
+        applyRoom();
+        canvas.style.opacity = '1';
+      }, 600);
+      return;
+    }
+
     const overlay = document.getElementById('roomTransition');
     const rtFloor = document.getElementById('rtFloor');
     const rtName = document.getElementById('rtName');
-    const nameEl = document.getElementById('currentRoomName');
+    if (!overlay) { applyRoom(); return; }
 
-    if (overlay) {
-      rtFloor.textContent = roomData[idx].floor;
-      rtName.textContent = roomData[idx].name;
-      overlay.classList.remove('hidden');
-      overlay.classList.add('show');
+    rtFloor.textContent = roomData[idx].floor;
+    rtName.textContent = roomData[idx].name;
+    overlay.classList.remove('hidden');
+    overlay.classList.add('show');
 
+    setTimeout(() => {
+      applyRoom();
       setTimeout(() => {
-        sphere.material = materials[idx];
-        currentRoomIdx = idx;
-        if (nameEl) nameEl.textContent = roomData[idx].name;
-
-        document.querySelectorAll('.room-node').forEach((node, nIdx) => {
-          node.classList.toggle('active', nIdx === idx);
-        });
-
-        restartRoomBanner();
-
-        setTimeout(() => {
-          overlay.classList.remove('show');
-          setTimeout(() => overlay.classList.add('hidden'), 350);
-        }, 400);
-      }, 350);
-    }
+        overlay.classList.remove('show');
+        setTimeout(() => overlay.classList.add('hidden'), 350);
+      }, 400);
+    }, 350);
   }
 
   // Room Node Buttons
@@ -378,7 +394,7 @@ function initHeroVirtualTour() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     roomBannerTimer = setInterval(() => {
       if (isUserInteracting) return;
-      switchRoom((currentRoomIdx + 1) % roomData.length);
+      switchRoom((currentRoomIdx + 1) % roomData.length, { silent: true });
     }, ROOM_BANNER_INTERVAL_MS);
   }
 
