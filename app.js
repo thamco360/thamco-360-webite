@@ -228,7 +228,14 @@ function initHeroVirtualTour() {
   let phi = 0, theta = 0;
   let autoRotate = true;
 
+  // touch-action: pan-y (CSS) already hands vertical touch drags back
+  // to native scroll, but pointerType is checked here too as a second
+  // layer: on a full-viewport canvas like this one, any gap between
+  // the two would mean a visitor can't scroll the page at all on
+  // mobile, so look-around dragging is mouse/pen only. Touch still
+  // gets the ambient auto-rotate + auto-cycling room banner.
   canvas.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return;
     isUserInteracting = true;
     onPointerDownPointerX = e.clientX;
     onPointerDownPointerY = e.clientY;
@@ -546,7 +553,12 @@ function initServiceTours() {
       },
     };
 
+    // Touch is excluded for the same reason as the hero canvas — without
+    // this, swiping to scroll past one of these panoramas gets captured
+    // as a look-around drag instead. touch-action: pan-y (CSS) is the
+    // first layer; this is the second.
     canvas.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'touch') return;
       isDragging = true;
       autoRotate = false;
       startX = e.clientX; startY = e.clientY;

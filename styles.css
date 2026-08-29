@@ -176,6 +176,13 @@ body {
   display: block;
   z-index: 1;
   cursor: grab;
+  /* Without this, this full-viewport canvas's own pointer-drag "look
+     around" handling swallows every touch gesture — including a plain
+     vertical swipe meant to scroll the page — since on touch there's
+     no separate wheel input to fall back on like there is on desktop.
+     pan-y hands vertical drags back to native scroll; horizontal
+     look-around dragging still works. */
+  touch-action: pan-y;
 }
 .tour-canvas:active { cursor: grabbing; }
 
@@ -1120,7 +1127,7 @@ body {
   border: 1px solid var(--border);
 }
 
-.service-tour-canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+.service-tour-canvas { width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
 .service-tour-canvas:active { cursor: grabbing; }
 
 .service-drag-hint {
