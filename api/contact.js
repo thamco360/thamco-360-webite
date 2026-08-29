@@ -6,7 +6,7 @@
 
 const nodemailer = require('nodemailer');
 
-const MAX_LEN = { name: 100, phone: 30, propertyType: 60, propertySize: 60, message: 2000 };
+const MAX_LEN = { name: 100, phone: 30, propertyType: 60, propertySize: 60, floors: 20, rooms: 20, service: 60, message: 2000 };
 
 // Best-effort only: each serverless instance has its own memory and gets
 // recycled/cold-started freely, so this does not enforce a real global
@@ -59,6 +59,9 @@ module.exports = async function handler(req, res) {
   const phone = clean(body.phone, MAX_LEN.phone);
   const propertyType = clean(body.propertyType, MAX_LEN.propertyType);
   const propertySize = clean(body.propertySize, MAX_LEN.propertySize);
+  const floors = clean(body.floors, MAX_LEN.floors);
+  const rooms = clean(body.rooms, MAX_LEN.rooms);
+  const service = clean(body.service, MAX_LEN.service);
   const message = clean(body.message, MAX_LEN.message);
 
   if (!name || !phone) {
@@ -81,12 +84,15 @@ module.exports = async function handler(req, res) {
       from: `Thamco360 Website <${GMAIL_USER}>`,
       to: 'thamco360@gmail.com',
       replyTo: undefined, // the form doesn't collect an email address, only phone
-      subject: `3D Spatial Scan Enquiry — ${name}`,
+      subject: `360° Virtual Tour Enquiry — ${name}`,
       text:
         `Name: ${name}\n` +
         `Phone: ${phone}\n` +
         `Property Type: ${propertyType || '—'}\n` +
         `Property Size: ${propertySize || '—'}\n` +
+        `Number of Floors: ${floors || '—'}\n` +
+        `Number of Rooms / Spaces: ${rooms || '—'}\n` +
+        `Required Service: ${service || '—'}\n` +
         `Details: ${message || '—'}`,
     });
 

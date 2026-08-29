@@ -281,29 +281,54 @@
   <div class="tour-scroll-driver" id="tourScrollDriver"></div>
 
   <!-- =====================================================================
-       KEYWORD MARQUEE
+       PROPERTY SHOWCASE — cinematic auto-crossfading reel, not a carousel
+       (no arrows/dots/controls; four property types Ken-Burns through
+       a single frame on an infinite CSS animation loop)
   ====================================================================== -->
-  <div class="marquee-strip">
-    <div class="marquee-track">
-      <span class="marquee-item filled">Residence</span>
-      <span class="marquee-glyph">&#9670;</span>
-      <span class="marquee-item filled">Store</span>
-      <span class="marquee-glyph">&#9670;</span>
-      <span class="marquee-item filled">Resort</span>
-      <span class="marquee-glyph">&#9670;</span>
-      <span class="marquee-item filled">College</span>
-      <span class="marquee-glyph">&#9670;</span>
-      <!-- duplicate for a seamless loop -->
-      <span class="marquee-item filled">Residence</span>
-      <span class="marquee-glyph">&#9670;</span>
-      <span class="marquee-item filled">Store</span>
-      <span class="marquee-glyph">&#9670;</span>
-      <span class="marquee-item filled">Resort</span>
-      <span class="marquee-glyph">&#9670;</span>
-      <span class="marquee-item filled">College</span>
-      <span class="marquee-glyph">&#9670;</span>
+  <section class="property-showcase" aria-label="Spaces we capture: residences, stores, resorts and colleges">
+    <div class="showcase-slide">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=85" alt="Residence" loading="lazy">
+      <span class="showcase-label">Residence</span>
     </div>
-  </div>
+    <div class="showcase-slide">
+      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=2400&q=85" alt="Store" loading="lazy">
+      <span class="showcase-label">Store</span>
+    </div>
+    <div class="showcase-slide">
+      <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=2400&q=85" alt="Resort" loading="lazy">
+      <span class="showcase-label">Resort</span>
+    </div>
+    <div class="showcase-slide">
+      <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=2400&q=85" alt="College" loading="lazy">
+      <span class="showcase-label">College</span>
+    </div>
+    <div class="showcase-vignette"></div>
+  </section>
+
+  <!-- =====================================================================
+       TRUST — three-part positioning, no cards/gradients
+  ====================================================================== -->
+  <section class="trust-section">
+    <div class="inner">
+      <div class="trust-grid">
+        <div class="trust-item reveal-up">
+          <span class="trust-index">01</span>
+          <h3>Google Trusted Photography</h3>
+          <p>Professional photography designed for Google and digital discovery.</p>
+        </div>
+        <div class="trust-item reveal-up">
+          <span class="trust-index">02</span>
+          <h3>Immersive Virtual Tours</h3>
+          <p>Interactive 360° experiences that let visitors explore spaces remotely.</p>
+        </div>
+        <div class="trust-item reveal-up">
+          <span class="trust-index">03</span>
+          <h3>Website Delivery</h3>
+          <p>Virtual-tour experiences, presented through a dedicated website.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- =====================================================================
        PORTFOLIO — real client work, live Google Maps embeds
@@ -328,55 +353,43 @@
   </section>
 
   <!-- =====================================================================
-       3. WORK & RITUAL SEQUENCE (5 Alternating Chapters)
+       PROCESS — "Capture Pipeline" replacement. INTENTIONALLY MINIMAL:
+       final copy for this section is being supplied by Alam. Keep the
+       visual/structural scaffold (5 labeled steps) so his real wording
+       can drop straight into the .flow-step h3/p without touching markup.
   ====================================================================== -->
   <section class="section sequence-section" id="process">
     <div class="inner">
-      <!-- Copy placeholder — final wording for this section to be supplied -->
       <div class="section-header-center">
-        <p class="section-kicker reveal-up">What We Deliver</p>
-        <h2 class="section-h2 reveal-up">360° Photography, Built Into Your Website</h2>
-        <p class="section-p reveal-up">From capture to a finished site — everything Thamco360 offers, in one place.</p>
+        <p class="section-kicker reveal-up">The Journey</p>
+        <h2 class="section-h2 reveal-up">From Capture to Experience</h2>
+        <!-- placeholder copy — Alam to provide final wording -->
+        <p class="section-p reveal-up">How 360° photography becomes a finished virtual tour.</p>
       </div>
 
-      <div class="chapter-list">
-        <!-- Chapter 1 -->
-        <div class="chapter-row reveal-up">
-          <div class="chapter-meta">
-            <span class="ch-eyebrow">01 · CAPTURE</span>
-            <h3 class="ch-title">360° Virtual Tour</h3>
-          </div>
-          <div class="chapter-content">
-            <p>High-resolution 360° photography of your space, delivered as a scroll- and drag-driven virtual tour.</p>
-          </div>
-        </div>
-
-        <!-- Chapter 2 -->
-        <div class="chapter-row reveal-up">
-          <div class="chapter-meta">
-            <span class="ch-eyebrow">02 · BUILD</span>
-            <h3 class="ch-title">Website Development</h3>
-          </div>
-          <div class="chapter-content">
-            <p>A fast, modern website built around your tour, so it lives on your own domain instead of a standalone link.</p>
-          </div>
-        </div>
-
-        <!-- Chapter 3 -->
-        <div class="chapter-row reveal-up">
-          <div class="chapter-meta">
-            <span class="ch-eyebrow">03 · IMMERSE</span>
-            <h3 class="ch-title">Web 3D Development — Immersive</h3>
-          </div>
-          <div class="chapter-content">
-            <p>Fully immersive, in-browser 3D experiences layered into the site — no app or plugin required.</p>
-          </div>
-        </div>
+      <div class="flow-strip reveal-up">
+        <div class="flow-step"><span class="flow-num">01</span><h3>Capture</h3></div>
+        <span class="flow-arrow">&#8594;</span>
+        <div class="flow-step"><span class="flow-num">02</span><h3>Stitch</h3></div>
+        <span class="flow-arrow">&#8594;</span>
+        <div class="flow-step"><span class="flow-num">03</span><h3>Refine</h3></div>
+        <span class="flow-arrow">&#8594;</span>
+        <div class="flow-step"><span class="flow-num">04</span><h3>Publish</h3></div>
+        <span class="flow-arrow">&#8594;</span>
+        <div class="flow-step"><span class="flow-num">05</span><h3>Experience</h3></div>
       </div>
 
-      <div class="section-header-center" style="margin-top: 80px;">
+      <div class="section-header-center" style="margin-top: 100px;">
         <p class="section-kicker reveal-up">Raw vs. Stitched</p>
-        <h2 class="section-h2 reveal-up">Experience the Difference Between Raw and Stitched 360° Images</h2>
+        <h2 class="section-h2 reveal-up">Experience the Difference — Raw Images vs. Stitched 360° Images</h2>
+      </div>
+
+      <div class="flow-strip flow-strip-small reveal-up">
+        <div class="flow-step"><h3>Raw Capture</h3></div>
+        <span class="flow-arrow">&#8594;</span>
+        <div class="flow-step"><h3>Stitching</h3></div>
+        <span class="flow-arrow">&#8594;</span>
+        <div class="flow-step"><h3>Final 360° Experience</h3></div>
       </div>
 
       <div class="ba-wrapper reveal-up">
@@ -395,6 +408,63 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7H3M21 12H3M21 17H3"/></svg>
             </div>
             <div class="ba-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       SERVICES — on the homepage, so visitors don't have to leave to see
+       what's offered. Content matches the ProfessionalService JSON-LD
+       makesOffer list in <head>, not invented separately.
+  ====================================================================== -->
+  <section class="section services-section" id="services">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">What We Offer</p>
+        <h2 class="section-h2 reveal-up">Services</h2>
+        <p class="section-p reveal-up">Everything Thamco360 delivers, from first capture to a finished website.</p>
+      </div>
+
+      <div class="chapter-list">
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">CAPTURE</span>
+            <h3 class="ch-title">Google Trusted Photography</h3>
+          </div>
+          <div class="chapter-content">
+            <p>Professional photography designed for Google and digital discovery — the foundation every tour is built from.</p>
+          </div>
+        </div>
+
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">EXPERIENCE</span>
+            <h3 class="ch-title">360° Virtual Tour</h3>
+          </div>
+          <div class="chapter-content">
+            <p>High-resolution 360° photography delivered as a scroll- and drag-driven virtual tour visitors can explore remotely.</p>
+          </div>
+        </div>
+
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">BUILD</span>
+            <h3 class="ch-title">Website Development</h3>
+          </div>
+          <div class="chapter-content">
+            <p>A fast, modern website built around your tour, so it lives on your own domain instead of a standalone link.</p>
+          </div>
+        </div>
+
+        <div class="chapter-row reveal-up">
+          <div class="chapter-meta">
+            <span class="ch-eyebrow">IMMERSE</span>
+            <h3 class="ch-title">Web 3D Development — Immersive</h3>
+          </div>
+          <div class="chapter-content">
+            <p>Fully immersive, in-browser 3D property experiences layered into the site — no app or plugin required.</p>
           </div>
         </div>
       </div>
@@ -469,6 +539,11 @@
           <h2 class="section-h2 reveal-up">Book Your 360° Virtual Tour</h2>
           <p class="section-p reveal-up">Contact our team to digitize your space.</p>
 
+          <a href="tel:+917090111360" class="phone-cta reveal-up">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +91 7090 111 360
+          </a>
+
           <div class="contact-details reveal-up">
             <div class="cd-item">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -476,7 +551,7 @@
             </div>
             <div class="cd-item">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              +91 70901 11360
+              <a href="tel:+917090111360">+91 7090 111 360</a>
             </div>
             <div class="cd-item">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -524,9 +599,30 @@
               </select>
             </div>
           </div>
+          <div class="form-row">
+            <div class="fg">
+              <label>Number of Floors</label>
+              <input type="text" id="contactFloors" name="floors" placeholder="e.g. 2">
+            </div>
+            <div class="fg">
+              <label>Number of Rooms / Spaces</label>
+              <input type="text" id="contactRooms" name="rooms" placeholder="e.g. 5">
+            </div>
+          </div>
           <div class="fg">
-            <label>Property Location &amp; Additional Details</label>
-            <textarea id="contactMsg" name="message" rows="4" placeholder="Number of rooms, location, anything else we should know..."></textarea>
+            <label>Required Service</label>
+            <select id="contactService" name="service">
+              <option>Google Trusted Photography</option>
+              <option>3D Photography</option>
+              <option>360° Virtual Tour</option>
+              <option>Virtual Tour Website</option>
+              <option>Multiple Services</option>
+              <option>Not Sure</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Property Location &amp; Additional Project Requirements</label>
+            <textarea id="contactMsg" name="message" rows="4" placeholder="Location, and anything else we should know..."></textarea>
           </div>
           <!-- Honeypot — hidden from real visitors via CSS, invisible to screen readers.
                Bots that fill every field trip this; humans never see it. -->
@@ -542,7 +638,18 @@
           <p class="form-alt-hint">Prefer WhatsApp? <a href="https://wa.me/917090111360" target="_blank">Message us directly</a>.</p>
         </form>
       </div>
-      <p class="sample-tours-link"><a href="#portfolio">Click to view sample tours →</a></p>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       FINAL CTA — strong close, links straight to the working Portfolio section
+  ====================================================================== -->
+  <section class="final-cta-section">
+    <div class="inner">
+      <a href="#portfolio" class="final-cta">
+        <span>Click to View Sample Tours</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
     </div>
   </section>
 
