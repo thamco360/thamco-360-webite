@@ -644,7 +644,7 @@ function initHookReveal() {
   if (!section) return;
 
   const words = section.querySelectorAll('.hook-word');
-  const cta = section.querySelector('.hook-cta');
+  const tagline = section.querySelector('.hook-tagline');
 
   if (!window.gsap || !window.ScrollTrigger || window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     return;
@@ -653,7 +653,7 @@ function initHookReveal() {
   gsap.registerPlugin(ScrollTrigger);
 
   gsap.set(words, { opacity: 0.14, y: '0.4em' });
-  gsap.set(cta, { opacity: 0, y: 16 });
+  if (tagline) gsap.set(tagline, { opacity: 0, y: 16 });
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -665,8 +665,8 @@ function initHookReveal() {
     }
   });
 
-  tl.to(words, { opacity: 1, y: 0, stagger: 0.4, ease: 'power2.out' })
-    .to(cta, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '+=0.2');
+  tl.to(words, { opacity: 1, y: 0, stagger: 0.4, ease: 'power2.out' });
+  if (tagline) tl.to(tagline, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '+=0.2');
 }
 
 /* ── 8. Inquiry Form — one-click submit via /api/contact ──
