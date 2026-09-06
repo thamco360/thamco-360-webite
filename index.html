@@ -363,11 +363,15 @@
             referrerpolicy="strict-origin-when-cross-origin" title="Streamphony Google 360&deg; virtual tour"></iframe>
         </div>
 
-        <!-- Custom tour, not hosted on Google Maps — TODO: awaiting the
-             embed URL/link from its actual hosting platform -->
-        <div class="portfolio-embed portfolio-embed-pending reveal-up">
+        <!-- Custom tour hosted on Panoee rather than Google Maps, so
+             tour.panoee.net also has to be allowed by frame-src in vercel.json -->
+        <div class="portfolio-embed reveal-up">
           <h3 class="portfolio-name">Confident Dental Clinic</h3>
-          <div class="portfolio-pending">Custom tour — link coming soon</div>
+          <iframe
+            src="https://tour.panoee.net/confidentdentalcare/0"
+            width="100%" height="450" style="border:0;" allowfullscreen loading="lazy"
+            allow="fullscreen; accelerometer; gyroscope; magnetometer; xr-spatial-tracking"
+            referrerpolicy="strict-origin-when-cross-origin" title="Confident Dental Clinic 360&deg; virtual tour"></iframe>
         </div>
       </div>
     </div>
