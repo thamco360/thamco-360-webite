@@ -259,6 +259,18 @@ body {
   font-size: 1.15rem;
   color: rgba(245, 241, 230, 0.75);
   max-width: 580px;
+  margin: 0 auto 12px;
+}
+
+/* Reads as the second half of the same block, so .hero-p hands its bottom
+   margin over to this line. Lifted off --primary because the gold sits on
+   the lighter middle of the hero's radial scrim at body size. */
+.hero-quote {
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #dcb45c;
+  max-width: 620px;
   margin: 0 auto 36px;
 }
 
