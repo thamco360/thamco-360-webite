@@ -676,8 +676,8 @@ function initHookReveal() {
   const section = document.getElementById('hook');
   if (!section) return;
 
-  const words = section.querySelectorAll('.hook-word');
-  const tagline = section.querySelector('.hook-tagline');
+  const words = section.querySelectorAll('.hook-words .hook-word');
+  const taglineWords = section.querySelectorAll('.hook-tagline .hook-tagline-word');
 
   if (!window.gsap || !window.ScrollTrigger || window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     return;
@@ -686,7 +686,7 @@ function initHookReveal() {
   gsap.registerPlugin(ScrollTrigger);
 
   gsap.set(words, { opacity: 0.14, y: '0.4em' });
-  if (tagline) gsap.set(tagline, { opacity: 0, y: 16 });
+  gsap.set(taglineWords, { opacity: 0, y: '0.5em' });
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -698,8 +698,28 @@ function initHookReveal() {
     }
   });
 
-  tl.to(words, { opacity: 1, y: 0, stagger: 0.4, ease: 'power2.out' });
-  if (tagline) tl.to(tagline, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '+=0.2');
+  // Two distinct sets rather than one continuous stagger: the statement
+  // resolves word by word over the first stretch of scroll, holds while the
+  // visitor keeps scrolling, and only then does the tagline answer it.
+  tl.to(words, {
+    opacity: 1,
+    y: 0,
+    ease: 'power2.out',
+    duration: 0.6,
+    stagger: { each: 0.5, from: 'start' },
+  });
+
+  tl.to({}, { duration: 0.9 }); // held beat between the two lines
+
+  tl.to(taglineWords, {
+    opacity: 1,
+    y: 0,
+    ease: 'power2.out',
+    duration: 0.6,
+    stagger: { each: 0.45, from: 'start' },
+  });
+
+  tl.to({}, { duration: 0.6 }); // let the finished pair sit before releasing
 }
 
 /* ── 8. Inquiry Form — one-click submit via /api/contact ──

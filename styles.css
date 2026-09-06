@@ -910,7 +910,7 @@ body {
    before the section releases and Contact scrolls in underneath. */
 .hook-section {
   position: relative;
-  height: 220vh;
+  height: 260vh;
   background: #241c12;
 }
 
@@ -927,20 +927,27 @@ body {
   padding: 0 24px;
 }
 
+/* The whole statement is one unbroken line, so the type is sized in vw and
+   the row is nowrap. `gap` resolves against THIS element's font-size, not
+   each word's — leaving it unset here collapsed the word spacing to a few
+   pixels while the words themselves rendered at ~90px. */
 .hook-words {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
-  gap: 0.28em;
-  max-width: 1000px;
+  align-items: baseline;
+  font-size: clamp(1rem, 4.4vw, 4.4rem);
+  gap: 0.3em;
+  max-width: 100%;
 }
 
 .hook-word {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 6.5vw, 5.4rem);
+  font-size: inherit;
   font-weight: 400;
   color: #f5efe0;
-  line-height: 1.1;
+  line-height: 1.15;
+  white-space: nowrap;
   will-change: transform, opacity, color;
 }
 
@@ -948,6 +955,13 @@ body {
   font-family: var(--font-script);
   font-style: italic;
   color: #f5efe0;
+}
+
+/* .gradient-text carries its own clamp() font-size for the hero; inside the
+   hook it has to track the line so the single line stays measurable. */
+.hook-words .gradient-text {
+  font-size: inherit;
+  line-height: 1.15;
 }
 
 .hook-cta {
@@ -970,11 +984,29 @@ body {
 .hook-cta:hover { background: rgba(245, 239, 224, 0.08); border-color: var(--primary); }
 
 .hook-tagline {
-  margin-top: 44px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  margin-top: 0.7em;
   font-family: var(--font-script);
   font-style: italic;
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-size: clamp(1rem, 3.2vw, 2.6rem);
+  gap: 0.3em;
   color: var(--primary);
+}
+
+.hook-tagline-word {
+  font-size: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+/* Below this width a single line would drop the statement to ~16px, so let
+   it break across two lines and take the type back up instead. */
+@media (max-width: 700px) {
+  .hook-words { flex-wrap: wrap; font-size: clamp(1.9rem, 8.4vw, 3rem); }
+  .hook-tagline { flex-wrap: wrap; font-size: clamp(1.3rem, 5.4vw, 2rem); }
 }
 
 /* ── FAQ ───────────────────────────────────────────────────── */
