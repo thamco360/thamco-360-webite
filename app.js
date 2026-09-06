@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceTours();
   initServicePinning();
   initHookReveal();
+  initShowreelVideo();
 
   // ScrollTrigger caches pin start/end pixel ranges at creation time.
   // This page has several lazy-loaded images (industries grid, property
@@ -104,6 +105,38 @@ function initCinematicTextReveals() {
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+}
+
+/* ── 2b. Showreel: autoplay once the section is reached ──
+   The video is muted + playsinline so browsers allow programmatic play().
+   It starts when half the frame is on screen and pauses again when it
+   leaves, so it never plays to nobody. Once the visitor takes manual
+   control (play/pause via the native controls) we stop steering it. */
+function initShowreelVideo() {
+  const video = document.getElementById('showreelVideo');
+  if (!video) return;
+
+  // Browser-fired play/pause events are isTrusted even when we called play()
+  // ourselves, so watch for a real interaction with the native controls
+  // instead and hand playback over to the visitor from then on.
+  let userDriven = false;
+  ['pointerdown', 'keydown'].forEach(evt => {
+    video.addEventListener(evt, () => { userDriven = true; });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (userDriven) return;
+      if (entry.isIntersecting) {
+        const attempt = video.play();
+        if (attempt && attempt.catch) attempt.catch(() => {});
+      } else if (!video.paused) {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(video);
 }
 
 /* ── 3. Ambient Shader Canvas Background ── */

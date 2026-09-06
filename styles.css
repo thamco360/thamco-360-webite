@@ -779,6 +779,34 @@ body {
   .trust-item { border-left: none; padding: 0; }
 }
 
+/* ── SHOWREEL (walkthrough film, sits above the portfolio) ── */
+.showreel-section { padding-bottom: 0; }
+
+.showreel-frame {
+  max-width: 1240px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+  background: #000;
+  line-height: 0;
+}
+
+.showreel-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 78vh;
+  object-fit: contain;
+  background: #000;
+}
+
+@media (max-width: 900px) {
+  .showreel-frame { border-radius: 14px; }
+  .showreel-video { max-height: 60vh; }
+}
+
 /* ── PORTFOLIO ─────────────────────────────────────────────── */
 .portfolio-grid {
   display: grid;
