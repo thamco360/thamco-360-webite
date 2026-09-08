@@ -5,6 +5,56 @@
 /* Shared motion guard. Read once, used by every module below, so the whole
    page agrees on whether it is allowed to animate. */
 const PREFERS_REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
+
+/* A 360 sphere only ever shows about a 75-degree slice, so a phone was
+   downloading a 2400px equirectangular frame to display roughly 270px of it.
+   Unsplash resizes on its own CDN via the w parameter, so ask for what the
+   device can actually resolve. Anything not served by Unsplash (our own
+   WebP exports) is returned untouched. */
+function panoTextureURL(url) {
+  if (!/images\.unsplash\.com/.test(url)) return url;
+  const w = window.innerWidth < 768 ? 1440 : window.innerWidth < 1200 ? 1800 : 2400;
+  return url.replace(/([?&]w=)\d+/, `$1${w}`);
+}
+
+/* Drives a render loop only while its canvas is actually on screen and the
+   tab is in front.
+   
+   Seven WebGL canvases on this page each ran their own unconditional
+   requestAnimationFrame loop from load onwards, so a phone sitting on the
+   contact form was still rendering five panoramas it could not see. The loop
+   is stopped outright rather than skipped inside the callback — a cancelled
+   rAF costs nothing, whereas an early-returning one still wakes the frame. */
+function renderWhileVisible(el, frame, rootMargin = '200px 0px') {
+  let onScreen = false;
+  let running = false;
+  let rafId = 0;
+
+  const tick = () => {
+    frame();
+    rafId = requestAnimationFrame(tick);
+  };
+
+  const sync = () => {
+    const should = onScreen && !document.hidden;
+    if (should && !running) {
+      running = true;
+      rafId = requestAnimationFrame(tick);
+    } else if (!should && running) {
+      running = false;
+      cancelAnimationFrame(rafId);
+    }
+  };
+
+  new IntersectionObserver(([entry]) => {
+    onScreen = entry.isIntersecting;
+    sync();
+  }, { rootMargin }).observe(el);
+
+  document.addEventListener('visibilitychange', sync);
+  sync();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // The <head> optimistically marks the document motion-ready so the hero
@@ -151,6 +201,17 @@ function initCinematicTextReveals() {
 function initBackgroundShader() {
   const canvas = document.getElementById('shaderCanvas');
   if (!canvas) return;
+
+  // Purely decorative: a full-viewport WebGL surface sitting behind the page
+  // under a 12px blur. On a phone it competes for the GPU with the panorama
+  // the visitor is actually looking at, and the blur means almost none of its
+  // detail survives to be seen. It is also one of seven WebGL contexts, and
+  // mobile browsers cap how many a page may hold at once.
+  if (IS_TOUCH || window.innerWidth < 768 || PREFERS_REDUCED) {
+    canvas.remove();
+    return;
+  }
+
   const gl = canvas.getContext('webgl');
   if (!gl) return;
 
@@ -217,13 +278,11 @@ function initBackgroundShader() {
   const timeLoc = gl.getUniformLocation(prog, 'u_time');
 
   let startTime = performance.now();
-  function render() {
+  renderWhileVisible(canvas, () => {
     gl.uniform2f(resLoc, canvas.width, canvas.height);
     gl.uniform1f(timeLoc, (performance.now() - startTime) * 0.001);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-    requestAnimationFrame(render);
-  }
-  render();
+  });
 }
 
 /* ── 4. Hero 360° Panorama Virtual Tour Engine ── */
@@ -246,19 +305,38 @@ function initHeroVirtualTour() {
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // A full-screen sphere at DPR 2 on a phone is a ~1.6M-pixel target every
+  // frame for an image that is soft to begin with. 1.5 is indistinguishable
+  // here and costs 44% fewer pixels.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, IS_TOUCH ? 1.5 : 2));
 
   // Equirectangular Sphere
   const geometry = new THREE.SphereGeometry(500, 60, 40);
   geometry.scale(-1, 1, 1);
 
   const textureLoader = new THREE.TextureLoader();
-  const materials = roomData.map(room => {
-    const tex = textureLoader.load(room.texture);
-    return new THREE.MeshBasicMaterial({ map: tex });
-  });
 
-  const sphere = new THREE.Mesh(geometry, materials[0]);
+  // Built on first use, not all five up front. The banner only reveals one
+  // room every five seconds, so eagerly loading the set meant a visitor who
+  // scrolled past the hero in three seconds still paid for five
+  // equirectangular frames to look at one.
+  const materials = [];
+  function materialFor(idx) {
+    if (!materials[idx]) {
+      const tex = textureLoader.load(panoTextureURL(roomData[idx].texture));
+      materials[idx] = new THREE.MeshBasicMaterial({ map: tex });
+    }
+    return materials[idx];
+  }
+
+  // Warm the room the banner is about to reveal, so the swap is never
+  // waiting on a download while staying off the critical path for the first
+  // paint. Called after each switch rather than before.
+  function warmNextRoom(idx) {
+    materialFor((idx + 1) % roomData.length);
+  }
+
+  const sphere = new THREE.Mesh(geometry, materialFor(0));
   scene.add(sphere);
 
   // Drag & Inertia state
@@ -302,8 +380,9 @@ function initHeroVirtualTour() {
     const nameEl = document.getElementById('currentRoomName');
 
     function applyRoom() {
-      sphere.material = materials[idx];
+      sphere.material = materialFor(idx);
       currentRoomIdx = idx;
+      warmNextRoom(idx);
       if (nameEl) nameEl.textContent = roomData[idx].name;
       document.querySelectorAll('.room-node').forEach((node, nIdx) => {
         node.classList.toggle('active', nIdx === idx);
@@ -393,10 +472,10 @@ function initHeroVirtualTour() {
     });
   }
 
-  // Render Loop
+  // Render Loop — stops once the hero has scrolled away. It is the one
+  // panorama that must exist at load, but it does not have to keep drawing
+  // for the rest of the page.
   function animate() {
-    requestAnimationFrame(animate);
-
     if (autoRotate && !isUserInteracting) lon += 0.05;
 
     lat = Math.max(-85, Math.min(85, lat));
@@ -419,7 +498,7 @@ function initHeroVirtualTour() {
 
     renderer.render(scene, camera);
   }
-  animate();
+  renderWhileVisible(canvas, animate, '0px');
 
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -566,9 +645,32 @@ function initMagneticButtons() {
    initServicePinning() scopes itself to .service-block, so only those get
    their pan driven by scroll. */
 function initServiceTours() {
+  // Nothing here is built at load. Five of these canvases sit far below the
+  // fold, and eagerly constructing them meant five WebGL contexts and five
+  // multi-hundred-KB equirectangular textures on a phone before the visitor
+  // had scrolled past the hero. Each one is now built when it comes within a
+  // screen's reach, which is early enough that it is always ready by the time
+  // it is looked at.
+  //
+  // initServicePinning() already reaches for canvas.panoramaAPI optionally,
+  // so a canvas that has not been built yet simply has no pan to drive.
   document.querySelectorAll('canvas[data-panorama]').forEach((canvas) => {
-    const url = canvas.dataset.panorama;
-    if (!url || !window.THREE) return;
+    if (!canvas.dataset.panorama || !window.THREE) return;
+
+    let built = false;
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting || built) return;
+      built = true;
+      io.disconnect();
+      buildPanorama(canvas);
+    }, { rootMargin: '100% 0px' });
+    io.observe(canvas);
+  });
+}
+
+function buildPanorama(canvas) {
+  {
+    const url = panoTextureURL(canvas.dataset.panorama);
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
@@ -576,7 +678,7 @@ function initServiceTours() {
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, IS_TOUCH ? 1.5 : 2));
 
     const geometry = new THREE.SphereGeometry(500, 48, 32);
     geometry.scale(-1, 1, 1);
@@ -637,7 +739,6 @@ function initServiceTours() {
     });
 
     function animate() {
-      requestAnimationFrame(animate);
       if (autoRotate) lon += 0.035;
       lat = Math.max(-75, Math.min(75, lat));
       const phi = THREE.MathUtils.degToRad(90 - lat);
@@ -650,7 +751,7 @@ function initServiceTours() {
       camera.lookAt(camera.target);
       renderer.render(scene, camera);
     }
-    animate();
+    renderWhileVisible(canvas, animate, '0px');
 
     const observer = new ResizeObserver(() => {
       if (!canvas.clientWidth || !canvas.clientHeight) return;
@@ -659,7 +760,7 @@ function initServiceTours() {
       renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     });
     observer.observe(canvas);
-  });
+  }
 }
 
 /* ── 12. Service Section Scroll-Pin — hold the tour, then release ──
