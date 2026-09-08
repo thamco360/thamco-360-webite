@@ -560,8 +560,13 @@ function initMagneticButtons() {
 }
 
 /* ── 11. Reusable Mini 360° Panorama (Services page, one per industry) ── */
+/* Drives every drag-to-look panorama on the page. The selector is the
+   data attribute rather than .service-tour-canvas so a standalone viewer can
+   opt in without inheriting the service blocks' pinned scroll behaviour —
+   initServicePinning() scopes itself to .service-block, so only those get
+   their pan driven by scroll. */
 function initServiceTours() {
-  document.querySelectorAll('.service-tour-canvas').forEach((canvas) => {
+  document.querySelectorAll('canvas[data-panorama]').forEach((canvas) => {
     const url = canvas.dataset.panorama;
     if (!url || !window.THREE) return;
 
@@ -594,12 +599,21 @@ function initServiceTours() {
       },
     };
 
-    // Touch is excluded for the same reason as the hero canvas — without
-    // this, swiping to scroll past one of these panoramas gets captured
-    // as a look-around drag instead. touch-action: pan-y (CSS) is the
-    // first layer; this is the second.
+    // Touch is excluded by default for the same reason as the hero canvas —
+    // without it, swiping to scroll past one of these panoramas gets captured
+    // as a look-around drag instead. touch-action: pan-y (CSS) is the first
+    // layer; this is the second.
+    //
+    // A viewer that opts in with data-touch-pan gets touch as well, but only
+    // on the horizontal axis: pan-y means the browser keeps vertical gestures
+    // for scrolling and only hands us the sideways ones, so looking around
+    // and scrolling the page never compete for the same swipe.
+    const touchPan = canvas.hasAttribute('data-touch-pan');
+    let touchDrag = false;
+
     canvas.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'touch') return;
+      touchDrag = e.pointerType === 'touch';
+      if (touchDrag && !touchPan) return;
       isDragging = true;
       autoRotate = false;
       startX = e.clientX; startY = e.clientY;
@@ -608,9 +622,19 @@ function initServiceTours() {
     window.addEventListener('pointermove', (e) => {
       if (!isDragging) return;
       lon = (startX - e.clientX) * 0.15 + startLon;
-      lat = (e.clientY - startY) * 0.15 + startLat;
+      if (!touchDrag) lat = (e.clientY - startY) * 0.15 + startLat;
     });
     window.addEventListener('pointerup', () => { isDragging = false; });
+
+    // Retire the "drag to look around" prompt the moment it has been obeyed.
+    // The flag goes on the frame, not the canvas, so the CSS can reach the
+    // hint as a descendant rather than an adjacent sibling — three.js owns
+    // the canvas element, and a sibling selector makes the styling hostage
+    // to DOM order inside a container it controls.
+    canvas.addEventListener('pointerdown', () => {
+      if (!isDragging) return;
+      canvas.closest('.pano-frame')?.classList.add('is-explored');
+    });
 
     function animate() {
       requestAnimationFrame(animate);

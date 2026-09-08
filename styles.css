@@ -1107,9 +1107,14 @@ body {
    Taller than the viewport on purpose: GSAP pins it at `top top` for
    the full scroll distance so each word gets its own slice of scroll
    before the section releases and Contact scrolls in underneath. */
+/* The pinned moment is a full-viewport black frame holding one short
+   sentence, so its dwell length is the only thing that decides how empty it
+   feels. 150vh still leaves ~50vh of scrub for the word-by-word reveal
+   (start:'top top' to end:'bottom bottom' minus the 100vh pin) while cutting
+   a third of the time spent staring at the surrounding dark. */
 .hook-section {
   position: relative;
-  height: 200vh;
+  height: 150vh;
   background: #241c12;
 }
 
@@ -1135,8 +1140,12 @@ body {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: baseline;
-  font-size: clamp(1rem, 4.4vw, 4.4rem);
-  gap: 0.3em;
+  /* The line was only filling ~56% of the viewport, which is what made the
+     margins around it read as dead space. It has 640px of headroom at
+     1440px wide, so the type goes up rather than the frame coming down —
+     nowrap means this can never exceed roughly 75% fill. */
+  font-size: clamp(1rem, 5.8vw, 5.8rem);
+  gap: 0.28em;
   max-width: 100%;
 }
 
@@ -1688,4 +1697,67 @@ html.motion-ready .h1-line-i {
   }
   [data-parallax] { will-change: auto; transform: none !important; }
   .parallax-frame > img { height: 100%; }
+}
+
+/* ── LIVE PANORAMA — drag-to-look 360 viewer ────────────────────
+   Shares the three.js sphere viewer with the service blocks. The frame is
+   16:9 rather than the source's 2:1 because the camera only ever shows a
+   ~75deg slice of the sphere; the frame's shape is a window onto the room,
+   not a container for the equirectangular image. */
+.pano-section { padding-bottom: 84px; }
+
+.pano-frame {
+  position: relative;
+  margin-top: 48px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 80px rgba(36, 28, 18, 0.28);
+  background: #17100a;
+  aspect-ratio: 16 / 9;
+  max-height: 660px;
+}
+
+.pano-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  /* First line of defence for touch: the browser keeps vertical gestures for
+     scrolling and only hands sideways ones to the viewer, so looking around
+     never steals a scroll. app.js enforces the same split a second time. */
+  touch-action: pan-y;
+}
+
+.pano-canvas:active { cursor: grabbing; }
+
+.pano-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px;
+  border-radius: 100px;
+  background: rgba(23, 16, 10, 0.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(245, 239, 224, 0.16);
+  color: rgba(245, 239, 224, 0.9);
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease);
+}
+
+/* The prompt has done its job the moment someone takes hold of the room. */
+.pano-frame.is-explored .pano-hint { opacity: 0; }
+
+@media (max-width: 768px) {
+  .pano-frame { aspect-ratio: 4 / 3; margin-top: 32px; border-radius: 14px; }
+  .pano-hint { bottom: 16px; font-size: 0.68rem; padding: 8px 14px; }
 }

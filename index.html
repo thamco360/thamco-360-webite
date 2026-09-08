@@ -157,7 +157,6 @@
       </a>
 
       <nav class="main-nav">
-        <a href="#virtual-tour" class="nav-a">Tour</a>
         <a href="#portfolio" class="nav-a">Portfolio</a>
         <a href="#process" class="nav-a">Process</a>
         <a href="#real-estate" class="nav-a">Services</a>
@@ -505,6 +504,39 @@
        what's offered. Content matches the ProfessionalService JSON-LD
        makesOffer list in <head>, not invented separately.
   ====================================================================== -->
+  <!-- =====================================================================
+       LIVE PANORAMA — a finished 360° capture the visitor can actually take
+       hold of, sitting directly above Services so the pitch below it lands
+       after they have felt the product rather than before. Reuses the same
+       three.js sphere viewer as the service blocks (any canvas carrying
+       data-panorama), but opts into data-touch-pan so phones can look around
+       too — horizontal only, leaving vertical swipes to scroll the page.
+  ====================================================================== -->
+  <section class="section pano-section" id="live-panorama">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">Step Inside</p>
+        <h2 class="section-h2 reveal-up">Take Hold of the Room</h2>
+        <p class="section-p reveal-up">A finished 360&deg; capture, running live in this page. Drag to look around &mdash; Streamphony Live, Bengaluru.</p>
+      </div>
+
+      <div class="pano-frame reveal-up">
+        <canvas
+          class="pano-canvas"
+          data-panorama="assets/img/stitched-360-streamphony.webp"
+          data-touch-pan
+          role="img"
+          aria-label="Interactive 360-degree panorama of Streamphony Live, Bengaluru. Drag to look around."></canvas>
+        <div class="pano-hint" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 6L4 12l5 6M15 6l5 6-5 6"/>
+          </svg>
+          <span>Drag to look around</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section services-section" id="services">
     <div class="inner">
       <div class="section-header-center">
