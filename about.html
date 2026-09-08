@@ -205,11 +205,22 @@
     </div>
   </footer>
 
-  <!-- Google tag (gtag.js) — G-4G2VQCLZDT. The loader stays inline as an
-       external src, which CSP allows; the configuration half lives in
-       analytics.js because script-src carries no 'unsafe-inline'. -->
+  <!-- Google tag (gtag.js) — G-4G2VQCLZDT.
+       Inline, byte-for-byte as Google issues it, because Google's own tag
+       detection scans the page HTML for the gtag('config', ...) call — with the
+       configuration in an external file a source scan finds nothing, even while
+       hits are flowing and returning 204.
+       CSP allows it by SHA-256 hash rather than 'unsafe-inline', so exactly this
+       one script runs and no other inline script is permitted. Reformatting the
+       block below — even the blank line — changes the hash and blocks the tag. -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4G2VQCLZDT"></script>
-  <script defer src="analytics.js"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4G2VQCLZDT');
+</script>
   <script defer src="clarity.js"></script>
   <script defer src="app.js"></script>
 </body>
