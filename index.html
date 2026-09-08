@@ -709,54 +709,54 @@
       </div>
 
       <div class="industries-grid">
-        <a href="#contact" class="industry-tile reveal-up">
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=900&q=80" alt="Resort" loading="lazy">
           <span>Resort</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80" alt="Service Apartment" loading="lazy">
           <span>Service Apartment</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Hotel / Restaurant" loading="lazy">
           <span>Hotel / Restaurant</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=900&q=80" alt="Hospital" loading="lazy">
           <span>Hospital</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80" alt="Co-working Space" loading="lazy">
           <span>Co-working Space</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80" alt="Salon" loading="lazy">
           <span>Salon</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80" alt="Gym" loading="lazy">
           <span>Gym</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=900&q=80" alt="Dental Clinic" loading="lazy">
           <span>Dental Clinic</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80" alt="Showroom" loading="lazy">
           <span>Showroom</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=900&q=80" alt="Nursery" loading="lazy">
           <span>Nursery</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80" alt="School" loading="lazy">
           <span>School</span>
-        </a>
-        <a href="#contact" class="industry-tile reveal-up">
+        </div>
+        <div class="industry-tile reveal-up">
           <img data-parallax="0.1" src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80" alt="College" loading="lazy">
           <span>College</span>
-        </a>
+        </div>
       </div>
     </div>
   </section>
@@ -833,11 +833,11 @@
         <form class="contact-form reveal-up" id="contactForm">
           <div class="form-row">
             <div class="fg">
-              <label>Full Name</label>
+              <label for="contactName">Full Name <span class="req" aria-hidden="true">*</span></label>
               <input type="text" id="contactName" name="name" placeholder="Alex Mercer" required>
             </div>
             <div class="fg">
-              <label>Phone / WhatsApp</label>
+              <label for="contactPhone">Phone / WhatsApp <span class="req" aria-hidden="true">*</span></label>
               <input type="tel" id="contactPhone" name="phone" placeholder="+91 98765 43210" required>
             </div>
           </div>
@@ -889,12 +889,10 @@
           <div class="fg">
             <label>Required Service</label>
             <select id="contactService" name="service">
-              <option>Google Trusted Photography</option>
-              <option>3D Photography</option>
-              <option>360° Virtual Tour</option>
-              <option>Virtual Tour Website</option>
+              <option>360° Photography</option>
+              <option>Google Trusted 360° Virtual Tours</option>
+              <option>3D Website Development / Designing</option>
               <option>Multiple Services</option>
-              <option>Not Sure</option>
             </select>
           </div>
           <div class="fg">

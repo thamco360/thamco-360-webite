@@ -1319,9 +1319,27 @@ body {
   border-radius: 20px; padding: 32px;
 }
 
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.fg { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-.fg label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+/* Eleven fields stacked at 16px read as one dense block — the eye has no
+   handhold between rows and the form looks longer than it is. The column gap
+   grows with it so the two halves of each row stay visibly separate. */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+.fg { display: flex; flex-direction: column; gap: 9px; margin-bottom: 26px; }
+.fg label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* Name and phone are enforced by the browser's required attribute and again
+   by /api/contact, which rejects a submission missing either. This is just
+   the visible half of that contract — aria-hidden because the input's own
+   required state is what a screen reader should be told, not a stray
+   asterisk read mid-label. */
+.fg label .req { color: var(--primary); font-weight: 700; }
+
+/* Two columns inside a 375px viewport leaves ~110px per input — too narrow
+   for a phone number, and labels like "Number of Rooms / Spaces" wrap to
+   three lines above them. The row collapses instead; .fg already carries the
+   vertical rhythm, so the row gap goes to zero to avoid doubling it. */
+@media (max-width: 620px) {
+  .form-row { grid-template-columns: 1fr; gap: 0; }
+}
 .fg input, .fg select, .fg textarea {
   width: 100%; padding: 12px 16px;
   background: rgba(36, 28, 18, 0.03);
@@ -1508,13 +1526,15 @@ body {
   gap: 16px;
 }
 
+/* Presentational only — these were anchors pointing at #contact, which made
+   twelve photographs look clickable and then jumped the visitor somewhere
+   they had not asked to go. They are labels for the industries served. */
 .industry-tile {
   position: relative;
   display: block;
   aspect-ratio: 4 / 5;
   border-radius: 14px;
   overflow: hidden;
-  text-decoration: none;
 }
 
 /* Overhangs its frame by 6% top and bottom so the parallax travel never

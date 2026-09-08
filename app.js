@@ -732,28 +732,32 @@ function initHookReveal() {
     }
   });
 
-  // Two distinct sets rather than one continuous stagger: the statement
-  // resolves word by word over the first stretch of scroll, holds while the
-  // visitor keeps scrolling, and only then does the tagline answer it.
+  // One line per scroll beat. Each line resolves as a whole rather than word
+  // by word: the statement lands, holds, and only then does the tagline
+  // answer it. A per-word stagger spread the sentence across a third of the
+  // scrub, so the visitor was reading it a word at a time and no single
+  // moment belonged to the finished line.
+  //
+  // Durations are relative, not absolute — ScrollTrigger's scrub normalises
+  // the whole timeline across the section's scroll distance, so these numbers
+  // set the proportion of the scroll each beat owns.
   tl.to(words, {
     opacity: 1,
     y: 0,
     ease: 'power2.out',
-    duration: 0.6,
-    stagger: { each: 0.5, from: 'start' },
+    duration: 1,
   });
 
-  tl.to({}, { duration: 0.9 }); // held beat between the two lines
+  tl.to({}, { duration: 1 }); // the statement holds on its own
 
   tl.to(taglineWords, {
     opacity: 1,
     y: 0,
     ease: 'power2.out',
-    duration: 0.6,
-    stagger: { each: 0.45, from: 'start' },
+    duration: 1,
   });
 
-  tl.to({}, { duration: 0.5 }); // beat before the body answers the tagline
+  tl.to({}, { duration: 1 }); // and so does the tagline, before the body
 
   // Whole paragraphs, not per-word. At reading size a word-by-word stagger
   // reads as a stutter rather than as choreography, and the two display lines
@@ -763,11 +767,11 @@ function initHookReveal() {
     opacity: 1,
     y: 0,
     ease: 'power2.out',
-    duration: 0.7,
-    stagger: 0.5,
+    duration: 1,
+    stagger: 0.35,
   });
 
-  tl.to({}, { duration: 0.6 }); // let the finished block sit before releasing
+  tl.to({}, { duration: 0.8 }); // let the finished block sit before releasing
 }
 
 /* ── 8. Inquiry Form — one-click submit via /api/contact ──
@@ -784,10 +788,19 @@ function initContactForm() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // Every field the form actually collects. propertySize, floors, rooms and
+    // service were missing here while /api/contact was already reading them
+    // and printing them into the enquiry email — so those four lines arrived
+    // as "—" on every single lead, however carefully the visitor filled them
+    // in. The API is the contract; this now matches it.
     const payload = {
       name: document.getElementById('contactName').value.trim(),
       phone: document.getElementById('contactPhone').value.trim(),
       propertyType: document.getElementById('contactType').value,
+      propertySize: document.getElementById('contactSize').value,
+      floors: document.getElementById('contactFloors').value.trim(),
+      rooms: document.getElementById('contactRooms').value.trim(),
+      service: document.getElementById('contactService').value,
       message: document.getElementById('contactMsg').value.trim(),
       company: document.getElementById('contactCompany').value, // honeypot
     };
