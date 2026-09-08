@@ -834,16 +834,16 @@
           <div class="form-row">
             <div class="fg">
               <label for="contactName">Full Name <span class="req" aria-hidden="true">*</span></label>
-              <input type="text" id="contactName" name="name" placeholder="Alex Mercer" required>
+              <input type="text" id="contactName" name="name" required>
             </div>
             <div class="fg">
               <label for="contactPhone">Phone / WhatsApp <span class="req" aria-hidden="true">*</span></label>
-              <input type="tel" id="contactPhone" name="phone" placeholder="+91 98765 43210" required>
+              <input type="tel" id="contactPhone" name="phone" required>
             </div>
           </div>
           <div class="form-row">
             <div class="fg">
-              <label>Property Type</label>
+              <label for="contactType">Property Type</label>
               <select id="contactType" name="propertyType">
                 <option>Residential Home / Apartment</option>
                 <option>Luxury Residential Villa</option>
@@ -865,7 +865,7 @@
               </select>
             </div>
             <div class="fg">
-              <label>Approx. Property Size</label>
+              <label for="contactSize">Approx. Property Size</label>
               <select id="contactSize" name="propertySize">
                 <option>Under 1,000 sq ft</option>
                 <option>1,000 – 2,500 sq ft</option>
@@ -878,16 +878,16 @@
           </div>
           <div class="form-row">
             <div class="fg">
-              <label>Number of Floors</label>
-              <input type="text" id="contactFloors" name="floors" placeholder="e.g. 2">
+              <label for="contactFloors">Number of Floors</label>
+              <input type="text" id="contactFloors" name="floors">
             </div>
             <div class="fg">
-              <label>Number of Rooms / Spaces</label>
-              <input type="text" id="contactRooms" name="rooms" placeholder="e.g. 5">
+              <label for="contactRooms">Number of Rooms / Spaces</label>
+              <input type="text" id="contactRooms" name="rooms">
             </div>
           </div>
           <div class="fg">
-            <label>Required Service</label>
+            <label for="contactService">Required Service</label>
             <select id="contactService" name="service">
               <option>360° Photography</option>
               <option>Google Trusted 360° Virtual Tours</option>
@@ -896,8 +896,8 @@
             </select>
           </div>
           <div class="fg">
-            <label>Property Location &amp; Additional Project Requirements</label>
-            <textarea id="contactMsg" name="message" rows="4" placeholder="Location, and anything else we should know..."></textarea>
+            <label for="contactMsg">Property Location &amp; Additional Project Requirements</label>
+            <textarea id="contactMsg" name="message" rows="4"></textarea>
           </div>
           <!-- Honeypot — hidden from real visitors via CSS, invisible to screen readers.
                Bots that fill every field trip this; humans never see it. -->
