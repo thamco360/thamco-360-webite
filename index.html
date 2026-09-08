@@ -1,5 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- class="motion-ready" is set statically rather than by an inline script:
+     the site sends a strict CSP with no 'unsafe-inline' in script-src, which
+     blocks inline <script> outright. As markup it also applies earlier — the
+     hero intro elements are hidden from the very first paint instead of
+     flashing their end state. app.js removes the class if GSAP failed to
+     load, and the CSS neutralises it under prefers-reduced-motion, so the
+     hero can never be stranded invisible. -->
+<html lang="en" class="motion-ready">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,11 +121,6 @@
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Set before first paint so the hero intro elements start hidden rather
-       than flashing in and then being animated. app.js removes this class
-       immediately if GSAP failed to load, and the CSS neutralises it under
-       prefers-reduced-motion, so nothing can be left permanently invisible. -->
-  <script>document.documentElement.classList.add('motion-ready');</script>
 
   <!-- CDNs for Smooth Scroll & 3D & GSAP.
        All deferred: defer keeps execution order and still runs everything
@@ -180,19 +182,15 @@
     <canvas id="tourCanvas" class="tour-canvas"></canvas>
 
     <!-- Initial Entry Hero Overlay.
-         Left-rail F-pattern: the eye lands top-left on the eyebrow, sweeps
-         right across each H1 line, drops down the shortening measure of the
-         paragraph and quote, and terminates on the CTA — so the copy column
-         is deliberately narrower than the H1 and the CTA sits on the same
-         left margin as the logo above it. Each H1 line is pre-split in the
-         markup (not by JS) so the masked line-by-line reveal is deterministic
-         and survives with scripting off. -->
+         Left-rail F-pattern: the eye lands top-left on the first H1 line,
+         sweeps right across each line in turn, then drops down the
+         shortening measure of the paragraph and quote — so the copy column
+         is deliberately narrower than the headline and every block starts on
+         the same left margin as the logo above it. Each H1 line is pre-split
+         in the markup (not by JS) so the masked line-by-line reveal is
+         deterministic and survives with scripting off. -->
     <div class="hero-overlay" id="heroOverlay">
       <div class="hero-overlay-inner" id="heroParallax">
-        <div class="pre-label hero-anim">
-          <span class="dot-live"></span>
-          See it before you step in it
-        </div>
         <h1 class="hero-h1">
           <span class="h1-line"><span class="h1-line-i">Google Trusted</span></span>
           <span class="h1-line"><span class="h1-line-i">Photography 360°</span></span>
@@ -200,7 +198,8 @@
           <span class="h1-line"><span class="h1-line-i gradient-text">Living a Virtual World</span></span>
         </h1>
         <p class="hero-p hero-anim">
-          We turn 360° photography into a virtual walk through. Step inside, look around and let the journey begin.
+          <span class="hero-p-line">We turn 360° photography into a virtual walk through.</span>
+          <span class="hero-p-line">Step inside, look around and let the journey begin.</span>
         </p>
         <p class="hero-quote hero-anim">
           A picture is worth a thousand words and a virtual tour is worth a thousand pictures!
@@ -210,13 +209,6 @@
              the quote so the changing panorama behind it is what holds the
              frame. The .hero-btns block is gone rather than hidden so the
              intro timeline does not animate an empty box. -->
-      </div>
-
-      <!-- Terminates the F: a quiet cue on the same left rail telling the
-           visitor the page keeps going. -->
-      <div class="scroll-cue hero-anim" aria-hidden="true">
-        <span class="scroll-cue-rail"><span class="scroll-cue-bead"></span></span>
-        <span class="scroll-cue-label">Scroll to explore</span>
       </div>
     </div>
 

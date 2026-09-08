@@ -234,32 +234,11 @@ body {
   max-width: 1320px;
   margin: 0 auto;
   /* The block is vertically centred in the section, so the fixed header
-     (75px) and the scroll cue (~94px) have to be reserved as padding —
-     otherwise the eyebrow slides under the nav and the CTA collides with
-     the cue on shorter viewports. */
-  padding: 96px 32px 100px;
+     has to be reserved as top padding or the first headline line slides
+     under the nav. The bottom value only balances the column optically —
+     the scroll cue it used to make room for is gone. */
+  padding: 96px 32px 48px;
   will-change: transform;
-}
-
-.pre-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-heading);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  /* A lighter tint of --accent. The base #4d84b8 only reaches 3.3:1 against
-     the hero scrim at its brightest, and at 13px/600 this counts as normal
-     text, so it needs 4.5:1 — this tint measures 5.7:1 in that worst case
-     while staying recognisably the brand blue. */
-  color: #7fb0dc;
-  margin-bottom: 24px;
-  padding: 6px 16px;
-  border: 1px solid rgba(127, 176, 220, 0.4);
-  border-radius: 100px;
-  background: rgba(77, 132, 184, 0.12);
 }
 
 .hero-h1 {
@@ -313,11 +292,18 @@ body {
 
 /* Measure tightens as the eye travels down the F — H1 16ch, lead 46ch,
    quote 52ch — which is what produces the stepped left-edge silhouette. */
+/* Each sentence is its own block so the break lands where it was written,
+   not wherever the measure happens to fall. The measure is widened to fit
+   the longer of the two on one line; below that width they wrap normally. */
 .hero-p {
   font-size: 1.15rem;
   color: rgba(245, 241, 230, 0.78);
-  max-width: 46ch;
+  max-width: 56ch;
   margin: 0 0 14px;
+}
+
+.hero-p-line {
+  display: block;
 }
 
 /* Reads as the second half of the same block, so .hero-p hands its bottom
@@ -710,8 +696,7 @@ body {
 .inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
 
 /* Small, uppercase and widely tracked: Cormorant's thin strokes disappear
-   at this size and its caps were never drawn for this much letter-spacing.
-   Matches .pre-label, which is the same kind of eyebrow. */
+   at this size and its caps were never drawn for this much letter-spacing. */
 .section-kicker {
   font-family: var(--font-heading);
   font-size: 0.82rem;
@@ -1532,57 +1517,6 @@ html.motion-ready .h1-line-i {
   opacity: 0;
 }
 
-/* ── Scroll cue ─────────────────────────────────────────────── */
-.scroll-cue {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 40px;
-  width: 100%;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 32px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  pointer-events: none;
-  z-index: 11;
-}
-
-.scroll-cue-rail {
-  position: relative;
-  display: block;
-  width: 1px;
-  height: 54px;
-  background: rgba(245, 239, 224, 0.25);
-  overflow: hidden;
-}
-
-.scroll-cue-bead {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 18px;
-  background: var(--primary);
-  animation: cue-travel 2.4s var(--ease) infinite;
-}
-
-@keyframes cue-travel {
-  0%   { transform: translateY(-20px); opacity: 0; }
-  35%  { opacity: 1; }
-  100% { transform: translateY(54px); opacity: 0; }
-}
-
-.scroll-cue-label {
-  font-family: var(--font-heading);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(245, 239, 224, 0.6);
-}
-
 /* ── Parallax ───────────────────────────────────────────────── */
 /* Elements carrying [data-parallax] are driven by GSAP in app.js. The
    promotion hint lives here so the compositor layer exists before the
@@ -1640,8 +1574,6 @@ html.motion-ready .h1-line-i {
         rgba(26, 16, 7, 0.88) 55%,
         rgba(26, 16, 7, 0.94) 100%);
   }
-  .scroll-cue { left: 24px; bottom: 26px; }
-  .scroll-cue-rail { height: 38px; }
 }
 
 @media (max-width: 768px) {
@@ -1649,8 +1581,7 @@ html.motion-ready .h1-line-i {
   .gradient-text { font-size: 2.8rem; }
   .hero-p { font-size: 1.02rem; }
   .hero-quote { font-size: 1rem; margin-bottom: 28px; }
-  .hero-overlay-inner { padding: 88px 24px 76px; }
-  .scroll-cue-label { display: none; }
+  .hero-overlay-inner { padding: 88px 24px 40px; }
 }
 
 /* ── Reduced motion ─────────────────────────────────────────── */
@@ -1662,7 +1593,6 @@ html.motion-ready .h1-line-i {
   html.motion-ready .h1-line-i {
     opacity: 1;
   }
-  .scroll-cue-bead { animation: none; opacity: 0.8; }
   [data-parallax] { will-change: auto; transform: none !important; }
   .parallax-frame > img { height: 100%; }
 }
