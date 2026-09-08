@@ -450,7 +450,7 @@
 
       <div class="section-header-center" style="margin-top: 72px;">
         <p class="section-kicker reveal-up">Raw vs. Stitched</p>
-        <h2 class="section-h2 reveal-up">Experience the Difference — Raw Images vs. Stitched 360° Images</h2>
+        <h2 class="section-h2 reveal-up">Experience the Difference — Raw Image vs. Stitched 360° Images &amp; final output</h2>
       </div>
 
       <div class="flow-strip flow-strip-small reveal-up">
@@ -496,30 +496,14 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- =====================================================================
-       SERVICES — on the homepage, so visitors don't have to leave to see
-       what's offered. Content matches the ProfessionalService JSON-LD
-       makesOffer list in <head>, not invented separately.
-  ====================================================================== -->
-  <!-- =====================================================================
-       LIVE PANORAMA — a finished 360° capture the visitor can actually take
-       hold of, sitting directly above Services so the pitch below it lands
-       after they have felt the product rather than before. Reuses the same
-       three.js sphere viewer as the service blocks (any canvas carrying
-       data-panorama), but opts into data-touch-pan so phones can look around
-       too — horizontal only, leaving vertical swipes to scroll the page.
-  ====================================================================== -->
-  <section class="section pano-section" id="live-panorama">
-    <div class="inner">
-      <div class="section-header-center">
-        <p class="section-kicker reveal-up">Step Inside</p>
-        <h2 class="section-h2 reveal-up">Take Hold of the Room</h2>
-        <p class="section-p reveal-up">A finished 360&deg; capture, running live in this page. Drag to look around &mdash; Streamphony Live, Bengaluru.</p>
-      </div>
-
+      <!-- The final output, and the last beat of the Raw Capture -> Stitching
+           -> Final 360 strip above: the stitched sphere running live, with
+           the visitor able to take hold of it. It sits inside this section
+           rather than in one of its own so it reads as the end of that
+           sequence rather than a fresh topic — the frame's own hint badge
+           carries the "drag to look around" prompt that a heading would
+           otherwise have had to. -->
       <div class="pano-frame reveal-up">
         <canvas
           class="pano-canvas"
@@ -537,6 +521,11 @@
     </div>
   </section>
 
+  <!-- =====================================================================
+       SERVICES — on the homepage, so visitors don't have to leave to see
+       what's offered. Content matches the ProfessionalService JSON-LD
+       makesOffer list in <head>, not invented separately.
+  ====================================================================== -->
   <section class="section services-section" id="services">
     <div class="inner">
       <div class="section-header-center">
