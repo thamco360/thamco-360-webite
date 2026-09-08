@@ -1,0 +1,14 @@
+# The gtag snippet in index.html, about.html and privacy.html is allowed by a
+# SHA-256 hash in the Content-Security-Policy. That hash is computed over the
+# exact bytes of the script body, which are LF while the rest of those files
+# are CRLF.
+#
+# Git's default autocrlf would rewrite those LFs to CRLF on checkout, changing
+# the hash and silently blocking the tag — the page would look fine and
+# Analytics would record nothing. Deploys currently upload the working tree so
+# this has not bitten, but it would the moment anyone clones the repo or
+# Vercel's Git integration builds from a checkout.
+#
+# -text disables all end-of-line conversion for these files: git stores and
+# restores them byte for byte.
+*.html -text
