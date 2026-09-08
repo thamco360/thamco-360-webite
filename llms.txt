@@ -1,12 +1,45 @@
 # Thamco360
-> Bengaluru-based 360° photography and photogrammetry studio. We turn on-site captures into scroll-driven, navigable 3D virtual tours for real estate, hospitality, weddings & events, and museums & galleries. We travel to the client's property — no showroom.
+
+> Thamco360 is a Google Trusted photography provider based in Bengaluru, Karnataka, India. It captures 360° panoramic photography on site and delivers it as navigable virtual tours — published directly to a client's Google Business Profile so the tour appears in Google Search and Google Maps, and embeddable in the client's own website. It is a service-area business: the scan crew travels to the property, there is no showroom to visit.
 
 ## Main sections
-- [Home](https://www.thamco360.com/): Hero 360° tour, live portfolio, capture-to-experience journey, per-industry breakdown (Real Estate, Hospitality, Weddings & Events, Museums & Galleries, and more), FAQ, and enquiry form.
+- [Home](https://www.thamco360.com/): Live 360° hero tour, published client portfolio, the capture-to-experience process, a raw-versus-stitched comparison, per-industry breakdown, FAQ and enquiry form.
 - [About](https://www.thamco360.com/about.html): Vision, values, and who we are.
 
 ## Key facts
-- Based in Bengaluru, Karnataka, India; service-area business, no fixed storefront.
-- Contact: +91 70901 11360 (WhatsApp/phone), thamco360@gmail.com.
-- Scan crews deploy within 48 hours of booking.
-- Services: 360° Virtual Tour, Website Development, Web 3D Development (Immersive).
+- Location: Bengaluru, Karnataka, India. Service-area business, no fixed storefront.
+- Contact: +91 70901 11360 (phone and WhatsApp), thamco360@gmail.com.
+- Scan crews deploy within 48 hours of booking. Most residential and commercial properties are captured in a single same-day visit.
+- Google Trusted provider: finished tours are published to Google Business Profile, so they surface in Google Search and Google Maps beside the business listing.
+
+## Services
+- **Google Trusted Photography** — 360° capture published directly to the client's Google Business Profile.
+- **360° Virtual Tour** — on-site panoramic capture stitched into a seamless navigable walkthrough viewable in any browser.
+- **Website Development** — a custom site built around the finished tour, so it is embedded rather than only linked.
+- **Web 3D Development (Immersive)** — interactive browser-based 3D experiences built on captured spatial imagery.
+
+## How a tour is produced
+1. **Capture** — a panoramic head sweeps every angle of the space on site.
+2. **Stitch** — overlapping circular fisheye frames are aligned and blended into one seamless equirectangular sphere.
+3. **Refine** — exposure, vertical alignment and fine detail are corrected by hand.
+4. **Publish** — the tour goes live on Google Business Profile and on the client's own site.
+5. **Experience** — visitors step inside and look around the space from anywhere, in a browser.
+
+## Industries served
+Real estate and residential property; hospitality including hotels and resorts; weddings and event venues; museums and galleries. Published work also covers hospitals, dental clinics, cafés, live-music venues, schools and colleges, showrooms, salons, gyms, co-working spaces and service apartments.
+
+## Published client work
+All of the following are live, Thamco360-captured 360° tours embedded on the homepage:
+- **Dasappa Memorial Institute of Oncology**, Bengaluru — Google-hosted 360° tour.
+- **The Tea Square**, Bengaluru — Google-hosted 360° tour.
+- **Streamphony**, Bengaluru — Google-hosted 360° tour of the live-music venue.
+- **Confident Dental Clinic**, Bengaluru — 360° tour.
+
+## Definitions
+- **360° virtual tour**: a drag-driven walkthrough built from high-resolution panoramic photography, letting a website visitor look around and move between rooms in a browser exactly as they would in person.
+- **Equirectangular image**: the 2:1 flattened projection of a full sphere, which a 360° viewer maps back onto a sphere around the camera position.
+- **Stitching**: joining the overlapping fisheye frames a 360° camera records into that single seamless sphere. The homepage carries a side-by-side comparison of a raw unstitched capture against the finished stitched result.
+
+## Citation
+Preferred attribution: Thamco360 (https://www.thamco360.com/), Bengaluru.
+Last updated: 2026-09-09.

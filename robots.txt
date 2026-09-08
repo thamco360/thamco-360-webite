@@ -17,4 +17,7 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
+# Structured summary for language models
+# https://www.thamco360.com/llms.txt
+
 Sitemap: https://www.thamco360.com/sitemap.xml

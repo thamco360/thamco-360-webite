@@ -12,6 +12,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thamco360 — 360° Virtual Tours & Immersive 3D Scans in Bengaluru</title>
   <meta name="description" content="Thamco360 turns 360° photography into fully navigable, scroll-driven virtual 3D home tours — serving Bengaluru and beyond. Book your scan today.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Thamco360">
+  <meta name="geo.region" content="IN-KA">
+  <meta name="geo.placename" content="Bengaluru">
   <link rel="canonical" href="https://www.thamco360.com/">
 
   <!-- Open Graph / Twitter Card -->
@@ -20,93 +24,390 @@
   <meta property="og:title" content="Thamco360 — 360° Virtual Tours & Immersive 3D Scans in Bengaluru">
   <meta property="og:description" content="Thamco360 turns 360° photography into fully navigable, scroll-driven virtual 3D home tours — serving Bengaluru and beyond.">
   <meta property="og:url" content="https://www.thamco360.com/">
-  <meta property="og:image" content="https://www.thamco360.com/assets/logo.webp">
+  <meta property="og:image" content="https://www.thamco360.com/assets/img/stitched-360-streamphony.webp">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="800">
+  <meta property="og:image:alt" content="A 360-degree panoramic capture of Streamphony Live in Bengaluru, produced by Thamco360">
+  <meta property="og:locale" content="en_IN">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Thamco360 — 360° Virtual Tours & Immersive 3D Scans in Bengaluru">
   <meta name="twitter:description" content="Thamco360 turns 360° photography into fully navigable, scroll-driven virtual 3D home tours — serving Bengaluru and beyond.">
-  <meta name="twitter:image" content="https://www.thamco360.com/assets/logo.webp">
+  <meta name="twitter:image" content="https://www.thamco360.com/assets/img/stitched-360-streamphony.webp">
+  <meta name="twitter:image:alt" content="A 360-degree panoramic capture of Streamphony Live in Bengaluru, produced by Thamco360">
 
   <!-- Structured Data: local business (service-area business — no fixed
        storefront, crews travel to the client) + services + FAQ, so search
        and AI answer engines can parse who/what/where without scraping the
        rendered page. -->
+  <!-- One connected @graph rather than separate islands: the @id references tie
+       the business, the site, the page, the production process and the published
+       client work into a single subject that search and answer engines resolve as
+       one entity. The FAQ nodes are generated from the visible markup further down
+       this file, so the two cannot drift apart - structured data that does not
+       match visible content is discarded, and can be penalised. -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "@id": "https://www.thamco360.com/#business",
-    "name": "Thamco360",
-    "url": "https://www.thamco360.com/",
-    "logo": "https://www.thamco360.com/assets/logo.webp",
-    "image": "https://www.thamco360.com/assets/logo.webp",
-    "description": "Thamco360 captures 360° photography and delivers it as scroll-driven, navigable 3D virtual tours for real estate, hospitality, weddings & events, and museums & galleries.",
-    "telephone": "+91-70901-11360",
-    "email": "thamco360@gmail.com",
-    "areaServed": {
-      "@type": "City",
-      "name": "Bengaluru"
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "ProfessionalService",
+        "LocalBusiness"
+      ],
+      "@id": "https://www.thamco360.com/#business",
+      "name": "Thamco360",
+      "url": "https://www.thamco360.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.thamco360.com/assets/logo.webp",
+        "width": 150,
+        "height": 97
+      },
+      "image": "https://www.thamco360.com/assets/img/stitched-360-streamphony.webp",
+      "description": "Thamco360 is a Google Trusted photography provider in Bengaluru that captures 360° panoramic photography and delivers it as navigable virtual tours, published to Google Business Profile and embeddable in a client's own website.",
+      "telephone": "+91-70901-11360",
+      "email": "thamco360@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "addressCountry": "IN"
+      },
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Bengaluru"
+        },
+        {
+          "@type": "State",
+          "name": "Karnataka"
+        },
+        {
+          "@type": "Country",
+          "name": "India"
+        }
+      ],
+      "priceRange": "$$",
+      "knowsAbout": [
+        "360° photography",
+        "Equirectangular panoramic imaging",
+        "Virtual tour production",
+        "Google Street View trusted photography",
+        "Google Business Profile 360° tours",
+        "Immersive web 3D development"
+      ],
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Google Trusted Photography",
+            "serviceType": "360° photography",
+            "provider": {
+              "@id": "https://www.thamco360.com/#business"
+            },
+            "areaServed": {
+              "@type": "City",
+              "name": "Bengaluru"
+            },
+            "description": "360° capture by a Google Trusted provider, published directly to the client's Google Business Profile so the tour appears in Google Search and Google Maps."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "360° Virtual Tour",
+            "serviceType": "Virtual tour production",
+            "provider": {
+              "@id": "https://www.thamco360.com/#business"
+            },
+            "areaServed": {
+              "@type": "City",
+              "name": "Bengaluru"
+            },
+            "description": "On-site panoramic capture stitched into a seamless navigable walkthrough the visitor can look around inside from any browser."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Website Development",
+            "serviceType": "Web development",
+            "provider": {
+              "@id": "https://www.thamco360.com/#business"
+            },
+            "areaServed": {
+              "@type": "City",
+              "name": "Bengaluru"
+            },
+            "description": "A custom website built around the finished virtual tour, so the tour is embedded in the client's own site rather than only hosted as a standalone link."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Web 3D Development — Immersive",
+            "serviceType": "Immersive 3D web development",
+            "provider": {
+              "@id": "https://www.thamco360.com/#business"
+            },
+            "areaServed": {
+              "@type": "City",
+              "name": "Bengaluru"
+            },
+            "description": "Interactive browser-based 3D experiences built on top of captured spatial imagery."
+          }
+        }
+      ]
     },
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Bengaluru",
-      "addressRegion": "Karnataka",
-      "addressCountry": "IN"
+    {
+      "@type": "WebSite",
+      "@id": "https://www.thamco360.com/#website",
+      "url": "https://www.thamco360.com/",
+      "name": "Thamco360",
+      "publisher": {
+        "@id": "https://www.thamco360.com/#business"
+      },
+      "inLanguage": "en"
     },
-    "priceRange": "$$",
-    "makesOffer": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "360° Virtual Tour" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Development" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web 3D Development — Immersive" } }
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Where is Thamco360 based?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Thamco360 is based in Bengaluru, India, and travels to the client's property for every 360° capture — there's no showroom to visit, the scan crew comes to you."
-        }
+    {
+      "@type": "WebPage",
+      "@id": "https://www.thamco360.com/#webpage",
+      "url": "https://www.thamco360.com/",
+      "name": "Thamco360 — 360° Virtual Tours & Immersive 3D Scans in Bengaluru",
+      "isPartOf": {
+        "@id": "https://www.thamco360.com/#website"
       },
-      {
-        "@type": "Question",
-        "name": "What is a 360° virtual tour?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A 360° virtual tour is a scroll- or drag-driven walkthrough built from high-resolution panoramic photography, letting a website visitor look around and move between rooms in a browser exactly as they would in person."
-        }
+      "about": {
+        "@id": "https://www.thamco360.com/#business"
       },
-      {
-        "@type": "Question",
-        "name": "How long does a Thamco360 shoot take?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Thamco360 deploys a scan crew within 48 hours of booking; most residential and commercial properties are fully captured in a single same-day visit."
-        }
+      "inLanguage": "en",
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://www.thamco360.com/assets/img/stitched-360-streamphony.webp",
+        "width": 1600,
+        "height": 800
       },
-      {
-        "@type": "Question",
-        "name": "Can Thamco360 build a website around the virtual tour?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes — Thamco360 also offers website development and immersive web 3D development, so the finished tour can be embedded directly into a custom site rather than only hosted as a standalone link."
-        }
+      "dateModified": "2026-09-09",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [
+          ".faq-item h3",
+          ".faq-item p"
+        ]
       },
-      {
-        "@type": "Question",
-        "name": "How do I get in touch with Thamco360?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Message +91 70901 11360 on WhatsApp, email thamco360@gmail.com, or fill in the enquiry form on this page — it sends straight to the team with no extra steps."
-        }
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.thamco360.com/"
+          }
+        ]
       }
-    ]
-  }
+    },
+    {
+      "@type": "HowTo",
+      "@id": "https://www.thamco360.com/#howto",
+      "name": "How 360° photography becomes a finished virtual tour",
+      "description": "The five stages Thamco360 works through to turn an on-site 360° capture into a navigable virtual tour.",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://www.thamco360.com/#business"
+      },
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Capture",
+          "text": "A panoramic head sweeps every angle of the space on site."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Stitch",
+          "text": "Overlapping fisheye frames are aligned and blended into one seamless equirectangular sphere."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Refine",
+          "text": "Exposure, vertical alignment and fine detail are corrected by hand."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Publish",
+          "text": "The finished tour goes live on Google Business Profile and on the client's own site."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Experience",
+          "text": "Visitors step inside and look around the space from anywhere, in a browser."
+        }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://www.thamco360.com/#portfolio",
+      "name": "Published Thamco360 360° virtual tours",
+      "numberOfItems": 4,
+      "itemListOrder": "Unordered",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "Place",
+            "name": "Dasappa Memorial Institute of Oncology",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Bengaluru",
+              "addressRegion": "Karnataka",
+              "addressCountry": "IN"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 12.948166,
+              "longitude": 77.57251
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "Place",
+            "name": "The Tea Square",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Bengaluru",
+              "addressRegion": "Karnataka",
+              "addressCountry": "IN"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 12.979652,
+              "longitude": 77.605741
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "Place",
+            "name": "Streamphony",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Bengaluru",
+              "addressRegion": "Karnataka",
+              "addressCountry": "IN"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 13.002347,
+              "longitude": 77.598176
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@type": "Place",
+            "name": "Confident Dental Clinic",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Bengaluru",
+              "addressRegion": "Karnataka",
+              "addressCountry": "IN"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.thamco360.com/#faq",
+      "isPartOf": {
+        "@id": "https://www.thamco360.com/#webpage"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Where is Thamco360 based?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Thamco360 is based in Bengaluru, India, and travels to the client's property for every 360° capture — there's no showroom to visit, the scan crew comes to you."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a 360° virtual tour?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A 360° virtual tour is a scroll- or drag-driven walkthrough built from high-resolution panoramic photography, letting a website visitor look around and move between rooms in a browser exactly as they would in person."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does a Thamco360 shoot take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Thamco360 deploys a scan crew within 48 hours of booking; most residential and commercial properties are fully captured in a single same-day visit."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Thamco360 build a website around the virtual tour?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — Thamco360 also offers website development and immersive web 3D development, so the finished tour can be embedded directly into a custom site rather than only hosted as a standalone link."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What industries does Thamco360 work with?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Thamco360 captures real estate and residential property, hospitality including hotels and resorts, weddings and event venues, and museums and galleries. Published client work also covers hospitals, dental clinics, cafés and live-music venues in Bengaluru."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between a 360° photo and a stitched virtual tour?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A raw 360° capture comes off the camera as two circular fisheye frames that are not yet joined. Stitching aligns and blends those frames into a single seamless equirectangular sphere, which is what a visitor can then look around inside. You can compare the two directly in the raw-versus-stitched slider on this page."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are Thamco360 tours published on Google?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Thamco360 is a Google Trusted photography provider and publishes finished 360° tours directly to Google Business Profile, so the tour appears in Google Search and Google Maps alongside the business listing. The portfolio on this page embeds live Google-hosted tours."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I get in touch with Thamco360?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Message +91 70901 11360 on WhatsApp, email thamco360@gmail.com, or fill in the enquiry form below — it sends straight to the team with no extra steps."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <!-- Google Fonts -->
@@ -726,6 +1027,23 @@
           <h3>Can Thamco360 build a website around the virtual tour?</h3>
           <p>Yes — Thamco360 also offers website development and immersive web 3D development, so the finished tour can be embedded directly into a custom site rather than only hosted as a standalone link.</p>
         </div>
+        <!-- Every answer below is drawn from what this page already states
+             elsewhere — the portfolio embeds, the raw-vs-stitched comparison
+             and the industry sections. Nothing here is a new claim, which is
+             what keeps the FAQPage schema honest: Google discards, and can
+             penalise, structured data that is not visible on the page. -->
+        <div class="faq-item reveal-up">
+          <h3>What industries does Thamco360 work with?</h3>
+          <p>Thamco360 captures real estate and residential property, hospitality including hotels and resorts, weddings and event venues, and museums and galleries. Published client work also covers hospitals, dental clinics, cafés and live-music venues in Bengaluru.</p>
+        </div>
+        <div class="faq-item reveal-up">
+          <h3>What is the difference between a 360° photo and a stitched virtual tour?</h3>
+          <p>A raw 360° capture comes off the camera as two circular fisheye frames that are not yet joined. Stitching aligns and blends those frames into a single seamless equirectangular sphere, which is what a visitor can then look around inside. You can compare the two directly in the raw-versus-stitched slider on this page.</p>
+        </div>
+        <div class="faq-item reveal-up">
+          <h3>Are Thamco360 tours published on Google?</h3>
+          <p>Yes. Thamco360 is a Google Trusted photography provider and publishes finished 360° tours directly to Google Business Profile, so the tour appears in Google Search and Google Maps alongside the business listing. The portfolio on this page embeds live Google-hosted tours.</p>
+        </div>
         <div class="faq-item reveal-up">
           <h3>How do I get in touch with Thamco360?</h3>
           <p>Message +91 70901 11360 on WhatsApp, email thamco360@gmail.com, or fill in the enquiry form below — it sends straight to the team with no extra steps.</p>
@@ -914,6 +1232,7 @@
   </footer>
 
   <!-- Main JavaScript Engine -->
+  <script defer src="clarity.js"></script>
   <script defer src="app.js"></script>
 </body>
 </html>
