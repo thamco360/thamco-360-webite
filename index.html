@@ -105,20 +105,35 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <!-- Cormorant Garamond carries the display voice (hero H1, section titles);
+       Instrument Sans stays on UI chrome, labels and body copy. One request,
+       preloaded, so the luxury serif does not cost a second round trip. -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- CDNs for Smooth Scroll & 3D & GSAP -->
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- Set before first paint so the hero intro elements start hidden rather
+       than flashing in and then being animated. app.js removes this class
+       immediately if GSAP failed to load, and the CSS neutralises it under
+       prefers-reduced-motion, so nothing can be left permanently invisible. -->
+  <script>document.documentElement.classList.add('motion-ready');</script>
+
+  <!-- CDNs for Smooth Scroll & 3D & GSAP.
+       All deferred: defer keeps execution order and still runs everything
+       before DOMContentLoaded (which is what app.js waits on), so the
+       globals are guaranteed present without blocking first paint. -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.446.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="tier-full">
 
@@ -164,29 +179,44 @@
   <section id="virtual-tour" class="hero-tour-section">
     <canvas id="tourCanvas" class="tour-canvas"></canvas>
 
-    <!-- Initial Entry Hero Overlay -->
+    <!-- Initial Entry Hero Overlay.
+         Left-rail F-pattern: the eye lands top-left on the eyebrow, sweeps
+         right across each H1 line, drops down the shortening measure of the
+         paragraph and quote, and terminates on the CTA — so the copy column
+         is deliberately narrower than the H1 and the CTA sits on the same
+         left margin as the logo above it. Each H1 line is pre-split in the
+         markup (not by JS) so the masked line-by-line reveal is deterministic
+         and survives with scripting off. -->
     <div class="hero-overlay" id="heroOverlay">
-      <div class="hero-overlay-inner">
-        <div class="pre-label reveal-up">
+      <div class="hero-overlay-inner" id="heroParallax">
+        <div class="pre-label hero-anim">
           <span class="dot-live"></span>
           See it before you step in it
         </div>
-        <h1 class="hero-h1 reveal-up">
-          Google Trusted Photography 360° Virtual Tours.<br>
-          <span class="gradient-text">Living a Virtual World</span>
+        <h1 class="hero-h1">
+          <span class="h1-line"><span class="h1-line-i">Google Trusted</span></span>
+          <span class="h1-line"><span class="h1-line-i">Photography 360°</span></span>
+          <span class="h1-line"><span class="h1-line-i">Virtual Tours.</span></span>
+          <span class="h1-line"><span class="h1-line-i gradient-text">Living a Virtual World</span></span>
         </h1>
-        <p class="hero-p reveal-up">
+        <p class="hero-p hero-anim">
           We turn 360° photography into a virtual walk through. Step inside, look around and let the journey begin.
         </p>
-        <p class="hero-quote reveal-up">
+        <p class="hero-quote hero-anim">
           A picture is worth a thousand words and a virtual tour is worth a thousand pictures!
         </p>
-        <div class="hero-btns reveal-up">
-          <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-enter-tour magnetic">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
-            Book Your 360° Virtual Tour
-          </a>
-        </div>
+        <!-- The hero's booking CTA was removed deliberately: the header pill
+             and the contact section still carry it, and the hero now ends on
+             the quote so the changing panorama behind it is what holds the
+             frame. The .hero-btns block is gone rather than hidden so the
+             intro timeline does not animate an empty box. -->
+      </div>
+
+      <!-- Terminates the F: a quiet cue on the same left rail telling the
+           visitor the page keeps going. -->
+      <div class="scroll-cue hero-anim" aria-hidden="true">
+        <span class="scroll-cue-rail"><span class="scroll-cue-bead"></span></span>
+        <span class="scroll-cue-label">Scroll to explore</span>
       </div>
     </div>
 
@@ -300,34 +330,6 @@
       <span class="showcase-label">College</span>
     </div>
     <div class="showcase-vignette"></div>
-  </section>
-
-  <!-- =====================================================================
-       SHOWREEL — sits directly above the portfolio. Muted + inline so it can
-       autoplay; initShowreelVideo() in app.js starts it when the section
-       scrolls into view and pauses it again once it leaves.
-  ====================================================================== -->
-  <section class="section showreel-section" id="showreel">
-    <div class="inner">
-      <div class="section-header-center">
-        <p class="section-kicker reveal-up">Walkthrough Film</p>
-        <h2 class="section-h2 reveal-up">Dasappa Memorial Institute of Oncology</h2>
-        <p class="section-p reveal-up">A cinematic pass through the space we captured — the 360&deg; tour of the same building sits just below.</p>
-      </div>
-
-      <div class="showreel-frame reveal-up">
-        <video
-          id="showreelVideo"
-          class="showreel-video"
-          src="assets/video/dasappa-showreel.mp4"
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          controls
-          aria-label="Walkthrough film of Dasappa Memorial Institute of Oncology"></video>
-      </div>
-    </div>
   </section>
 
   <!-- =====================================================================
@@ -616,51 +618,51 @@
 
       <div class="industries-grid">
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=900&q=80" alt="Resort" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=900&q=80" alt="Resort" loading="lazy">
           <span>Resort</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80" alt="Service Apartment" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80" alt="Service Apartment" loading="lazy">
           <span>Service Apartment</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Hotel / Restaurant" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Hotel / Restaurant" loading="lazy">
           <span>Hotel / Restaurant</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=900&q=80" alt="Hospital" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=900&q=80" alt="Hospital" loading="lazy">
           <span>Hospital</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80" alt="Co-working Space" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=80" alt="Co-working Space" loading="lazy">
           <span>Co-working Space</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80" alt="Salon" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=80" alt="Salon" loading="lazy">
           <span>Salon</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80" alt="Gym" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80" alt="Gym" loading="lazy">
           <span>Gym</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=900&q=80" alt="Dental Clinic" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=900&q=80" alt="Dental Clinic" loading="lazy">
           <span>Dental Clinic</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80" alt="Showroom" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80" alt="Showroom" loading="lazy">
           <span>Showroom</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=900&q=80" alt="Nursery" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=900&q=80" alt="Nursery" loading="lazy">
           <span>Nursery</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80" alt="School" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=900&q=80" alt="School" loading="lazy">
           <span>School</span>
         </a>
         <a href="#contact" class="industry-tile reveal-up">
-          <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80" alt="College" loading="lazy">
+          <img data-parallax="0.1" src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=900&q=80" alt="College" loading="lazy">
           <span>College</span>
         </a>
       </div>
@@ -886,6 +888,6 @@
   </footer>
 
   <!-- Main JavaScript Engine -->
-  <script src="app.js"></script>
+  <script defer src="app.js"></script>
 </body>
 </html>

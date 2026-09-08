@@ -2,30 +2,68 @@
    THAMCO360 — Main Interactive Engine
    ========================================================================== */
 
+/* Shared motion guard. Read once, used by every module below, so the whole
+   page agrees on whether it is allowed to animate. */
+const PREFERS_REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 document.addEventListener('DOMContentLoaded', () => {
+  // The <head> optimistically marks the document motion-ready so the hero
+  // never flashes its final state before the intro timeline takes over. If
+  // GSAP did not actually arrive, that promise cannot be kept — drop the
+  // class immediately so the hero copy is visible rather than stranded at
+  // opacity 0.
+  if (!window.gsap) document.documentElement.classList.remove('motion-ready');
+
   // Initialize Lenis Smooth Scroll
   let lenis;
   try {
     lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.15,
+      // expo-out: fast commit, long glide — reads as weight rather than lag.
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothTouch: true
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.6,
+      // Native momentum on touch. Virtualised touch scrolling fights the
+      // hero's drag-to-look panorama and mis-reports position to the pinned
+      // ScrollTriggers on iOS, so the phone keeps the platform scroller.
+      smoothTouch: false
     });
-    function raf(time) {
-      lenis.raf(time);
+
+    if (window.gsap && window.ScrollTrigger) {
+      // Lenis virtualizes scroll rather than driving native scrollTop, so
+      // ScrollTrigger (used below for the hero room driver and the service
+      // tour pins) needs to be told explicitly when Lenis moves the page —
+      // without this, pinned sections desync from the actual scroll position.
+      lenis.on('scroll', ScrollTrigger.update);
+
+      // Drive Lenis from GSAP's ticker instead of a second requestAnimationFrame
+      // loop. One loop means scroll position and every scrubbed tween are
+      // computed in the same frame — two loops let them land a frame apart,
+      // which is exactly the jitter that shows up on parallax. lagSmoothing(0)
+      // stops GSAP from fast-forwarding after a background-tab stall, which
+      // would otherwise snap the parallax on return.
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
       requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
 
-    // Lenis virtualizes scroll rather than driving native scrollTop, so
-    // ScrollTrigger (used below for the hero room driver and the service
-    // tour pins) needs to be told explicitly when Lenis moves the page —
-    // without this, pinned sections desync from the actual scroll position.
-    if (window.gsap && window.ScrollTrigger) {
-      lenis.on('scroll', ScrollTrigger.update);
-    }
+    // Route in-page anchors through Lenis so the jump inherits the same
+    // easing as a wheel scroll instead of teleporting.
+    document.querySelectorAll('a[href^="#"]').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (!id || id === '#') return;
+        const target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        lenis.scrollTo(target, { offset: -90, duration: 1.4 });
+      });
+    });
   } catch (e) {
     console.log('Lenis fallback');
+    document.documentElement.style.scrollBehavior = 'smooth';
   }
 
   // Lucide Icons
@@ -43,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceTours();
   initServicePinning();
   initHookReveal();
-  initShowreelVideo();
+  initHeroIntro();
+  initParallax();
 
   // ScrollTrigger caches pin start/end pixel ranges at creation time.
   // This page has several lazy-loaded images (industries grid, property
@@ -105,38 +144,6 @@ function initCinematicTextReveals() {
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
-}
-
-/* ── 2b. Showreel: autoplay once the section is reached ──
-   The video is muted + playsinline so browsers allow programmatic play().
-   It starts when half the frame is on screen and pauses again when it
-   leaves, so it never plays to nobody. Once the visitor takes manual
-   control (play/pause via the native controls) we stop steering it. */
-function initShowreelVideo() {
-  const video = document.getElementById('showreelVideo');
-  if (!video) return;
-
-  // Browser-fired play/pause events are isTrusted even when we called play()
-  // ourselves, so watch for a real interaction with the native controls
-  // instead and hand playback over to the visitor from then on.
-  let userDriven = false;
-  ['pointerdown', 'keydown'].forEach(evt => {
-    video.addEventListener(evt, () => { userDriven = true; });
-  });
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (userDriven) return;
-      if (entry.isIntersecting) {
-        const attempt = video.play();
-        if (attempt && attempt.catch) attempt.catch(() => {});
-      } else if (!video.paused) {
-        video.pause();
-      }
-    });
-  }, { threshold: 0.5 });
-
-  observer.observe(video);
 }
 
 /* ── 3. Ambient Shader Canvas Background ── */
@@ -767,5 +774,139 @@ function initContactForm() {
     } finally {
       btn.disabled = false;
     }
+  });
+}
+
+/* ── 13. Hero Intro Timeline ──
+   The one piece of choreography the visitor is guaranteed to see, so it is
+   hand-built rather than handed to the generic .reveal-up observer:
+
+     eyebrow  → fades up first, establishing the top-left origin of the F
+     H1 lines → rise out of their masks on a 0.09s stagger, so the eye is
+                pulled left-to-right down the stack rather than shown a
+                block of type all at once
+     lead/quote/CTA → follow on the same rail, each a touch later, which is
+                what makes the column read top-down instead of as one flash
+
+   Everything is offset against a small lead-in so the panorama behind has a
+   beat to settle before type lands on it. */
+function initHeroIntro() {
+  const root = document.documentElement;
+  const overlay = document.getElementById('heroOverlay');
+  if (!overlay) return;
+
+  const clear = () => root.classList.remove('motion-ready');
+
+  // No GSAP, or the visitor asked for less motion: show the final state.
+  if (!window.gsap || PREFERS_REDUCED) { clear(); return; }
+
+  // Failsafe for the one thing that actually matters: the timeline never
+  // starting at all (a throw during setup, GSAP present but broken). It is
+  // cancelled on the first rendered frame — once GSAP is demonstrably
+  // driving the timeline, opacity is guaranteed to reach 1, so there is no
+  // need to race the timeline's own duration. Waiting for onComplete instead
+  // made this a coin flip: the run lands around 2.2s on a cold load, against
+  // a 2.5s timer.
+  const failsafe = setTimeout(clear, 4000);
+
+  const lines = overlay.querySelectorAll('.h1-line-i');
+  const label = overlay.querySelector('.pre-label');
+  const lead = overlay.querySelector('.hero-p');
+  const quote = overlay.querySelector('.hero-quote');
+  const btns = overlay.querySelector('.hero-btns');
+  const cue = overlay.querySelector('.scroll-cue');
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'expo.out' },
+    onStart: () => clearTimeout(failsafe),
+    onComplete: () => {
+      clearTimeout(failsafe);
+      // The class only ever existed to stop a pre-intro flash. Drop it now
+      // that the intro is over, so the stylesheet's opacity:0 rule is not
+      // left hanging over the hero for the rest of the session.
+      clear();
+      // Hand the promoted layers back once they have stopped moving —
+      // leaving will-change on permanently keeps the memory pinned.
+      gsap.set([lines, label, lead, quote, btns, cue].filter(Boolean), { clearProps: 'willChange' });
+    }
+  });
+
+  if (label) {
+    tl.fromTo(label, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9 }, 0.15);
+  }
+
+  if (lines.length) {
+    tl.fromTo(lines,
+      { opacity: 0, yPercent: 108 },
+      { opacity: 1, yPercent: 0, duration: 1.25, stagger: 0.09 },
+      0.28);
+  }
+
+  [[lead, 0.66], [quote, 0.78], [btns, 0.9]].forEach(([el, at]) => {
+    if (el) tl.fromTo(el, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 1 }, at);
+  });
+
+  if (cue) {
+    tl.fromTo(cue, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.8 }, 1.15);
+  }
+}
+
+/* ── 14. Parallax ──
+   Two layers of depth, both scrubbed off the same Lenis-driven ScrollTrigger
+   so they stay in lockstep with the smooth scroll:
+
+     a) the hero column, which drifts up slower than the page and dims as it
+        leaves — the panorama behind it therefore appears to sit further back
+     b) any [data-parallax] element, where the attribute value is the share
+        of its own height it should travel over the scroll past it
+
+   Skipped entirely on coarse pointers: sustained transform scrubbing on a
+   mobile GPU costs more than the effect returns, and mobile browsers already
+   move the URL bar under the finger, which fights it. */
+function initParallax() {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  if (PREFERS_REDUCED) return;
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // (a) Hero column depth.
+  const heroInner = document.getElementById('heroParallax');
+  const heroSection = document.getElementById('virtual-tour');
+  if (heroInner && heroSection) {
+    gsap.to(heroInner, {
+      yPercent: -16,
+      opacity: 0.15,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: heroSection,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.6
+      }
+    });
+  }
+
+  // (b) Generic depth layers.
+  document.querySelectorAll('[data-parallax]').forEach((el) => {
+    const depth = parseFloat(el.dataset.parallax);
+    if (!depth) return;
+
+    // Travel is centred on the element (-half → +half) so it sits in its
+    // designed position when it is level with the middle of the viewport,
+    // rather than starting displaced.
+    const travel = depth * 100;
+    gsap.fromTo(el,
+      { yPercent: -travel / 2 },
+      {
+        yPercent: travel / 2,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el.closest('.parallax-frame') || el,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.6
+        }
+      });
   });
 }
