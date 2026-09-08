@@ -23,6 +23,12 @@
   --font-script: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
   --font-heading: 'Instrument Sans', sans-serif;
   --font-body: 'Instrument Sans', sans-serif;
+  /* One rail for the entire page. The header used to sit on 1320 while every
+     content section used .inner at 1240, so the header logo hung 40px to the
+     left of everything beneath it all the way down. The header has ~370px of
+     slack at this width, so it loses nothing by matching. */
+  --rail: 1240px;
+  --rail-pad: 32px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --glass: rgba(42, 30, 16, 0.85);
 }
@@ -71,9 +77,9 @@ body {
 }
 
 .header-inner {
-  max-width: 1320px;
+  max-width: var(--rail);
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 var(--rail-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -164,9 +170,13 @@ body {
 }
 
 /* ── HERO VIRTUAL TOUR SECTION ─────────────────────────────── */
+/* 100% rather than 100vw: 100vw counts the scrollbar gutter, which made this
+   section ~15px wider than every other block and pushed the hero headline 8px
+   right of the rail everything else sits on. It was also a real horizontal
+   overflow that only body{overflow-x:hidden} was hiding. */
 .hero-tour-section {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   overflow: hidden;
   background: #2a2015;
@@ -231,7 +241,7 @@ body {
 .hero-overlay-inner {
   text-align: left;
   width: 100%;
-  max-width: 1320px;
+  max-width: var(--rail);
   margin: 0 auto;
   /* The block is vertically centred in the section, so the fixed header
      has to be reserved as top padding or the first headline line slides
@@ -692,8 +702,11 @@ body {
 .tour-scroll-driver { height: 0; margin-top: 0; pointer-events: none; }
 
 /* ── WORK & SEQUENCE CHAPTERS ──────────────────────────────── */
-.section { padding: 120px 0; position: relative; }
-.inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+/* 120px top and bottom meant every pair of adjacent sections opened a 240px
+   empty band. 84px keeps the page airy while closing roughly a third of that
+   dead space. */
+.section { padding: 84px 0; position: relative; }
+.inner { max-width: var(--rail); margin: 0 auto; padding: 0 var(--rail-pad); }
 
 /* Small, uppercase and widely tracked: Cormorant's thin strokes disappear
    at this size and its caps were never drawn for this much letter-spacing. */
@@ -806,7 +819,7 @@ body {
 .journey {
   position: relative;
   list-style: none;
-  margin: 64px 0 0;
+  margin: 52px 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1096,7 +1109,7 @@ body {
    before the section releases and Contact scrolls in underneath. */
 .hook-section {
   position: relative;
-  height: 260vh;
+  height: 200vh;
   background: #241c12;
 }
 
@@ -1341,13 +1354,22 @@ body {
 .floating-wa:hover { transform: scale(1.1); }
 
 /* FOOTER */
-.site-footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padding-top: 80px; }
-.footer-inner { display: grid; grid-template-columns: 1.5fr 2fr; gap: 64px; padding-bottom: 60px; }
-.footer-brand p { font-size: 0.88rem; color: var(--text-muted); margin-top: 12px; }
-.footer-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.site-footer { background: var(--bg-subtle); border-top: 1px solid var(--border); padding-top: 64px; }
+/* Was a nested grid — a 1.5fr/2fr outer split with its own 3-column grid
+   inside — so the link columns were spaced against a different track to the
+   brand beside them and the whole block read as two unrelated halves.
+   .footer-links now uses display:contents, which dissolves the wrapper and
+   lets all four columns sit on one shared track with one consistent gap. */
+.footer-inner { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 56px; }
+.footer-brand p { font-size: 0.88rem; color: var(--text-muted); margin-top: 12px; max-width: 34ch; }
+.footer-links { display: contents; }
 .fl-col h5 { font-size: 0.78rem; text-transform: uppercase; color: rgba(36, 28, 18, 0.75); margin-bottom: 14px; }
-.fl-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.88rem; margin-bottom: 8px; }
-.fl-col a.fl-sub { padding-left: 14px; font-size: 0.82rem; opacity: 0.85; }
+.fl-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.88rem; margin-bottom: 8px; line-height: 1.45; }
+.fl-col a:hover { color: var(--primary); }
+/* These three are sibling services in the JSON-LD, not a parent and a child,
+   so the old 14px indent was making one link hang off the column's left edge
+   for no reason. */
+.fl-col a.fl-sub { padding-left: 0; font-size: 0.88rem; opacity: 1; }
 .footer-bottom { border-top: 1px solid var(--border); padding: 20px 0; }
 .footer-bottom .inner { display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(36, 28, 18, 0.6); }
 
@@ -1563,7 +1585,8 @@ body {
 @media (max-width: 1024px) {
   .chapter-row { grid-template-columns: 1fr; gap: 16px; }
   .contact-grid { grid-template-columns: 1fr; }
-  .footer-inner { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer-brand { grid-column: 1 / -1; }
 }
 
 @media (max-width: 768px) {
