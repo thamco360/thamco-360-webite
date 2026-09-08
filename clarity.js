@@ -6,10 +6,12 @@
  * simply have recorded nothing. Kept as a separate file it is served from
  * 'self' and runs normally.
  *
- * vercel.json is updated alongside this to allow https://www.clarity.ms in
- * script-src (the tag this loader injects) and the Clarity/Bing collection
- * endpoints in connect-src (where the recordings are posted). Without those
- * two the loader would run and every beacon it sent would still be refused.
+ * vercel.json is updated alongside this to allow https://*.clarity.ms in
+ * script-src and the Clarity/Bing collection endpoints in connect-src. The
+ * wildcard is load-bearing: this loader fetches www.clarity.ms/tag/<id>, which
+ * in turn pulls the real library from scripts.clarity.ms — a different
+ * subdomain. Allowing only www.clarity.ms let the first request through and
+ * blocked the second, so Clarity appeared to load and recorded nothing.
  *
  * Loaded with defer so it never competes with first paint.
  */
