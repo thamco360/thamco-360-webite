@@ -56,6 +56,8 @@ function renderWhileVisible(el, frame, rootMargin = '200px 0px') {
   sync();
 }
 
+let lenisInstance = null;
+
 document.addEventListener('DOMContentLoaded', () => {
   // The <head> optimistically marks the document motion-ready so the hero
   // never flashes its final state before the intro timeline takes over. If
@@ -78,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // ScrollTriggers on iOS, so the phone keeps the platform scroller.
       smoothTouch: false
     });
+    lenisInstance = lenis;
 
     if (window.gsap && window.ScrollTrigger) {
       // Lenis virtualizes scroll rather than driving native scrollTop, so
@@ -131,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroIntro();
   initParallax();
   initJourney();
+  initMobileNav();
 
   // ScrollTrigger caches pin start/end pixel ranges at creation time.
   // This page has several lazy-loaded images (industries grid, property
@@ -1037,4 +1041,61 @@ function initJourney() {
       }
     });
   }
+}
+
+
+/* ── 16. Mobile Navigation ──
+   Below 768px the nav was display:none with nothing in its place, so a phone
+   visitor could reach no section of the site except by scrolling past all of
+   it. This gives those links a panel.
+
+   The panel is a disclosure, not a dialog: it sits under the header, does not
+   cover the page, and the toggle stays visible while it is open — so it does
+   not trap focus, and Escape plus a click outside are enough. */
+function initMobileNav() {
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('mainNav');
+  if (!toggle || !nav) return;
+
+  const setOpen = (open) => {
+    nav.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    // Lenis virtualises scrolling, so hiding body overflow would not hold the
+    // page still behind the panel — the instance has to be told directly.
+    if (lenisInstance) open ? lenisInstance.stop() : lenisInstance.start();
+  };
+
+  const isOpen = () => nav.classList.contains('is-open');
+
+  toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+  // Capture phase on the container, deliberately. The anchor handler that
+  // routes in-page links through lenis.scrollTo() is registered on each link
+  // during startup, before this module runs — so a target-phase listener here
+  // would fire second, and Lenis would be asked to scroll while it was still
+  // stopped by the open menu. Nothing would move. Capturing on the parent
+  // guarantees the panel closes, and Lenis restarts, before that scroll runs.
+  nav.addEventListener('click', (e) => {
+    if (e.target.closest('a')) setOpen(false);
+  }, true);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen()) {
+      setOpen(false);
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!isOpen()) return;
+    if (nav.contains(e.target) || toggle.contains(e.target)) return;
+    setOpen(false);
+  });
+
+  // Widening past the breakpoint restores the desktop nav; the panel state
+  // has to be cleared or the page is left scroll-locked by an invisible menu.
+  window.matchMedia('(min-width: 769px)').addEventListener('change', (e) => {
+    if (e.matches && isOpen()) setOpen(false);
+  });
 }

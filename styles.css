@@ -66,6 +66,7 @@ body {
   z-index: 1000;
   padding: 16px 0;
   background: rgba(250, 246, 238, 0.85);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   transition: background 0.4s ease;
@@ -164,6 +165,7 @@ body {
   position: relative;
   width: 100%;
   height: 100vh;
+  height: 100svh;
   overflow: hidden;
   background: #2a2015;
 }
@@ -797,6 +799,7 @@ body {
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1312,7 +1315,43 @@ body {
 }
 
 @media (max-width: 768px) {
-  .main-nav { display: none; }
+  /* The nav becomes a panel rather than disappearing. It is kept in the DOM
+     and moved off-canvas instead of display:none so it stays focusable in
+     order and the slide can be animated. */
+  .main-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    top: 71px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 12px 24px 26px;
+    background: rgba(250, 246, 238, 0.98);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 18px 40px rgba(36, 28, 18, 0.16);
+    transform: translateY(-12px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease), visibility 0.28s;
+  }
+
+  .main-nav.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .main-nav .nav-a {
+    padding: 15px 0;
+    font-size: 1.02rem;
+    border-bottom: 1px solid rgba(36, 28, 18, 0.08);
+  }
+
+  .main-nav .nav-a:last-child { border-bottom: none; }
     .hero-h1 { font-size: 2.6rem; }
   
   }
@@ -1442,6 +1481,7 @@ html.motion-ready .h1-line-i {
   padding: 9px 18px;
   border-radius: 100px;
   background: rgba(23, 16, 10, 0.72);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(245, 239, 224, 0.16);
   color: rgba(245, 239, 224, 0.9);
@@ -1460,4 +1500,109 @@ html.motion-ready .h1-line-i {
 @media (max-width: 768px) {
   .pano-frame { aspect-ratio: 4 / 3; margin-top: 32px; border-radius: 14px; }
   .pano-hint { bottom: 16px; font-size: 0.68rem; padding: 8px 14px; }
+}
+
+/* ================================================================
+   MOBILE & TOUCH HARDENING
+   Behaviours that only bite on real phones, so they are easy to miss
+   on a desktop browser window narrowed to phone width.
+   ================================================================ */
+
+@media (max-width: 768px) {
+  /* iOS Safari zooms the whole page in whenever a form control smaller than
+     16px receives focus, and does not zoom back out afterwards. The fields
+     were 14.72px, so every visitor tapping "Full Name" got thrown into a
+     zoomed viewport for the rest of the form. 16px is the exact threshold. */
+  .fg input,
+  .fg select,
+  .fg textarea {
+    font-size: 16px;
+  }
+
+  /* Comfortable touch targets. Footer links were 20px tall against Apple's
+     44px guidance and WCAG's 24px floor — small enough to mis-tap on the
+     move, which is where this page is read. */
+  .fl-col a {
+    padding: 9px 0;
+    margin-bottom: 0;
+  }
+
+  .footer-bottom .inner a,
+  .cd-item a,
+  .phone-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .nav-a {
+    padding: 10px 0;
+  }
+
+  /* Inline link inside a sentence, so it cannot take block padding without
+     breaking the line box — inline-block plus a min-height gives it a real
+     target while leaving the surrounding text flowing normally. */
+  .form-alt-hint a {
+    display: inline-block;
+    min-height: 32px;
+    line-height: 32px;
+  }
+}
+
+/* Stops a grey flash on tap in iOS/Android Chrome — the elements here already
+   have their own hover and active treatments. */
+a, button, .industry-tile, .room-node {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Keeps a rubber-band overscroll at the top of the page from dragging the
+   fixed header with it on iOS. */
+html, body {
+  overscroll-behavior-y: none;
+}
+
+/* ── Mobile nav toggle ──────────────────────────────────────── */
+/* Hidden on desktop, where the full nav is already visible. */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  order: 3;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--text);
+  transition: transform 0.28s var(--ease), opacity 0.2s var(--ease);
+}
+
+/* Bars fold into an X while the panel is open. */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }
+  /* The full label does not fit beside a toggle at 375px, so the CTA shortens
+     to "Book". order:-1 puts the pseudo-element ahead of the arrow SVG, which
+     sits after the (now hidden) span in the markup — without it the button
+     reads as an arrow followed by its label. */
+  .header-actions .btn-pill span { display: none; }
+  .header-actions .btn-pill::after { content: 'Book'; order: -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-nav, .nav-toggle-bar { transition: none; }
 }
