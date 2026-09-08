@@ -1116,14 +1116,14 @@ body {
    Taller than the viewport on purpose: GSAP pins it at `top top` for
    the full scroll distance so each word gets its own slice of scroll
    before the section releases and Contact scrolls in underneath. */
-/* The pinned moment is a full-viewport black frame holding one short
-   sentence, so its dwell length is the only thing that decides how empty it
-   feels. 150vh still leaves ~50vh of scrub for the word-by-word reveal
-   (start:'top top' to end:'bottom bottom' minus the 100vh pin) while cutting
-   a third of the time spent staring at the surrounding dark. */
+/* Scroll distance is section height minus the 100vh pin, so this leaves
+   ~90vh of scrub — enough for three beats now that body copy follows the two
+   display lines. It was cut to 150vh when the frame held nothing but a single
+   sentence and the surrounding dark read as empty; with real content in it
+   the extra dwell is doing work rather than stalling. */
 .hook-section {
   position: relative;
-  height: 150vh;
+  height: 190vh;
   background: #241c12;
 }
 
@@ -1210,6 +1210,41 @@ body {
   font-size: clamp(1rem, 3.2vw, 2.6rem);
   gap: 0.3em;
   color: var(--primary);
+}
+
+/* Body copy inside the pinned frame. Sized and measured for reading rather
+   than for display: the two lines above it are set in vw and run nowrap, but
+   this has to wrap, so it takes a ch-based measure and steps down on smaller
+   viewports like any other paragraph. */
+.hook-body {
+  margin-top: 2em;
+  /* Measure is in ch, so it tracks the larger type automatically and the line
+     length stays readable instead of widening with the font. */
+  max-width: 56ch;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 8px;
+}
+
+.hook-para {
+  font-family: var(--font-body);
+  font-size: 1.34rem;
+  line-height: 1.62;
+  color: rgba(245, 239, 224, 0.78);
+}
+
+/* The closing line hands off to the industry sections below, so it sits a
+   step back from the paragraph it follows rather than competing with it. */
+.hook-bridge {
+  font-size: 1.16rem;
+  color: rgba(245, 239, 224, 0.56);
+}
+
+@media (max-width: 768px) {
+  .hook-body { margin-top: 1.6em; gap: 14px; }
+  .hook-para { font-size: 1.06rem; line-height: 1.58; }
+  .hook-bridge { font-size: 0.98rem; }
 }
 
 .hook-tagline-word {

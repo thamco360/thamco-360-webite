@@ -710,6 +710,7 @@ function initHookReveal() {
 
   const words = section.querySelectorAll('.hook-words .hook-word');
   const taglineWords = section.querySelectorAll('.hook-tagline .hook-tagline-word');
+  const paras = section.querySelectorAll('.hook-body .hook-para');
 
   if (!window.gsap || !window.ScrollTrigger || window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     return;
@@ -719,6 +720,7 @@ function initHookReveal() {
 
   gsap.set(words, { opacity: 0.14, y: '0.4em' });
   gsap.set(taglineWords, { opacity: 0, y: '0.5em' });
+  gsap.set(paras, { opacity: 0, y: 18 });
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -751,7 +753,21 @@ function initHookReveal() {
     stagger: { each: 0.45, from: 'start' },
   });
 
-  tl.to({}, { duration: 0.6 }); // let the finished pair sit before releasing
+  tl.to({}, { duration: 0.5 }); // beat before the body answers the tagline
+
+  // Whole paragraphs, not per-word. At reading size a word-by-word stagger
+  // reads as a stutter rather than as choreography, and the two display lines
+  // above have already earned that treatment — repeating it here would flatten
+  // the distinction between the statement and its explanation.
+  tl.to(paras, {
+    opacity: 1,
+    y: 0,
+    ease: 'power2.out',
+    duration: 0.7,
+    stagger: 0.5,
+  });
+
+  tl.to({}, { duration: 0.6 }); // let the finished block sit before releasing
 }
 
 /* ── 8. Inquiry Form — one-click submit via /api/contact ──
