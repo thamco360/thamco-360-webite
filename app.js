@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHookReveal();
   initHeroIntro();
   initParallax();
+  initJourney();
 
   // ScrollTrigger caches pin start/end pixel ranges at creation time.
   // This page has several lazy-loaded images (industries grid, property
@@ -909,4 +910,97 @@ function initParallax() {
         }
       });
   });
+}
+
+
+/* ── 15. The Journey ──
+   Draws the five-stage capture-to-experience diagram as the section scrolls
+   through. Three things move together:
+
+     the rail  — scrubbed, so its fill tracks scroll position directly and
+                 reverses cleanly if the visitor scrolls back up
+     the steps — a one-shot rise as the row enters view
+     the icons — each SVG path drawn on from zero length, which is why the
+                 icons are inline markup rather than <img>
+
+   The whole thing is progressive enhancement: the diagram is fully legible
+   with no JS at all, so every failure path here simply leaves it static. */
+function initJourney() {
+  const journey = document.getElementById('journey');
+  if (!journey) return;
+
+  const steps = [...journey.querySelectorAll('.journey-step')];
+  const fill = document.getElementById('journeyRailFill');
+  if (!steps.length) return;
+
+  // Reduced motion, or no GSAP: light every stage and fill the rail, so the
+  // finished state is what gets shown rather than a half-drawn diagram.
+  if (!window.gsap || !window.ScrollTrigger || PREFERS_REDUCED) {
+    steps.forEach(s => s.classList.add('is-lit'));
+    if (fill) fill.style.transform = 'scaleX(1)';
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Prime every stroke to zero length. getTotalLength() covers <path>; the
+  // primitives (circle/ellipse/rect/line) do not implement it, so they fall
+  // back to their own geometry. Anything that cannot be measured is left
+  // alone and simply appears without a draw-on.
+  const strokes = [];
+  journey.querySelectorAll('.journey-icon svg > *').forEach(el => {
+    let len = 0;
+    if (typeof el.getTotalLength === 'function') {
+      try { len = el.getTotalLength(); } catch (e) { len = 0; }
+    }
+    if (!len) {
+      const r = parseFloat(el.getAttribute('r'));
+      const rx = parseFloat(el.getAttribute('rx'));
+      const ry = parseFloat(el.getAttribute('ry'));
+      const w = parseFloat(el.getAttribute('width'));
+      const h = parseFloat(el.getAttribute('height'));
+      if (r) len = 2 * Math.PI * r;
+      else if (rx && ry) len = Math.PI * (3 * (rx + ry) - Math.sqrt((3 * rx + ry) * (rx + 3 * ry)));
+      else if (w && h) len = 2 * (w + h);
+    }
+    if (!len) return;
+    // A dashed seam carries its own stroke-dasharray for looks; overwriting
+    // it with the draw-on pattern would turn it solid.
+    if (el.getAttribute('stroke-dasharray')) return;
+    gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
+    strokes.push({ el, len });
+  });
+
+  gsap.set(steps, { opacity: 0, y: 26 });
+
+  // Steps and their strokes: one pass, as the row arrives.
+  ScrollTrigger.create({
+    trigger: journey,
+    start: 'top 82%',
+    once: true,
+    onEnter: () => {
+      gsap.to(steps, {
+        opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', stagger: 0.13
+      });
+      gsap.to(strokes.map(s => s.el), {
+        strokeDashoffset: 0, duration: 1.1, ease: 'power2.out', stagger: 0.035, delay: 0.15,
+        onComplete: () => gsap.set(strokes.map(s => s.el), { clearProps: 'strokeDasharray,strokeDashoffset' })
+      });
+    }
+  });
+
+  // Rail: scrubbed across the row, lighting each stage as it passes.
+  if (fill) {
+    ScrollTrigger.create({
+      trigger: journey,
+      start: 'top 70%',
+      end: 'bottom 65%',
+      scrub: 0.5,
+      onUpdate: (self) => {
+        gsap.set(fill, { scaleX: self.progress });
+        const reached = Math.round(self.progress * steps.length);
+        steps.forEach((step, i) => step.classList.toggle('is-lit', i < reached));
+      }
+    });
+  }
 }

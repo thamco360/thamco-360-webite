@@ -300,31 +300,6 @@
   <div class="tour-scroll-driver" id="tourScrollDriver"></div>
 
   <!-- =====================================================================
-       PROPERTY SHOWCASE — cinematic auto-crossfading reel, not a carousel
-       (no arrows/dots/controls; four property types Ken-Burns through
-       a single frame on an infinite CSS animation loop)
-  ====================================================================== -->
-  <section class="property-showcase" aria-label="Spaces we capture: residences, stores, resorts and colleges">
-    <div class="showcase-slide">
-      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=2400&q=85" alt="Residence" loading="lazy">
-      <span class="showcase-label">Residence</span>
-    </div>
-    <div class="showcase-slide">
-      <img src="https://images.unsplash.com/photo-1470309864661-68328b2cd0a5?auto=format&fit=crop&w=2400&q=85" alt="Store" loading="lazy">
-      <span class="showcase-label">Store</span>
-    </div>
-    <div class="showcase-slide">
-      <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=2400&q=85" alt="Resort" loading="lazy">
-      <span class="showcase-label">Resort</span>
-    </div>
-    <div class="showcase-slide">
-      <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=2400&q=85" alt="College" loading="lazy">
-      <span class="showcase-label">College</span>
-    </div>
-    <div class="showcase-vignette"></div>
-  </section>
-
-  <!-- =====================================================================
        PORTFOLIO — real client work, live Google Maps embeds
   ====================================================================== -->
   <section class="section portfolio-section" id="portfolio">
@@ -389,17 +364,90 @@
         <p class="section-p reveal-up">How 360° photography becomes a finished virtual tour.</p>
       </div>
 
-      <div class="flow-strip reveal-up">
-        <div class="flow-step"><span class="flow-num">01</span><h3>Capture</h3></div>
-        <span class="flow-arrow">&#8594;</span>
-        <div class="flow-step"><span class="flow-num">02</span><h3>Stitch</h3></div>
-        <span class="flow-arrow">&#8594;</span>
-        <div class="flow-step"><span class="flow-num">03</span><h3>Refine</h3></div>
-        <span class="flow-arrow">&#8594;</span>
-        <div class="flow-step"><span class="flow-num">04</span><h3>Publish</h3></div>
-        <span class="flow-arrow">&#8594;</span>
-        <div class="flow-step"><span class="flow-num">05</span><h3>Experience</h3></div>
-      </div>
+      <!-- The five-stage journey. Each icon is inline stroke SVG rather than
+           an image: it stays crisp at any density, inherits the page's colour
+           so it works in both themes, weighs a few KB, and — because every
+           mark is a real path — initJourney() can draw the strokes on as the
+           section scrolls in. The connector rail fills left-to-right across
+           the row, scrubbed to scroll position.
+           NOTE: the one-line descriptors are placeholder copy, same as the
+           section intro above — Alam to replace with final wording. -->
+      <ol class="journey" id="journey" aria-label="From capture to experience, in five stages">
+        <li class="journey-rail" aria-hidden="true">
+          <span class="journey-rail-track"></span>
+          <span class="journey-rail-fill" id="journeyRailFill"></span>
+        </li>
+
+        <li class="journey-step">
+          <span class="journey-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="24" cy="24" rx="20" ry="8.5"/>
+              <circle cx="24" cy="24" r="9"/>
+              <circle cx="24" cy="24" r="3.5"/>
+              <path d="M40 20.5l4 3.5-4 3.5"/>
+            </svg>
+          </span>
+          <span class="journey-num">01</span>
+          <h3 class="journey-name">Capture</h3>
+          <p class="journey-note">A panoramic head sweeps every angle of the space.</p>
+        </li>
+
+        <li class="journey-step">
+          <span class="journey-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="13" width="22" height="22" rx="2.5"/>
+              <rect x="21" y="13" width="22" height="22" rx="2.5"/>
+              <path d="M24 11v26" stroke-dasharray="3 3"/>
+              <path d="M15 30l4-4 3 3"/>
+            </svg>
+          </span>
+          <span class="journey-num">02</span>
+          <h3 class="journey-name">Stitch</h3>
+          <p class="journey-note">Overlapping frames are aligned into one seamless sphere.</p>
+        </li>
+
+        <li class="journey-step">
+          <span class="journey-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 16h32M8 24h32M8 32h32"/>
+              <circle cx="18" cy="16" r="3.5"/>
+              <circle cx="30" cy="24" r="3.5"/>
+              <circle cx="22" cy="32" r="3.5"/>
+            </svg>
+          </span>
+          <span class="journey-num">03</span>
+          <h3 class="journey-name">Refine</h3>
+          <p class="journey-note">Exposure, verticals and fine detail corrected by hand.</p>
+        </li>
+
+        <li class="journey-step">
+          <span class="journey-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="24" cy="27" r="13"/>
+              <path d="M11 27h26"/>
+              <ellipse cx="24" cy="27" rx="6" ry="13"/>
+              <path d="M13 11a15 15 0 0 1 22 0"/>
+            </svg>
+          </span>
+          <span class="journey-num">04</span>
+          <h3 class="journey-name">Publish</h3>
+          <p class="journey-note">The finished tour goes live on Google and on your site.</p>
+        </li>
+
+        <li class="journey-step">
+          <span class="journey-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="24" cy="24" r="18"/>
+              <path d="M24 24l-13-8M24 24l-13 8"/>
+              <path d="M11 16a18 18 0 0 0 0 16"/>
+              <circle cx="24" cy="24" r="2.5"/>
+            </svg>
+          </span>
+          <span class="journey-num">05</span>
+          <h3 class="journey-name">Experience</h3>
+          <p class="journey-note">Visitors step inside and look around, from anywhere.</p>
+        </li>
+      </ol>
 
       <div class="section-header-center" style="margin-top: 100px;">
         <p class="section-kicker reveal-up">Raw vs. Stitched</p>
@@ -416,13 +464,29 @@
 
       <div class="ba-wrapper reveal-up">
         <div class="ba-container" id="baContainer">
+          <!-- Thamco360's own capture, not stock: the same room on both sides
+               of the wipe. Left is the unstitched dual-fisheye frame straight
+               off the camera's raw file; right is the finished equirectangular
+               panorama. Both are exported at 1600x800 — the stitched source's
+               native size — so the "after" never reads as the softer of the
+               two, which would undercut the whole comparison.
+               width/height are declared so the browser reserves the box before
+               the images decode and the slider does not shift the page. -->
+          <!-- Layer order is structural, not chronological: .ba-after is the
+               clipped top layer and therefore owns the LEFT of the wipe, while
+               .ba-before is the full-bleed base showing through on the RIGHT.
+               So the raw frame goes in .ba-after to land on the left, which is
+               where the eye starts and where the "Raw Capture → Stitching →
+               Final 360°" strip above already points. -->
           <div class="ba-before">
-            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85" alt="Raw, unstitched photo">
-            <div class="ba-badge before">Raw Photo</div>
+            <img src="assets/img/stitched-360-streamphony.webp" width="1600" height="800"
+                 alt="The same room stitched into a seamless 360° equirectangular panorama — Streamphony Live, Bengaluru">
+            <div class="ba-badge is-stitched">Stitched 360° Photo</div>
           </div>
           <div class="ba-after" id="baAfter">
-            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85" alt="Stitched 360° photo">
-            <div class="ba-badge after">Stitched 360° Photo</div>
+            <img src="assets/img/raw-capture-streamphony.webp" width="1600" height="800"
+                 alt="Raw dual-fisheye frame straight from the camera, before stitching — Streamphony Live, Bengaluru">
+            <div class="ba-badge is-raw">Raw Capture</div>
           </div>
           <div class="ba-handle" id="baHandle">
             <div class="ba-line"></div>
