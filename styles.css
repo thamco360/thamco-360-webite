@@ -103,20 +103,6 @@ body {
 .footer-brand .logo-mark { height: 38px; }
 
 /* Live Scroll Tag in Header */
-.live-scroll-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  background: rgba(201, 150, 47, 0.12);
-  border: 1px solid rgba(201, 150, 47, 0.3);
-  border-radius: 100px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--accent-ink);
-  letter-spacing: 0.04em;
-}
-
 .dot-live {
   width: 7px;
   height: 7px;
@@ -204,7 +190,7 @@ body {
    keep an explicit light text color independent of the site's base
    theme — the page default flipped to dark warm ink for the light/cream
    chrome, which would otherwise be invisible against a photo backdrop. */
-.hero-overlay, .tour-ui, .room-transition-overlay {
+.hero-overlay {
   color: #f5efe0;
 }
 
@@ -228,12 +214,6 @@ body {
     linear-gradient(to top, rgba(26, 16, 7, 0.55) 0%, rgba(26, 16, 7, 0) 34%);
   pointer-events: auto;
   transition: opacity 0.6s ease, visibility 0.6s ease;
-}
-
-.hero-overlay.dissolve {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
 }
 
 /* Same 1320/32 rail as .header-inner, so the H1's left edge stacks under
@@ -338,14 +318,6 @@ body {
   margin-bottom: 0;
 }
 
-.hero-btns {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 4px;
-}
-
 .btn-enter-tour {
   display: inline-flex;
   align-items: center;
@@ -368,175 +340,43 @@ body {
   transform: translateY(-3px) scale(1.02);
 }
 
-.btn-scroll-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 26px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 100px;
-  font-size: 0.92rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
 
-.btn-scroll-hint:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
 
-.hero-subtext {
-  margin-top: 14px;
-  font-size: 0.95rem;
-  font-style: italic;
-  color: rgba(245, 241, 230, 0.65);
-}
 
-/* ── TOUR UI CONTROLS ──────────────────────────────────────── */
-.tour-ui {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  pointer-events: none;
-}
-.tour-ui > * { pointer-events: auto; }
+
+
+
 .hidden { display: none !important; }
 
 /* Room Title Bar */
-.room-title-bar {
-  position: absolute;
-  top: 80px; left: 28px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 20px;
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
 
-.room-dot {
-  width: 10px; height: 10px;
-  background: #22c55e;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #22c55e;
-}
 
-.room-floor {
-  display: block;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgba(245, 239, 224, 0.65);
-  font-weight: 600;
-}
 
-.room-name {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 0.98rem;
-  font-weight: 700;
-}
+
+
+
+
 
 /* Exit Button */
-.exit-tour-btn {
-  position: absolute;
-  top: 80px; left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
-  background: rgba(220, 38, 38, 0.25);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(220, 38, 38, 0.5);
-  color: #fca5a5;
-  border-radius: 100px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
 
-.exit-tour-btn:hover {
-  background: rgba(220, 38, 38, 0.6);
-  color: #fff;
-}
+
+
 
 /* Compass */
-.compass-ui {
-  position: absolute;
-  top: 80px; right: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 12px 18px;
-}
 
-.compass-ring {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 4px;
-}
 
-.compass-ring span { font-size: 0.7rem; font-weight: 800; color: var(--primary); }
 
-.compass-needle {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -100%);
-  width: 2px; height: 16px;
-  background: linear-gradient(to top, var(--primary), #fff);
-  transform-origin: bottom center;
-}
 
-.compass-label { font-size: 0.72rem; color: var(--text-muted); }
+
+
+
+
+
 
 /* Drag Hint */
-.drag-hint {
-  position: absolute;
-  bottom: 150px; left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
-  border-radius: 100px;
-  font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.75);
-  pointer-events: none;
-}
+
 
 /* Floor Nav */
-.floor-nav {
-  position: absolute;
-  bottom: 30px; left: 50%;
-  transform: translateX(-50%);
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 12px 16px;
-  min-width: 360px;
-}
-
 .floor-nav-title {
   display: flex;
   align-items: center;
@@ -549,121 +389,22 @@ body {
   margin-bottom: 8px;
 }
 
-.room-nodes {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-}
 
-.room-node {
-  padding: 7px 14px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(245, 239, 224, 0.7);
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
 
-.room-node:hover, .room-node.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
-}
+
+
+
 
 /* Look Controls */
-.look-controls {
-  position: absolute;
-  right: 28px; bottom: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
 .look-row { display: flex; gap: 4px; }
 
-.look-btn {
-  width: 38px; height: 38px;
-  border-radius: 10px;
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
 
-.look-btn:hover { background: rgba(201, 150, 47, 0.4); color: #fff; }
 
-.zoom-panel {
-  position: absolute;
-  left: 28px; bottom: 150px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  padding: 12px 10px;
-}
 
-.zoom-btn {
-  width: 34px; height: 34px;
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-}
 
-.fov-slider {
-  writing-mode: vertical-lr;
-  direction: rtl;
-  width: 6px; height: 75px;
-  accent-color: var(--primary);
-  cursor: pointer;
-}
 
-.hotspot-layer { position: absolute; inset: 0; pointer-events: none; }
 
-.hotspot-pin {
-  position: absolute;
-  width: 36px; height: 36px;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  pointer-events: auto;
-}
 
-.hotspot-pin-inner {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--primary);
-  border: 2px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  box-shadow: 0 0 16px var(--primary-glow);
-}
-
-.hotspot-popup {
-  position: absolute;
-  z-index: 50;
-  top: 80px; right: 160px;
-  width: 280px;
-  background: rgba(42, 30, 16, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(201, 150, 47, 0.4);
-  border-radius: 16px;
-  padding: 20px;
-}
 
 .popup-close {
   position: absolute;
@@ -674,25 +415,10 @@ body {
   cursor: pointer;
 }
 
-.room-transition-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 30;
-  background: rgba(42, 26, 12, 0.92);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-}
 
-.room-transition-overlay.show { opacity: 1; }
 
-.rt-floor { font-size: 0.8rem; text-transform: uppercase; color: var(--accent); font-weight: 700; }
-.rt-name { font-family: var(--font-display); font-size: 2.2rem; font-weight: 400; }
+
+
 
 /* Formerly a 300vh scroll-jack driver for a pinned room walkthrough —
    removed in favor of the hero's own timer-driven auto-cycle (see
@@ -784,16 +510,6 @@ body {
 }
 
 .flow-step { text-align: center; min-width: 90px; }
-
-.flow-num {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--primary);
-  margin-bottom: 8px;
-}
 
 .flow-step h3 {
   font-family: var(--font-display);
@@ -946,50 +662,21 @@ body {
 }
 
 /* ── TRUST — editorial three-column, dividers not cards ────── */
-.trust-section {
-  padding: 90px 0;
-  border-bottom: 1px solid var(--border);
-}
 
-.trust-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
 
-.trust-item {
-  padding: 0 40px;
-  border-left: 1px solid var(--border);
-}
-.trust-item:first-child { border-left: none; padding-left: 0; }
-.trust-item:last-child { padding-right: 0; }
 
-.trust-index {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--primary);
-  margin-bottom: 18px;
-}
 
-.trust-item h3 {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin-bottom: 12px;
-}
 
-.trust-item p {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  line-height: 1.7;
-}
+
+
+
+
+
+
 
 @media (max-width: 900px) {
-  .trust-grid { grid-template-columns: 1fr; gap: 40px; }
-  .trust-item { border-left: none; padding: 0; }
-}
+  
+  }
 
 /* ── PORTFOLIO ─────────────────────────────────────────────── */
 .portfolio-grid {
@@ -1020,33 +707,12 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.portfolio-pending {
-  height: 260px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-subtle);
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  font-style: italic;
-}
-
 @media (max-width: 900px) {
   .portfolio-grid { grid-template-columns: 1fr; }
 }
 
 /* ── SERVICE TECH TAGS (Services page industry pills) ──────── */
-.model-tech-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
 
-.model-tech-tags span {
-  padding: 5px 12px;
-  background: rgba(201, 150, 47, 0.12);
-  border: 1px solid rgba(201, 150, 47, 0.25);
-  border-radius: 100px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--accent-ink);
-}
 
 /* ── BEFORE / AFTER ────────────────────────────────────────── */
 .ba-wrapper { border-radius: 20px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
@@ -1181,24 +847,7 @@ body {
   line-height: 1.15;
 }
 
-.hook-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 52px;
-  padding: 15px 32px;
-  background: transparent;
-  border: 1px solid rgba(245, 239, 224, 0.3);
-  border-radius: 100px;
-  color: #f5efe0;
-  text-decoration: none;
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
-  font-weight: 700;
-  transition: background 0.25s ease, border-color 0.25s ease;
-}
 
-.hook-cta:hover { background: rgba(245, 239, 224, 0.08); border-color: var(--primary); }
 
 .hook-tagline {
   display: flex;
@@ -1664,11 +1313,9 @@ body {
 
 @media (max-width: 768px) {
   .main-nav { display: none; }
-  .live-scroll-tag { display: none; }
-  .hero-h1 { font-size: 2.6rem; }
-  .floor-nav { min-width: auto; width: calc(100vw - 40px); }
-  .look-controls, .zoom-panel, .compass-ui { display: none; }
-}
+    .hero-h1 { font-size: 2.6rem; }
+  
+  }
 
 /* ================================================================
    MOTION LAYER — hero intro, scroll cue, parallax, reduced motion
@@ -1693,17 +1340,7 @@ html.motion-ready .h1-line-i {
 
 /* Media that parallaxes has to be taller than its frame, otherwise the
    travel exposes the edge of the image. */
-.parallax-frame {
-  position: relative;
-  overflow: hidden;
-}
 
-.parallax-frame > img {
-  display: block;
-  width: 100%;
-  height: 118%;
-  object-fit: cover;
-}
 
 /* ── Paint / layout cost below the fold ─────────────────────── */
 /* The industries grid and FAQ are long, image-heavy and always off-screen
@@ -1760,8 +1397,7 @@ html.motion-ready .h1-line-i {
     opacity: 1;
   }
   [data-parallax] { will-change: auto; transform: none !important; }
-  .parallax-frame > img { height: 100%; }
-}
+  }
 
 /* ── LIVE PANORAMA — drag-to-look 360 viewer ────────────────────
    Shares the three.js sphere viewer with the service blocks. The frame is

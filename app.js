@@ -116,9 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.documentElement.style.scrollBehavior = 'smooth';
   }
 
-  // Lucide Icons
-  if (window.lucide) lucide.createIcons();
-
   // Initialize Modules
   initBackgroundShader();
   initHeroVirtualTour();
@@ -148,40 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ── 1. Live Header Scroll Indicator & Header Transparency ── */
 function initLiveScrollObserver() {
   const header = document.getElementById('siteHeader');
-  const activeTagLabel = document.getElementById('activeTagLabel');
-
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  }, { passive: true });
 
-  const sections = [
-    { id: 'virtual-tour', name: 'Live Tour' },
-    { id: 'portfolio', name: 'Portfolio' },
-    { id: 'process', name: 'From Capture to Experience' },
-    { id: 'services', name: 'Services' },
-    { id: 'real-estate', name: 'By Industry' },
-    { id: 'contact', name: 'Book Your 360° Tour' }
-  ];
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const matched = sections.find(s => s.id === entry.target.id);
-        if (matched && activeTagLabel) {
-          activeTagLabel.textContent = matched.name;
-        }
-      }
-    });
-  }, { threshold: 0.3 });
-
-  sections.forEach(s => {
-    const el = document.getElementById(s.id);
-    if (el) observer.observe(el);
-  });
 }
 
 /* ── 2. Cinematic Scroll Reveals ── */
@@ -375,101 +342,21 @@ function initHeroVirtualTour() {
   // straight to the next room — reads as continuous live movement
   // rather than a slideshow. Manual floor-nav clicks still get the
   // card, since naming the room someone explicitly picked is useful.
-  function switchRoom(idx, { silent = false } = {}) {
+  // One caller: the auto-cycling banner. The silent flag, the room-name label
+  // and the floorplan node highlighting all existed for the manual tour panel,
+  // which was never reachable and has been removed.
+  function switchRoom(idx) {
     if (idx === currentRoomIdx) return;
-    const nameEl = document.getElementById('currentRoomName');
 
-    function applyRoom() {
+    canvas.style.transition = 'opacity 0.6s ease';
+    canvas.style.opacity = '0';
+    setTimeout(() => {
       sphere.material = materialFor(idx);
       currentRoomIdx = idx;
       warmNextRoom(idx);
-      if (nameEl) nameEl.textContent = roomData[idx].name;
-      document.querySelectorAll('.room-node').forEach((node, nIdx) => {
-        node.classList.toggle('active', nIdx === idx);
-      });
       restartRoomBanner();
-    }
-
-    if (silent) {
-      canvas.style.transition = 'opacity 0.6s ease';
-      canvas.style.opacity = '0';
-      setTimeout(() => {
-        applyRoom();
-        canvas.style.opacity = '1';
-      }, 600);
-      return;
-    }
-
-    const overlay = document.getElementById('roomTransition');
-    const rtFloor = document.getElementById('rtFloor');
-    const rtName = document.getElementById('rtName');
-    if (!overlay) { applyRoom(); return; }
-
-    rtFloor.textContent = roomData[idx].floor;
-    rtName.textContent = roomData[idx].name;
-    overlay.classList.remove('hidden');
-    overlay.classList.add('show');
-
-    setTimeout(() => {
-      applyRoom();
-      setTimeout(() => {
-        overlay.classList.remove('show');
-        setTimeout(() => overlay.classList.add('hidden'), 350);
-      }, 400);
-    }, 350);
-  }
-
-  // Room Node Buttons
-  document.querySelectorAll('.room-node').forEach((btn, idx) => {
-    btn.addEventListener('click', () => switchRoom(idx));
-  });
-
-  // Tour UI Mode Toggle
-  const btnEnterTour = document.getElementById('btnEnterTour');
-  const btnExitTour = document.getElementById('btnExitTour');
-  const heroOverlay = document.getElementById('heroOverlay');
-  const tourUI = document.getElementById('tourUI');
-
-  if (btnEnterTour) {
-    btnEnterTour.addEventListener('click', () => {
-      heroOverlay.classList.add('dissolve');
-      tourUI.classList.remove('hidden');
-    });
-  }
-
-  if (btnExitTour) {
-    btnExitTour.addEventListener('click', () => {
-      heroOverlay.classList.remove('dissolve');
-      tourUI.classList.add('hidden');
-    });
-  }
-
-  // D-Pad Look Controls
-  document.querySelectorAll('.look-btn[data-dir]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const dir = btn.dataset.dir;
-      if (dir === 'up') lat += 15;
-      if (dir === 'down') lat -= 15;
-      if (dir === 'left') lon -= 20;
-      if (dir === 'right') lon += 20;
-    });
-  });
-
-  const btnAutoRotate = document.getElementById('btnAutoRotate');
-  if (btnAutoRotate) {
-    btnAutoRotate.addEventListener('click', () => {
-      autoRotate = !autoRotate;
-      btnAutoRotate.style.color = autoRotate ? '#c9962f' : '#fff';
-    });
-  }
-
-  // FOV Slider
-  const fovSlider = document.getElementById('fovSlider');
-  if (fovSlider) {
-    fovSlider.addEventListener('input', (e) => {
-      camera.fov = parseFloat(e.target.value);
-      camera.updateProjectionMatrix();
-    });
+      canvas.style.opacity = '1';
+    }, 600);
   }
 
   // Render Loop — stops once the hero has scrolled away. It is the one
@@ -489,13 +376,6 @@ function initHeroVirtualTour() {
     );
 
     camera.lookAt(camera.target);
-
-    // Update Compass Needle
-    const compassNeedle = document.getElementById('compassNeedle');
-    if (compassNeedle) {
-      compassNeedle.style.transform = `translate(-50%, -100%) rotate(${lon}deg)`;
-    }
-
     renderer.render(scene, camera);
   }
   renderWhileVisible(canvas, animate, '0px');
@@ -521,7 +401,7 @@ function initHeroVirtualTour() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     roomBannerTimer = setInterval(() => {
       if (isUserInteracting) return;
-      switchRoom((currentRoomIdx + 1) % roomData.length, { silent: true });
+      switchRoom((currentRoomIdx + 1) % roomData.length);
     }, ROOM_BANNER_INTERVAL_MS);
   }
 
@@ -587,7 +467,7 @@ function initCursorReticle() {
     requestAnimationFrame(raf);
   })();
 
-  const hoverSelector = 'a, button, input, select, textarea, .room-node, .look-btn, .zoom-btn, .price-card';
+  const hoverSelector = 'a, button, input, select, textarea, .price-card';
   document.addEventListener('pointerover', (e) => {
     if (e.target.closest(hoverSelector)) ring.classList.add('hover');
   });

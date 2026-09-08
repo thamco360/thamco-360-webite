@@ -130,12 +130,9 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-  <!-- Lucide Icons -->
-  <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.446.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="tier-full">
 
@@ -210,89 +207,8 @@
              intro timeline does not animate an empty box. -->
       </div>
     </div>
-
-    <!-- ===== FULL TOUR MANUAL CONTROLS UI ===== -->
-    <div class="tour-ui hidden" id="tourUI">
-      <!-- Room Title (Top Left) -->
-      <div class="room-title-bar">
-        <div class="room-dot"></div>
-        <div class="room-title-text">
-          <span class="room-floor">Ground Floor</span>
-          <span class="room-name" id="currentRoomName">Grand Living Room</span>
-        </div>
-      </div>
-
-      <!-- Exit Button (Top Center) -->
-      <button class="exit-tour-btn" id="btnExitTour">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        Exit Tour Mode
-      </button>
-
-      <!-- Compass (Top Right) -->
-      <div class="compass-ui">
-        <div class="compass-ring">
-          <span>N</span>
-          <div class="compass-needle" id="compassNeedle"></div>
-        </div>
-        <div class="compass-label">Facing <span id="compassDir">North</span></div>
-      </div>
-
-      <!-- Drag Hint -->
-      <div class="drag-hint">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        <span>Click &amp; drag to look around</span>
-      </div>
-
-      <!-- Floor Plan Room Selector (Bottom Center) -->
-      <div class="floor-nav">
-        <div class="floor-nav-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
-          Floorplan Navigation
-        </div>
-        <div class="room-nodes">
-          <button class="room-node active" data-room="0">Living</button>
-          <button class="room-node" data-room="1">Kitchen</button>
-          <button class="room-node" data-room="2">Bedroom</button>
-          <button class="room-node" data-room="3">Bathroom</button>
-          <button class="room-node" data-room="4">Terrace</button>
-        </div>
-      </div>
-
-      <!-- Look Control D-Pad (Right Side) -->
-      <div class="look-controls">
-        <button class="look-btn" data-dir="up" title="Look Up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></button>
-        <div class="look-row">
-          <button class="look-btn" data-dir="left" title="Look Left"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <button class="look-btn look-center" id="btnAutoRotate" title="Toggle Auto Rotate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></button>
-          <button class="look-btn" data-dir="right" title="Look Right"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
-        <button class="look-btn" data-dir="down" title="Look Down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>
-      </div>
-
-      <!-- Zoom Slider (Left Side) -->
-      <div class="zoom-panel">
-        <button class="zoom-btn" id="btnZoomIn" title="Zoom In"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
-        <input type="range" id="fovSlider" class="fov-slider" min="30" max="100" value="75" orient="vertical">
-        <button class="zoom-btn" id="btnZoomOut" title="Zoom Out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
-      </div>
-
-      <!-- Hotspot Layer -->
-      <div class="hotspot-layer" id="hotspotLayer"></div>
-
-      <!-- Hotspot Details Card -->
-      <div class="hotspot-popup hidden" id="hotspotPopup">
-        <button class="popup-close" id="popupClose"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-        <div class="popup-icon" id="popupIcon">🛋️</div>
-        <h4 id="popupTitle">Feature</h4>
-        <p id="popupDesc">Details...</p>
-      </div>
-    </div>
-
-    <!-- Room Transition Overlay -->
-    <div class="room-transition-overlay hidden" id="roomTransition">
-      <div class="rt-floor" id="rtFloor">Upper Floor</div>
-      <div class="rt-name" id="rtName">Master Bedroom Suite</div>
-    </div>
+    >
+    >
   </section>
 
   <!-- Pinned Scroll Track Driver -->
