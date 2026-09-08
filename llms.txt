@@ -5,6 +5,7 @@
 ## Main sections
 - [Home](https://www.thamco360.com/): Live 360° hero tour, published client portfolio, the capture-to-experience process, a raw-versus-stitched comparison, per-industry breakdown, FAQ and enquiry form.
 - [About](https://www.thamco360.com/about.html): Vision, values, and who we are.
+- [Privacy Policy & Terms](https://www.thamco360.com/privacy.html): What the site collects, who processes it, and visitor rights under India’s DPDP Act and the GDPR.
 
 ## Key facts
 - Location: Bengaluru, Karnataka, India. Service-area business, no fixed storefront.

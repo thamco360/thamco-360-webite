@@ -1606,3 +1606,94 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   .main-nav, .nav-toggle-bar { transition: none; }
 }
+
+/* ── LEGAL PAGE (privacy / terms) ───────────────────────────── */
+.legal-page { padding-top: 150px; }
+
+.legal-head { max-width: 760px; margin-bottom: 44px; }
+
+.legal-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  color: var(--text);
+  margin: 6px 0 14px;
+}
+
+.legal-meta {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+/* A measure sized for sustained reading rather than for display — this is the
+   one page on the site someone reads top to bottom. */
+.legal-body { max-width: 68ch; }
+
+.legal-lede {
+  font-size: 1.14rem;
+  line-height: 1.7;
+  color: var(--text);
+  padding-bottom: 26px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.legal-body h2 {
+  font-family: var(--font-display);
+  font-size: 1.62rem;
+  font-weight: 400;
+  color: var(--text);
+  margin: 40px 0 12px;
+  /* Anchored headings (#terms) must clear the fixed header when jumped to. */
+  scroll-margin-top: 100px;
+}
+
+.legal-body p,
+.legal-body li {
+  font-size: 1rem;
+  line-height: 1.72;
+  color: var(--text-muted);
+}
+
+.legal-body p { margin-bottom: 14px; }
+
+.legal-body ul {
+  margin: 0 0 18px;
+  padding-left: 22px;
+}
+
+.legal-body li { margin-bottom: 9px; }
+
+.legal-body strong { color: var(--text); font-weight: 700; }
+
+.legal-body a {
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal-body a:hover { color: var(--primary); }
+
+.legal-body code {
+  font-size: 0.88em;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(36, 28, 18, 0.07);
+  color: var(--text);
+}
+
+/* The footer's legal links were plain text; now they are real links they need
+   to look like the muted chrome around them rather than body links. */
+.footer-bottom a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-bottom a:hover { color: var(--primary); }
+
+@media (max-width: 768px) {
+  .legal-page { padding-top: 118px; }
+  .legal-body h2 { font-size: 1.4rem; margin-top: 32px; }
+}
