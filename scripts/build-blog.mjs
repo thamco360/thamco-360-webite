@@ -62,6 +62,7 @@ const PUBLISHER = {
   '@id': `${SITE}/#business`,
   name: 'Thamco360',
   url: `${SITE}/`,
+  sameAs: ['https://www.instagram.com/thamco360/'],
   logo: { '@type': 'ImageObject', url: `${SITE}/assets/logo.webp`, width: 150, height: 97 },
 };
 
@@ -133,6 +134,7 @@ ${guides}
           <a href="/about.html">About Thamco360</a>
           <a href="/#portfolio">Portfolio</a>
           <a href="/#contact">Contact</a>
+          <a href="https://www.instagram.com/thamco360/" target="_blank" rel="me noopener">Instagram</a>
         </div>
       </div>
     </div>
