@@ -4,9 +4,47 @@
       "source": "/360-virtual-tour-indiranagar-bengaluru",
       "destination": "/360-virtual-tour-indiranagar-bengaluru/",
       "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug([a-z0-9-]+)",
+      "destination": "/blog/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/services/:slug([a-z0-9-]+)",
+      "destination": "/services/:slug/",
+      "permanent": true
     }
   ],
   "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/(favicon.ico|apple-touch-icon.png|icon-192.png|icon-512.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [

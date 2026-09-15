@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!-- class="motion-ready" is set statically rather than by an inline script:
      the site sends a strict CSP with no 'unsafe-inline' in script-src, which
      blocks inline <script> outright. app.js removes the class if GSAP failed
@@ -6,8 +7,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#faf6ee">
   <title>Privacy Policy &amp; Terms of Use — Thamco360</title>
-  <meta name="description" content="How Thamco360 handles the information you share through this website: the enquiry form, analytics cookies, session recording, embedded tours, and your rights under India's DPDP Act and the GDPR.">
+  <meta name="description" content="How Thamco360 handles enquiry data, analytics cookies and embedded tours, and your rights under India’s DPDP Act and the GDPR.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <meta name="author" content="Thamco360">
   <link rel="canonical" href="https://www.thamco360.com/privacy.html">
@@ -18,6 +24,8 @@
   <meta property="og:description" content="How Thamco360 handles the information you share through this website.">
   <meta property="og:url" content="https://www.thamco360.com/privacy.html">
   <meta property="og:locale" content="en_IN">
+  <meta property="og:image" content="https://www.thamco360.com/assets/img/stitched-360-streamphony.webp">
+  <meta name="twitter:card" content="summary_large_image">
 
   <script type="application/ld+json">
   {
@@ -58,7 +66,7 @@
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a href="index.html" class="logo">
-        <img src="assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
+        <img src="assets/logo.webp" srcset="/assets/logo-160.webp 160w, /assets/logo.webp 360w" sizes="70px" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
       </a>
 
       <button class="nav-toggle" id="navToggle" type="button"
@@ -78,7 +86,7 @@
       </nav>
 
       <div class="header-actions">
-        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-pill magnetic">
+        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-pill magnetic" aria-label="Book your 360° virtual tour on WhatsApp">
           <span>Book Your 360° Virtual Tour</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -161,27 +169,27 @@
     <div class="inner footer-inner">
       <div class="footer-brand">
         <a href="index.html" class="logo">
-          <img src="assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="130" height="84">
+          <img src="assets/logo.webp" srcset="/assets/logo-160.webp 160w, /assets/logo.webp 360w" sizes="70px" alt="Thamco360 — 360° Photography" class="logo-mark" width="130" height="84">
         </a>
         <p>Transforming physical spaces into living 3D virtual experiences. Culture-first. Craft-obsessed.</p>
       </div>
 
       <div class="footer-links">
         <div class="fl-col">
-          <h5>Services</h5>
+          <p class="fl-heading">Services</p>
           <a href="index.html#virtual-tour">360 Virtual Tour</a>
           <a href="index.html#contact">Website Development</a>
           <a href="index.html#contact" class="fl-sub">Web 3D Development — Immersive</a>
         </div>
         <div class="fl-col">
-          <h5>Industries</h5>
+          <p class="fl-heading">Industries</p>
           <a href="index.html#real-estate">Real Estate</a>
           <a href="index.html#hospitality">Hospitality</a>
           <a href="index.html#weddings-events">Weddings &amp; Events</a>
           <a href="index.html#museums-galleries">Museums &amp; Galleries</a>
         </div>
         <div class="fl-col">
-          <h5>Company</h5>
+          <p class="fl-heading">Company</p>
           <a href="about.html">About Thamco360</a>
           <a href="index.html#real-estate">Case Studies</a>
           <a href="index.html#contact">Contact</a>

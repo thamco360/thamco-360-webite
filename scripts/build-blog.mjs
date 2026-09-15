@@ -72,7 +72,7 @@ function header() {
   return `  <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a href="/" class="logo">
-        <img src="/assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
+        <img src="/assets/logo.webp" srcset="/assets/logo-160.webp 160w, /assets/logo.webp 360w" sizes="70px" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
       </a>
 
       <button class="nav-toggle" id="navToggle" type="button"
@@ -92,7 +92,7 @@ function header() {
       </nav>
 
       <div class="header-actions">
-        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-pill magnetic">
+        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-pill magnetic" aria-label="Book your 360° virtual tour on WhatsApp">
           <span>Book Your 360° Virtual Tour</span>
           ${ARROW}
         </a>
@@ -112,24 +112,24 @@ function footer() {
     <div class="inner footer-inner">
       <div class="footer-brand">
         <a href="/" class="logo">
-          <img src="/assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="130" height="84">
+          <img src="/assets/logo.webp" srcset="/assets/logo-160.webp 160w, /assets/logo.webp 360w" sizes="70px" alt="Thamco360 — 360° Photography" class="logo-mark" width="130" height="84">
         </a>
         <p>360° virtual tours &amp; Google Trusted photography for businesses across Bengaluru.</p>
       </div>
 
       <div class="footer-links">
         <div class="fl-col">
-          <h5>Services</h5>
+          <p class="fl-heading">Services</p>
 ${svc}
           <a href="/360-virtual-tour-indiranagar-bengaluru/">Indiranagar</a>
         </div>
         <div class="fl-col">
-          <h5>Guides</h5>
+          <p class="fl-heading">Guides</p>
 ${guides}
           <a href="/blog/">All guides</a>
         </div>
         <div class="fl-col">
-          <h5>Company</h5>
+          <p class="fl-heading">Company</p>
           <a href="/about.html">About Thamco360</a>
           <a href="/#portfolio">Portfolio</a>
           <a href="/#contact">Contact</a>
@@ -170,6 +170,11 @@ function page({ title, description, path, image, imageAlt, ogType, graph, main, 
   <meta name="author" content="Thamco360">
   <meta name="geo.region" content="IN-KA">
   <meta name="geo.placename" content="Bengaluru">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#faf6ee">
   <link rel="canonical" href="${url}">
 
   <meta property="og:type" content="${ogType}">
@@ -391,8 +396,8 @@ ${finalCta}
 function renderIndex() {
   const path = '/blog/';
   const url = SITE + path;
-  const title = '360° Virtual Tour Guides for Bangalore Businesses | Thamco360 Blog';
-  const description = 'Guides on how 360° virtual tours and Google Business Profile tours help Bangalore resorts, co-working spaces, restaurants, clinics, real estate, schools, venues and retail.';
+  const title = '360° Virtual Tour Guides for Bangalore | Thamco360 Blog';
+  const description = 'Guides on how 360° virtual tours and Google Business Profile tours help Bangalore resorts, workspaces, restaurants, clinics, property, schools and venues.';
 
   const graph = [
     {

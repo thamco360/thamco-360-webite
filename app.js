@@ -128,8 +128,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Initialize Modules
-  initBackgroundShader();
-  initHeroVirtualTour();
+  // The hero panorama and ambient shader are the heaviest work on the page —
+  // WebGL setup plus a large texture decode — and neither is needed for the
+  // first paint: the hero copy already renders over the section's dark
+  // background. Starting them when the browser is idle keeps that work out of
+  // the window Largest Contentful Paint and Total Blocking Time measure.
+  const whenIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 200));
+  whenIdle(() => { initBackgroundShader(); initHeroVirtualTour(); }, { timeout: 1500 });
   initCinematicTextReveals();
   initBeforeAfterSlider();
   initContactForm();
@@ -884,16 +889,10 @@ function initHeroIntro() {
     tl.fromTo(label, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9 }, 0.15);
   }
 
-  if (lines.length) {
-    tl.fromTo(lines,
-      { opacity: 0, yPercent: 108 },
-      { opacity: 1, yPercent: 0, duration: 1.25, stagger: 0.09 },
-      0.28);
-  }
-
-  [[lead, 0.66], [quote, 0.78], [btns, 0.9]].forEach(([el, at]) => {
-    if (el) tl.fromTo(el, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 1 }, at);
-  });
+  // H1 lines, lead and quote are animated by CSS keyframes (see "Hero intro in
+  // pure CSS" in styles.css) so the page's largest element paints without
+  // waiting for this script. Only elements CSS does not cover stay here.
+  if (btns) tl.fromTo(btns, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 1 }, 0.9);
 
   if (cue) {
     tl.fromTo(cue, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.8 }, 1.15);

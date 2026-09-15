@@ -172,7 +172,7 @@ html.lenis, html.lenis body { height: auto; }
   gap: 8px;
   padding: 10px 22px;
   background: var(--primary);
-  color: #fff;
+  color: #241c12;
   border-radius: 100px;
   text-decoration: none;
   font-size: 0.88rem;
@@ -358,7 +358,7 @@ html.lenis, html.lenis body { height: auto; }
   gap: 10px;
   padding: 15px 32px;
   background: var(--primary);
-  color: #fff;
+  color: #241c12;
   border: none;
   border-radius: 100px;
   font-size: 0.95rem;
@@ -983,7 +983,7 @@ html.lenis, html.lenis body { height: auto; }
   font-family: var(--font-heading); transition: all 0.25s ease;
 }
 
-.btn-card.primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn-card.primary { background: var(--primary); border-color: var(--primary); color: #241c12; }
 
 /* ── HOOK SECTION — pinned scroll reveal into Services ──────
    Taller than the viewport on purpose: GSAP pins it at `top top` for
@@ -1291,7 +1291,8 @@ html.lenis, html.lenis body { height: auto; }
 .footer-inner { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 56px; }
 .footer-brand p { font-size: 0.88rem; color: var(--text-muted); margin-top: 12px; max-width: 34ch; }
 .footer-links { display: contents; }
-.fl-col h5 { font-size: 0.78rem; text-transform: uppercase; color: rgba(36, 28, 18, 0.75); margin-bottom: 14px; }
+.fl-col h5,
+.fl-col .fl-heading { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: rgba(36, 28, 18, 0.8); margin-bottom: 14px; }
 .fl-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.88rem; margin-bottom: 8px; line-height: 1.45; }
 .fl-col a:hover { color: var(--primary); }
 /* These three are sibling services in the JSON-LD, not a parent and a child,
@@ -1299,7 +1300,7 @@ html.lenis, html.lenis body { height: auto; }
    for no reason. */
 .fl-col a.fl-sub { padding-left: 0; font-size: 0.88rem; opacity: 1; }
 .footer-bottom { border-top: 1px solid var(--border); padding: 20px 0; }
-.footer-bottom .inner { display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(36, 28, 18, 0.6); }
+.footer-bottom .inner { display: flex; justify-content: space-between; font-size: 0.8rem; color: rgba(36, 28, 18, 0.8); }
 
 /* REVEALS */
 .reveal-up {
@@ -1564,10 +1565,25 @@ html.lenis, html.lenis body { height: auto; }
    is set by app.js only once GSAP is confirmed present, so with scripting
    off — or if the CDN fails — the hero renders fully visible instead of
    being stranded at opacity 0. */
-html.motion-ready .hero-anim,
-html.motion-ready .h1-line-i {
-  opacity: 0;
+/* Hero intro in pure CSS. The H1 is this page's Largest Contentful Paint;
+   when its reveal waited for GSAP, LCP waited for every deferred script to
+   download and execute (~8s on a mid-range phone). Keyframes start on first
+   paint instead, with the same rise-out-of-mask motion and stagger.
+   fill-mode "both" holds the start state during each delay. */
+@keyframes hero-line-in {
+  from { opacity: 0; transform: translateY(108%); }
+  to { opacity: 1; transform: none; }
 }
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: none; }
+}
+.h1-line-i { animation: hero-line-in 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both; }
+.h1-line:nth-child(2) .h1-line-i { animation-delay: 0.37s; }
+.h1-line:nth-child(3) .h1-line-i { animation-delay: 0.46s; }
+.h1-line:nth-child(4) .h1-line-i { animation-delay: 0.55s; }
+.hero-p.hero-anim { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.66s both; }
+.hero-quote.hero-anim { animation: hero-fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) 0.78s both; }
 
 /* ── Parallax ───────────────────────────────────────────────── */
 /* Elements carrying [data-parallax] are driven by GSAP in app.js. The

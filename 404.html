@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#faf6ee">
+  <!-- Vercel serves this file for any URL that does not exist, with a real 404
+       status. noindex keeps it out of search results; the links below turn a
+       dead end into a route back to the pages that matter. All paths are
+       root-absolute because this page can be shown at any depth. -->
+  <title>Page not found | Thamco360</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="description" content="This page could not be found. Explore Thamco360 360° virtual tours, services and guides for Bengaluru businesses.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body class="tier-full">
+
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <img src="/assets/logo.webp" srcset="/assets/logo-160.webp 160w, /assets/logo.webp 360w" sizes="70px" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
+      </a>
+
+      <button class="nav-toggle" id="navToggle" type="button"
+              aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="/#portfolio" class="nav-a">Portfolio</a>
+        <a href="/#process" class="nav-a">Process</a>
+        <a href="/#real-estate" class="nav-a">Services</a>
+        <a href="/#faq" class="nav-a">FAQ</a>
+        <a href="/about.html" class="nav-a">About</a>
+        <a href="/#contact" class="nav-a">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-pill magnetic" aria-label="Book your 360° virtual tour on WhatsApp">
+          <span>Book Your 360° Virtual Tour</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section location-hero fx-hero">
+      <div class="inner fx-tilt">
+        <p class="section-kicker">Error 404</p>
+        <h1 class="location-h1 fx-hero-title fx-pending">This room isn’t on the <span class="gradient-text">tour</span></h1>
+        <p class="location-lede">The page you were looking for has moved or never existed. Here are the best places to step back in.</p>
+        <a href="/" class="btn-enter-tour magnetic location-cta">
+          <span>Back to the homepage</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="blog-grid blog-grid-compact">
+          <a class="svc-card" href="/services/360-virtual-tours-bengaluru/">
+            <strong>360° Virtual Tours</strong>
+            <span>On-site capture stitched into a walkable tour for Google and your website.</span>
+          </a>
+          <a class="svc-card" href="/services/google-street-view-photography-bengaluru/">
+            <strong>Google Street View Photography</strong>
+            <span>Publish 360° imagery of your premises to your Google Business Profile.</span>
+          </a>
+          <a class="svc-card" href="/blog/">
+            <strong>Guides for Bangalore businesses</strong>
+            <span>How virtual tours help resorts, workspaces, restaurants, clinics and more.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-bottom">
+      <div class="inner">
+        <span>&copy; 2026 Thamco360 Inc. All Rights Reserved.</span>
+        <span><a href="/privacy.html">Privacy</a> &middot; <a href="/privacy.html#terms">Terms</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="/app.js"></script>
+  <script defer src="/effects.js"></script>
+</body>
+</html>

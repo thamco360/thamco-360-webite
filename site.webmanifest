@@ -1,0 +1,20 @@
+{
+  "name": "Thamco360 — 360° Virtual Tours Bengaluru",
+  "short_name": "Thamco360",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#faf6ee",
+  "theme_color": "#faf6ee",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
