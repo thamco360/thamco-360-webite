@@ -5,6 +5,16 @@
 ## Main sections
 - [Home](https://www.thamco360.com/): Live 360° hero tour, published client portfolio, the capture-to-experience process, a raw-versus-stitched comparison, per-industry breakdown, FAQ and enquiry form.
 - [360° Virtual Tours in Indiranagar](https://www.thamco360.com/360-virtual-tour-indiranagar-bengaluru/): Indiranagar, Bengaluru location page — 8K virtual tours and Google Street View photography for cafés, retail, clinics and commercial spaces; shoot duration (2–4 hours under 5,000 sq ft), pricing (₹5,000 to ₹35,000+) and a virtual tour vs standard photography comparison.
+- [Blog — 360° virtual tour guides](https://www.thamco360.com/blog/): Guides on how 360° virtual tours help Bangalore businesses, each with an FAQ:
+  - [Google Business Profile (GMB) 360° tours](https://www.thamco360.com/blog/google-business-profile-360-virtual-tour-benefits/): what a tour on a Google Business Profile does and does not do for local visibility.
+  - [Resorts & hotels](https://www.thamco360.com/blog/360-virtual-tour-resorts-hotels-bangalore/)
+  - [Co-working spaces & offices](https://www.thamco360.com/blog/virtual-tour-coworking-office-spaces-bangalore/)
+  - [Restaurants, cafés & pubs](https://www.thamco360.com/blog/360-virtual-tour-restaurants-cafes-bangalore/)
+  - [Hospitals & dental clinics](https://www.thamco360.com/blog/virtual-tour-hospitals-dental-clinics-bangalore/)
+  - [Real estate, apartments & villas](https://www.thamco360.com/blog/360-virtual-tour-real-estate-bangalore/)
+  - [Schools & colleges](https://www.thamco360.com/blog/virtual-tour-schools-colleges-bangalore/)
+  - [Wedding & event venues](https://www.thamco360.com/blog/360-virtual-tour-wedding-event-venues-bangalore/)
+  - [Gyms, salons & showrooms](https://www.thamco360.com/blog/virtual-tour-gyms-salons-showrooms-bangalore/)
 - [About](https://www.thamco360.com/about.html): Vision, values, and who we are.
 - [Privacy Policy & Terms](https://www.thamco360.com/privacy.html): What the site collects, who processes it, and visitor rights under India’s DPDP Act and the GDPR.
 
