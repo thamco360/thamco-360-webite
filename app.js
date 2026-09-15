@@ -4,7 +4,15 @@
 
 /* Shared motion guard. Read once, used by every module below, so the whole
    page agrees on whether it is allowed to animate. */
-const PREFERS_REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Scroll choreography runs for every visitor, by explicit decision: Windows
+   ships with "Animation effects" off on many machines, which Chrome reports
+   as prefers-reduced-motion, and that silently stripped every pin, reveal and
+   parallax from a large share of desktop visitors as well as all phones.
+   PREFERS_REDUCED is therefore pinned to false rather than read from the OS,
+   and the touch checks below no longer gate motion — only hover-only effects
+   (cursor reticle, magnetic buttons) and GPU-heavy decoration still look at
+   IS_TOUCH. */
+const PREFERS_REDUCED = false;
 const IS_TOUCH = window.matchMedia('(pointer: coarse)').matches;
 
 /* A 360 sphere only ever shows about a 75-degree slice, so a phone was
@@ -403,7 +411,6 @@ function initHeroVirtualTour() {
 
   function restartRoomBanner() {
     if (roomBannerTimer) clearInterval(roomBannerTimer);
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     roomBannerTimer = setInterval(() => {
       if (isUserInteracting) return;
       switchRoom((currentRoomIdx + 1) % roomData.length);
@@ -658,10 +665,12 @@ function buildPanorama(canvas) {
    drag-to-look-around with no pinning. */
 function initServicePinning() {
   if (!window.gsap || !window.ScrollTrigger) return;
-  if (window.matchMedia('(pointer: coarse)').matches) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   gsap.registerPlugin(ScrollTrigger);
+  // Mobile browsers resize the viewport every time the URL bar slides in or
+  // out. Without this, each of those resizes re-measures every pin mid-swipe
+  // and the pinned blocks visibly jump on a phone.
+  ScrollTrigger.config({ ignoreMobileResize: true });
 
   document.querySelectorAll('.service-block').forEach((block) => {
     const canvas = block.querySelector('.service-tour-canvas');
@@ -698,7 +707,7 @@ function initHookReveal() {
   const taglineWords = section.querySelectorAll('.hook-tagline .hook-tagline-word');
   const paras = section.querySelectorAll('.hook-body .hook-para');
 
-  if (!window.gsap || !window.ScrollTrigger || window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (!window.gsap || !window.ScrollTrigger) {
     return;
   }
 
@@ -905,8 +914,6 @@ function initHeroIntro() {
    move the URL bar under the finger, which fights it. */
 function initParallax() {
   if (!window.gsap || !window.ScrollTrigger) return;
-  if (PREFERS_REDUCED) return;
-  if (window.matchMedia('(pointer: coarse)').matches) return;
 
   gsap.registerPlugin(ScrollTrigger);
 

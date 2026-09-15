@@ -681,14 +681,6 @@ html.lenis, html.lenis body { height: auto; }
   .journey-note { font-size: 0.82rem; }
 }
 
-/* Nothing here depends on JS for legibility — the diagram is fully readable
-   before any animation runs. These rules only pin the finished state so the
-   draw-on never starts from a hidden icon. */
-@media (prefers-reduced-motion: reduce) {
-  .journey-rail-fill { transform: scaleX(1); }
-  .journey-step { opacity: 1 !important; transform: none !important; }
-  .journey-icon svg * { stroke-dashoffset: 0 !important; }
-}
 
 @media (max-width: 768px) {
   .flow-strip { flex-direction: column; gap: 16px; }
@@ -1416,13 +1408,8 @@ html.lenis, html.lenis body { height: auto; }
 }
 .industry-tile:hover img { scale: 1.06; }
 
-/* The 6% overhang only earns its keep while something is scrubbing the
-   image. initParallax() bails on coarse pointers and under reduced motion,
-   so in exactly those cases drop back to an untransformed, uncropped fit —
-   otherwise touch users get the tighter crop and none of the effect. */
-@media (prefers-reduced-motion: reduce), (pointer: coarse) {
-  .industry-tile img { position: static; inset: auto; height: 100%; }
-}
+/* The 6% overhang is always needed now: initParallax() scrubs these images on
+   every device, including touch and reduced-motion setups. */
 
 .industry-tile::after {
   content: '';
@@ -1639,17 +1626,9 @@ html.motion-ready .h1-line-i {
   .hero-overlay-inner { padding: 88px 24px 40px; }
 }
 
-/* ── Reduced motion ─────────────────────────────────────────── */
-/* Every animated affordance above resolves to its end state. app.js
-   independently skips the GSAP timelines under the same query, so this is
-   the belt to that braces. */
-@media (prefers-reduced-motion: reduce) {
-  html.motion-ready .hero-anim,
-  html.motion-ready .h1-line-i {
-    opacity: 1;
-  }
-  [data-parallax] { will-change: auto; transform: none !important; }
-  }
+/* No reduced-motion override here: scroll choreography runs for every visitor
+   (see PREFERS_REDUCED in app.js). The hero can still never be stranded
+   invisible — app.js drops .motion-ready if GSAP fails, plus a 4s failsafe. */
 
 /* ── LIVE PANORAMA — drag-to-look 360 viewer ────────────────────
    Shares the three.js sphere viewer with the service blocks. The frame is
