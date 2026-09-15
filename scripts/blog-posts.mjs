@@ -3,7 +3,7 @@
 //
 // Ground rules for this content, so it stays safe for search and honest:
 // - No invented statistics. Prices, shoot times and turnaround come from what
-//   Thamco360 already states on the site (₹5,000–₹35,000+, 2–4 hours under
+//   Thamco360 already states on the site (basic packages from ₹7,999, 2–4 hours under
 //   5,000 sq ft, crew within 48 hours, publish within 48 hours of capture).
 // - Portfolio references are only the four real published tours.
 // - FAQ answers are plain text: the same string is rendered on the page and in
@@ -30,7 +30,7 @@ export const posts = [
     keywords: ['Google Business Profile 360 tour', 'GMB virtual tour Bangalore', 'Google Maps virtual tour', 'Google Street View business photography Bangalore'],
     takeaways: [
       'A 360° tour attaches to your Google Business Profile and opens from Google Search and Google Maps.',
-      'It answers the questions photos cannot: size, layout, entrance, seating and atmosphere.',
+      'It answers the questions photos cannot: size, layout, entrance, seating and ambiance.',
       'Google does not publish a ranking boost for 360° imagery — the value is trust and a more complete, more engaging listing.',
       'One shoot serves Google, your website, WhatsApp and social media.',
     ],
@@ -113,7 +113,7 @@ export const posts = [
       { q: 'Does a 360° virtual tour improve my Google Maps ranking?', a: 'Google does not publish a direct ranking boost for 360° imagery. What a tour does is make your Google Business Profile more complete and more engaging, which helps customers choose you once they find you. Google recommends complete, accurate and up-to-date profiles for local visibility.' },
       { q: 'Where does the virtual tour appear on Google?', a: 'The tour is attached to your Google Business Profile, so it opens from your listing on Google Search and Google Maps, alongside your photos, reviews and business details.' },
       { q: 'Do I need a verified Google Business Profile?', a: 'Yes. The tour is linked to your business listing, so the profile should be verified. Thamco360 can check your profile status with you before the shoot.' },
-      { q: 'How much does a Google 360° virtual tour cost in Bangalore?', a: 'Thamco360 virtual tour packages generally range from ₹5,000 to ₹35,000+, depending on the size of the space, the number of scan points and whether you also want a website embed or custom 3D features.' },
+      { q: 'How much does a Google 360° virtual tour cost in Bangalore?', a: 'Basic Thamco360 virtual tour packages start from just ₹7,999, and the final price depends on the size of the space, the number of scan points and whether you also want a website embed or custom 3D features.' },
       { q: 'Can I use the same tour on my website?', a: 'Yes. The published tour can be embedded on your website and shared as a link on WhatsApp and social media, so one shoot serves every channel.' },
     ],
     cta: { title: 'Put your business on Google in 360°', text: 'Tell us your business name and area — we will confirm coverage, timing and a price for your space.', wa: 'Hi Thamco360! I would like a 360° virtual tour on my Google Business Profile.' },
@@ -191,7 +191,7 @@ export const posts = [
       { q: 'Will the shoot disturb our guests?', a: 'No. Thamco360 schedules capture for low-occupancy slots, shoots vacant rooms, and covers public areas at quiet hours, so the shoot runs alongside normal operations.' },
       { q: 'Can the tour be added to our Google listing and our website?', a: 'Yes. The same tour is published to your Google Business Profile and can be embedded on the rooms or booking page of your website.' },
       { q: 'Do you cover resorts outside Bangalore city?', a: 'Yes. The scan crew travels to properties around Bangalore, including areas such as Nandi Hills, Devanahalli and Kanakapura Road, and travel is planned into the quote.' },
-      { q: 'What does a resort virtual tour cost?', a: 'Pricing depends on the number of spaces and scan points. Thamco360 packages generally range from ₹5,000 to ₹35,000+, with larger multi-building resorts quoted individually.' },
+      { q: 'What does a resort virtual tour cost?', a: 'Pricing depends on the number of spaces and scan points. Basic Thamco360 packages start from just ₹7,999, with larger multi-building resorts quoted individually.' },
     ],
     cta: { title: 'Show guests your resort before they book', text: 'Share your property name and location, and we will plan a shoot around your occupancy.', wa: 'Hi Thamco360! I would like a 360° virtual tour for my resort / hotel.' },
     related: ['360-virtual-tour-wedding-event-venues-bangalore', 'google-business-profile-360-virtual-tour-benefits', '360-virtual-tour-restaurants-cafes-bangalore'],
@@ -262,7 +262,7 @@ export const posts = [
       { q: 'Can you shoot during working hours?', a: 'Yes, but early mornings, evenings or weekends give the cleanest capture with no members in frame. Thamco360 plans the shoot around your members.' },
       { q: 'Is a virtual tour useful for leasing an empty office floor?', a: 'Yes. Bare-shell and furnished floors can both be captured, letting brokers and tenants check the layout, windows and core areas before booking a site visit.' },
       { q: 'How long does a co-working space shoot take?', a: 'Most centres under 5,000 sq ft are captured in a single 2-to-4 hour visit. Larger multi-floor centres take longer and are planned floor by floor.' },
-      { q: 'What does a co-working virtual tour cost?', a: 'Pricing depends on floor area and number of scan points. Thamco360 packages generally range from ₹5,000 to ₹35,000+.' },
+      { q: 'What does a co-working virtual tour cost?', a: 'Pricing depends on floor area and number of scan points. Basic Thamco360 packages start from just ₹7,999.' },
     ],
     cta: { title: 'Fill desks with a tour, not a brochure', text: 'Tell us your centre locations and floor sizes and we will plan the shoots.', wa: 'Hi Thamco360! I would like 360° virtual tours for my co-working space / office.' },
     related: ['google-business-profile-360-virtual-tour-benefits', '360-virtual-tour-real-estate-bangalore', 'virtual-tour-gyms-salons-showrooms-bangalore'],
@@ -275,21 +275,21 @@ export const posts = [
     title: 'Restaurant & Café 360° Virtual Tours Bangalore | Thamco360',
     h1: '360° Virtual Tours for Restaurants, Cafés and Pubs in Bangalore',
     short: 'Restaurants & cafés',
-    description: 'How Bangalore restaurants, cafés and pubs use 360° tours on Google Maps to show ambience, seating and private dining — and turn searches into bookings.',
-    dek: 'In Indiranagar, Koramangala or Church Street, diners pick where to go from Google Maps. A 360° tour shows them the ambience and seating before they decide.',
+    description: 'How Bangalore restaurants, cafés and pubs use 360° tours on Google Maps to show ambiance, seating and private dining — and turn searches into bookings.',
+    dek: 'In Indiranagar, Koramangala or Church Street, diners pick where to go from Google Maps. A 360° tour shows them the ambiance and seating before they decide.',
     image: U('photo-1517248135467-4c7edcad34c4'),
     imageAlt: 'Representative photo of a modern restaurant interior with set tables',
     caption: 'Representative image. See our live café and live-music venue tours in the Thamco360 portfolio.',
     keywords: ['restaurant virtual tour Bangalore', 'cafe 360 tour Google Maps', 'pub virtual tour Bangalore', 'restaurant Google Business Profile photos'],
     takeaways: [
-      'Diners choose on ambience as much as the menu — a tour shows it honestly.',
+      'Diners choose on ambiance as much as the menu — a tour shows it honestly.',
       'Groups and party planners can check seating, rooftop and private areas remotely.',
       'Entrance panoramas help people find first-floor and lane-side outlets.',
       'Shoots happen before opening, so service is not affected.',
     ],
     sections: [
       {
-        id: 'why-ambience-matters',
+        id: 'why-ambiance-matters',
         h2: 'Diners choose the room as much as the menu',
         html: `
 <p>Bangalore’s food scene is crowded and competitive. Search for a café or restaurant nearby on Google Maps and you will get a long list, each with a rating, a menu and a set of photos. When ratings are similar, people choose on feel: is it cosy or lively, good for a date or a team lunch, quiet enough to talk?</p>
@@ -331,7 +331,7 @@ export const posts = [
       { q: 'How long does a café or restaurant shoot take?', a: 'Most outlets under 5,000 sq ft are captured in a single 2-to-4 hour visit, without disrupting daily service.' },
       { q: 'Will the tour appear on Google Maps?', a: 'Yes. Thamco360 publishes the tour to your Google Business Profile, so it opens from your listing on Google Maps and Google Search.' },
       { q: 'Can I share the tour on Instagram or food apps?', a: 'You can share the tour link anywhere, including Instagram and WhatsApp. Food delivery and review apps have their own photo rules, so the tour itself lives on Google and your website.' },
-      { q: 'How much does a restaurant virtual tour cost in Bangalore?', a: 'Thamco360 packages generally range from ₹5,000 to ₹35,000+, depending on the size of the outlet and the number of seating areas covered.' },
+      { q: 'How much does a restaurant virtual tour cost in Bangalore?', a: 'Basic Thamco360 packages start from just ₹7,999, and the final price depends on the size of the outlet and the number of seating areas covered.' },
     ],
     cta: { title: 'Let diners feel your space on Google Maps', text: 'Share your outlet name and area — we will plan a pre-opening shoot.', wa: 'Hi Thamco360! I would like a 360° virtual tour for my restaurant / café.' },
     related: ['google-business-profile-360-virtual-tour-benefits', 'virtual-tour-gyms-salons-showrooms-bangalore', '360-virtual-tour-wedding-event-venues-bangalore'],
@@ -401,7 +401,7 @@ export const posts = [
       { q: 'Which areas of a hospital or clinic should be in the tour?', a: 'Usually the entrance, reception, waiting areas, consultation and treatment rooms, and patient rooms. Sensitive areas such as operation theatres or ICUs are left out unless you want them shown.' },
       { q: 'How long does a dental clinic virtual tour take?', a: 'Most clinics under 5,000 sq ft are captured in a single 2-to-4 hour visit, scheduled around appointments.' },
       { q: 'Can the tour help patients find a large hospital campus?', a: 'Yes. Panoramas of entrances, departments and parking can be included and linked from your website so patients and families can orient themselves before arriving.' },
-      { q: 'What does a clinic or hospital virtual tour cost?', a: 'Thamco360 packages generally range from ₹5,000 to ₹35,000+ for clinics and smaller facilities. Hospital campuses are quoted individually based on the areas covered.' },
+      { q: 'What does a clinic or hospital virtual tour cost?', a: 'Basic Thamco360 packages for clinics and smaller facilities start from just ₹7,999. Hospital campuses are quoted individually based on the areas covered.' },
     ],
     cta: { title: 'Reassure patients before they walk in', text: 'Tell us about your clinic or hospital and we will plan a privacy-safe shoot.', wa: 'Hi Thamco360! I would like a 360° virtual tour for my clinic / hospital.' },
     related: ['google-business-profile-360-virtual-tour-benefits', 'virtual-tour-schools-colleges-bangalore', 'virtual-tour-gyms-salons-showrooms-bangalore'],
@@ -471,7 +471,7 @@ export const posts = [
       { q: 'Are virtual tours useful for NRI property buyers?', a: 'Yes. NRI buyers and relocating families can walk through a home from anywhere and share the link with family before deciding whether to visit.' },
       { q: 'How long does an apartment virtual tour shoot take?', a: 'Most homes and model flats under 5,000 sq ft are captured in a single 2-to-4 hour visit. Large villas and amenity areas take longer.' },
       { q: 'Can the tour be embedded on our project website?', a: 'Yes. The finished tour can be embedded on your project website or listing pages and shared as a link on WhatsApp.' },
-      { q: 'What does a real estate virtual tour cost in Bangalore?', a: 'Thamco360 packages generally range from ₹5,000 to ₹35,000+, depending on property size, number of rooms and the amenity areas included.' },
+      { q: 'What does a real estate virtual tour cost in Bangalore?', a: 'Basic Thamco360 packages start from just ₹7,999, and the final price depends on property size, number of rooms and the amenity areas included.' },
     ],
     cta: { title: 'Let buyers walk the home first', text: 'Tell us about the property or project and we will plan the capture.', wa: 'Hi Thamco360! I would like a 360° virtual tour for a property / project.' },
     related: ['virtual-tour-coworking-office-spaces-bangalore', 'google-business-profile-360-virtual-tour-benefits', '360-virtual-tour-resorts-hotels-bangalore'],
@@ -538,7 +538,7 @@ export const posts = [
       { q: 'Can a virtual tour include hostels?', a: 'Yes. Hostel rooms, mess and common areas can be captured when empty, which is especially helpful for out-of-state and international students.' },
       { q: 'Can large campuses be covered?', a: 'Yes. Large campuses are planned building by building and may take more than one day, depending on how many facilities are included.' },
       { q: 'Where will parents see the tour?', a: 'The tour can be embedded on your website’s admissions page and published to your Google Business Profile so it opens from Google Search and Maps.' },
-      { q: 'What does a campus virtual tour cost?', a: 'Pre-schools and smaller schools typically fall within Thamco360’s ₹5,000 to ₹35,000+ range. Large campuses are quoted individually based on the facilities covered.' },
+      { q: 'What does a campus virtual tour cost?', a: 'Basic Thamco360 packages for pre-schools and smaller schools start from just ₹7,999. Large campuses are quoted individually based on the facilities covered.' },
     ],
     cta: { title: 'Open your campus to every family', text: 'Share your school or college details and we will plan a holiday or after-hours shoot.', wa: 'Hi Thamco360! I would like a 360° virtual campus tour for our school / college.' },
     related: ['virtual-tour-hospitals-dental-clinics-bangalore', 'google-business-profile-360-virtual-tour-benefits', 'virtual-tour-coworking-office-spaces-bangalore'],
@@ -602,7 +602,7 @@ export const posts = [
       { q: 'Can you capture multiple halls at one venue?', a: 'Yes. Each hall, lawn and dining area is captured as part of one connected tour so clients can move between them.' },
       { q: 'How long does a venue shoot take?', a: 'A single hall with dining and rooms is usually captured in a few hours. Convention centres with multiple halls and lawns take longer and are planned around your bookings.' },
       { q: 'Will the tour help families abroad choose our venue?', a: 'Yes. Relatives abroad can walk through the venue from their phones and join the decision without travelling.' },
-      { q: 'What does a wedding venue virtual tour cost?', a: 'Thamco360 packages generally range from ₹5,000 to ₹35,000+, depending on the number of halls and outdoor areas covered.' },
+      { q: 'What does a wedding venue virtual tour cost?', a: 'Basic Thamco360 packages start from just ₹7,999, and the final price depends on the number of halls and outdoor areas covered.' },
     ],
     cta: { title: 'Help families say yes to your venue', text: 'Tell us about your halls and lawns and we will plan the capture around your bookings.', wa: 'Hi Thamco360! I would like a 360° virtual tour for my wedding / event venue.' },
     related: ['360-virtual-tour-resorts-hotels-bangalore', '360-virtual-tour-restaurants-cafes-bangalore', 'google-business-profile-360-virtual-tour-benefits'],
@@ -623,7 +623,7 @@ export const posts = [
     keywords: ['gym virtual tour Bangalore', 'salon 360 tour Google Maps', 'showroom virtual tour Bangalore', 'retail store virtual tour'],
     takeaways: [
       'Gyms: members want to see equipment, space and cleanliness before joining.',
-      'Salons and spas: a tour shows hygiene, privacy and ambience.',
+      'Salons and spas: a tour shows hygiene, privacy and ambiance.',
       'Showrooms: customers can check the range and plan a focused visit.',
       'All three benefit from a tour on their Google Business Profile.',
     ],
@@ -638,7 +638,7 @@ export const posts = [
         id: 'salons-spas',
         h2: 'Salons, spas and wellness centres',
         html: `
-<p>Hygiene, privacy and ambience drive salon and spa decisions. A tour of the styling stations, treatment rooms, pedicure area and waiting lounge helps first-time clients feel comfortable booking, especially for longer or more personal treatments.</p>`,
+<p>Hygiene, privacy and ambiance drive salon and spa decisions. A tour of the styling stations, treatment rooms, pedicure area and waiting lounge helps first-time clients feel comfortable booking, especially for longer or more personal treatments.</p>`,
       },
       {
         id: 'showrooms',
@@ -659,7 +659,7 @@ export const posts = [
       { q: 'Can you shoot a gym without members in frame?', a: 'Yes. Shoots are scheduled before opening or during the quietest hour so equipment and space are shown clearly with no members captured.' },
       { q: 'Can a showroom tour show our product range?', a: 'Yes. Each section of the showroom floor is captured so customers can look around the displays and plan what to see when they visit.' },
       { q: 'How long does a retail or wellness shoot take?', a: 'Most gyms, salons and showrooms under 5,000 sq ft are captured in a single 2-to-4 hour visit.' },
-      { q: 'What does it cost?', a: 'Thamco360 packages generally range from ₹5,000 to ₹35,000+, depending on the size of the space and the number of areas covered.' },
+      { q: 'What does it cost?', a: 'Basic Thamco360 packages start from just ₹7,999, and the final price depends on the size of the space and the number of areas covered.' },
     ],
     cta: { title: 'Turn Maps searches into walk-ins', text: 'Tell us your business type and area — we will schedule a pre-opening shoot.', wa: 'Hi Thamco360! I would like a 360° virtual tour for my gym / salon / showroom.' },
     related: ['google-business-profile-360-virtual-tour-benefits', '360-virtual-tour-restaurants-cafes-bangalore', 'virtual-tour-coworking-office-spaces-bangalore'],

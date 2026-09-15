@@ -18,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 import { posts, BUILD_DATE } from './blog-posts.mjs';
 import { galleries } from './blog-images.mjs';
 import { services } from './service-pages.mjs';
+import { renderLocationPages, locationsIndexSection, locationSitemapEntries, HUB_PATH } from './render-locations.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://www.thamco360.com';
@@ -122,7 +123,6 @@ function footer() {
         <div class="fl-col">
           <p class="fl-heading">Services</p>
 ${svc}
-          <a href="/360-virtual-tour-indiranagar-bengaluru/">Indiranagar</a>
         </div>
         <div class="fl-col">
           <p class="fl-heading">Guides</p>
@@ -445,6 +445,8 @@ ${posts.map((p) => card(p)).join('\n')}
       </div>
     </section>
 
+${locationsIndexSection({ esc, ARROW })}
+
 ${band(['Resorts', 'Workspaces', 'Cafés', 'Clinics', 'Homes', 'Venues'])}
 
 ${finalCta}
@@ -469,7 +471,7 @@ function renderService(s) {
       image: abs(s.heroImage),
       provider: PUBLISHER,
       areaServed: { '@type': 'City', name: 'Bengaluru' },
-      offers: { '@type': 'Offer', priceCurrency: 'INR', priceSpecification: { '@type': 'PriceSpecification', minPrice: 5000, priceCurrency: 'INR' } },
+      ...(s.priceFrom ? { offers: { '@type': 'Offer', priceCurrency: 'INR', priceSpecification: { '@type': 'PriceSpecification', minPrice: s.priceFrom, priceCurrency: 'INR' } } } : {}),
     },
     {
       '@type': 'BreadcrumbList',
@@ -643,6 +645,7 @@ function renderSitemap() {
     ...services.map((s) => ({ loc: servicePath(s), lastmod: BUILD_DATE, changefreq: 'monthly', priority: '0.9' })),
     { loc: '/360-virtual-tour-indiranagar-bengaluru/', lastmod: BUILD_DATE, changefreq: 'monthly', priority: '0.9' },
     { loc: '/blog/', lastmod: BUILD_DATE, changefreq: 'weekly', priority: '0.8' },
+    ...locationSitemapEntries(BUILD_DATE),
     ...posts.map((p) => ({ loc: `/blog/${p.slug}/`, lastmod: BUILD_DATE, changefreq: 'monthly', priority: '0.7' })),
     { loc: '/about.html', lastmod: '2026-09-09', changefreq: 'monthly', priority: '0.6' },
     { loc: '/privacy.html', lastmod: '2026-09-09', changefreq: 'yearly', priority: '0.3' },
@@ -681,4 +684,5 @@ function write(rel, content) {
 for (const p of posts) write(`blog/${p.slug}/index.html`, renderPost(p));
 write('blog/index.html', renderIndex());
 for (const s of services) write(`services/${s.slug}/index.html`, renderService(s));
+for (const [rel, html] of renderLocationPages({ page, band, card, faqBlock, esc, wa, ARROW, finalCta, PUBLISHER, SITE, BUILD_DATE, bySlug, abs })) write(rel, html);
 write('sitemap.xml', renderSitemap());
