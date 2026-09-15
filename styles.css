@@ -2294,3 +2294,37 @@ main { overflow-x: hidden; }
 @media (max-width: 640px) {
   .home-guides-grid { grid-template-columns: 1fr; }
 }
+
+/* ── FINAL CUT label (homepage, between the raw/stitched slider and the
+   live panorama) ─────────────────────────────────────────────────────── */
+.final-cut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin: 96px auto 30px;
+  max-width: 560px;
+}
+.final-cut::before,
+.final-cut::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 150, 47, 0.7));
+}
+.final-cut::after { background: linear-gradient(90deg, rgba(201, 150, 47, 0.7), transparent); }
+.final-cut-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  white-space: nowrap;
+}
+/* The label now provides the spacing above the panorama. */
+.final-cut + .pano-frame { margin-top: 0; }
+
+@media (max-width: 768px) {
+  .final-cut { margin: 64px auto 20px; gap: 14px; }
+}
