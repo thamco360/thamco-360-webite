@@ -993,6 +993,69 @@
   </section>
 
   <!-- =====================================================================
+       GUIDES — surfaces the blog on the homepage without touching the nav
+       (owner decision: the nav stays at the original six links). Cards reuse
+       the blog's .blog-card styles; content comes from scripts/blog-posts.mjs.
+       The reveal is on the grid, not each card: .blog-card has no opacity
+       transition, so revealing cards individually would pop rather than fade.
+  ====================================================================== -->
+  <section class="section home-guides" id="guides">
+    <div class="inner">
+      <div class="section-header-center">
+        <p class="section-kicker reveal-up">Guides</p>
+        <h2 class="section-h2 reveal-up">How 360° Tours Help Bangalore Businesses</h2>
+        <p class="section-p reveal-up">Practical guides for resorts, workspaces, restaurants and clinics — and what a tour on your Google Business Profile actually does.</p>
+      </div>
+
+      <div class="blog-grid home-guides-grid reveal-up">
+        <a class="blog-card" href="/blog/google-business-profile-360-virtual-tour-benefits/">
+          <span class="blog-card-media"><img src="/assets/img/stitched-360-streamphony-800.webp" alt="A stitched 360° panorama of Streamphony Live in Bengaluru, captured by Thamco360" loading="lazy" decoding="async" width="800" height="533"></span>
+          <span class="blog-card-body">
+            <span class="blog-card-cat">Google Business Profile</span>
+            <h3 class="blog-card-title">How a 360° Virtual Tour on Google Business Profile (GMB) Helps Bangalore Businesses</h3>
+            <span class="blog-card-excerpt">What a 360° virtual tour on your Google Business Profile (GMB) does: more trust on Google Maps, fewer wasted enquiries and a stronger Bangalore listing.</span>
+            <span class="blog-card-meta">Read the guide &rarr;</span>
+          </span>
+        </a>
+        <a class="blog-card" href="/blog/360-virtual-tour-resorts-hotels-bangalore/">
+          <span class="blog-card-media"><img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Representative photo of an infinity pool with cabanas at sunset" loading="lazy" decoding="async" width="800" height="533"></span>
+          <span class="blog-card-body">
+            <span class="blog-card-cat">Resorts &amp; Hotels</span>
+            <h3 class="blog-card-title">360° Virtual Tours for Resorts and Hotels in and around Bangalore</h3>
+            <span class="blog-card-excerpt">How resorts and hotels near Bangalore — Nandi Hills, Devanahalli, Kanakapura Road — use 360° virtual tours to win direct bookings, offsites and weddings.</span>
+            <span class="blog-card-meta">Read the guide &rarr;</span>
+          </span>
+        </a>
+        <a class="blog-card" href="/blog/virtual-tour-coworking-office-spaces-bangalore/">
+          <span class="blog-card-media"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Representative photo of a modern office corridor with glass-walled rooms" loading="lazy" decoding="async" width="800" height="533"></span>
+          <span class="blog-card-body">
+            <span class="blog-card-cat">Co-working &amp; Offices</span>
+            <h3 class="blog-card-title">Virtual Tours for Co-working Spaces and Offices in Bangalore</h3>
+            <span class="blog-card-excerpt">How co-working operators and office landlords in Koramangala, HSR Layout, Whitefield and ORR use 360° virtual tours to fill desks and lease space faster.</span>
+            <span class="blog-card-meta">Read the guide &rarr;</span>
+          </span>
+        </a>
+        <a class="blog-card" href="/blog/360-virtual-tour-restaurants-cafes-bangalore/">
+          <span class="blog-card-media"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Representative photo of a modern restaurant interior with set tables" loading="lazy" decoding="async" width="800" height="533"></span>
+          <span class="blog-card-body">
+            <span class="blog-card-cat">Restaurants &amp; Cafés</span>
+            <h3 class="blog-card-title">360° Virtual Tours for Restaurants, Cafés and Pubs in Bangalore</h3>
+            <span class="blog-card-excerpt">How Bangalore restaurants, cafés and pubs use 360° tours on Google Maps to show ambience, seating and private dining — and turn searches into bookings.</span>
+            <span class="blog-card-meta">Read the guide &rarr;</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="home-guides-cta reveal-up">
+        <a href="/blog/" class="btn-enter-tour magnetic">
+          <span>See all guides</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
        FAQ — mirrors the FAQPage JSON-LD in <head> word-for-word, since
        Google only honors FAQ rich results when the schema matches text
        that's actually visible on the page.
@@ -1043,6 +1106,7 @@
           <p>Message +91 70901 11360 on WhatsApp, email thamco360@gmail.com, or fill in the enquiry form below — it sends straight to the team with no extra steps.</p>
         </div>
       </div>
+      <p class="faq-more reveal-up">Want more detail? <a href="/blog/">Read our guides for resorts, cafés, clinics and more &rarr;</a></p>
     </div>
   </section>
 
