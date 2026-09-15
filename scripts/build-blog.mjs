@@ -1,16 +1,23 @@
-// Generates /blog/index.html, /blog/<slug>/index.html for every post in
-// blog-posts.mjs, and rewrites sitemap.xml so it always lists every page.
+// Generates every templated page on the site and rewrites sitemap.xml:
+//
+//   /blog/                      index of guides          (blog-posts.mjs)
+//   /blog/<slug>/               one page per guide       (blog-posts.mjs + blog-images.mjs)
+//   /services/<slug>/           one page per service     (service-pages.mjs)
+//   /sitemap.xml                every indexable page on the site
 //
 //   node scripts/build-blog.mjs
 //
 // The output is plain static HTML committed to the repo — Vercel serves it
-// with no build step, same as the rest of the site.
+// with no build step, same as the rest of the site. 3D text and scroll effects
+// come from /effects.js, which these pages load after /app.js.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { posts, BUILD_DATE } from './blog-posts.mjs';
+import { galleries } from './blog-images.mjs';
+import { services } from './service-pages.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://www.thamco360.com';
@@ -29,19 +36,22 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const ld = (obj) => JSON.stringify(obj, null, 2).replace(/<\//g, '<\\/');
 const wa = (text) => `https://wa.me/917090111360?text=${encodeURIComponent(text)}`;
 const abs = (url) => (url.startsWith('http') ? url : SITE + url);
-const readMins = (post) => {
-  const text = [post.dek, ...post.takeaways, ...post.sections.map((s) => s.h2 + ' ' + s.html), ...post.faqs.map((f) => f.q + ' ' + f.a)].join(' ');
-  return Math.max(3, Math.round(text.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length / 200));
-};
+const words = (text) => text.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const readMins = (post) => Math.max(3, Math.round(words([post.dek, ...post.takeaways, ...post.sections.map((s) => s.h2 + ' ' + s.html), ...post.faqs.map((f) => f.q + ' ' + f.a)].join(' ')) / 200));
 const humanDate = (iso) => new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 const bySlug = Object.fromEntries(posts.map((p) => [p.slug, p]));
+const servicePath = (s) => `/services/${s.slug}/`;
 
-// Validate links between posts before writing anything.
+// ── Validation: fail the build rather than ship a dead link ──────────────
+const blogLinks = (html) => [...html.matchAll(/href="\/blog\/([^"/]+)\/"/g)].map((m) => m[1]);
 for (const p of posts) {
   for (const r of p.related) if (!bySlug[r]) throw new Error(`${p.slug}: related post "${r}" does not exist`);
-  for (const [, href] of p.sections.map((s) => s.html).join('').matchAll(/href="\/blog\/([^"/]+)\/"/g)) {
-    if (!bySlug[href]) throw new Error(`${p.slug}: links to missing post "${href}"`);
-  }
+  for (const l of blogLinks(p.sections.map((s) => s.html).join(''))) if (!bySlug[l]) throw new Error(`${p.slug}: links to missing post "${l}"`);
+  for (const g of galleries[p.slug] || []) if (!p.sections.some((s) => s.id === g.after)) throw new Error(`${p.slug}: gallery image placed after unknown section "${g.after}"`);
+}
+for (const s of services) {
+  for (const r of s.relatedPosts) if (!bySlug[r]) throw new Error(`service ${s.slug}: related post "${r}" does not exist`);
+  for (const l of blogLinks(s.sections.map((x) => x.html).join(''))) if (!bySlug[l]) throw new Error(`service ${s.slug}: links to missing post "${l}"`);
 }
 
 const WA_ICON = '<svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>';
@@ -55,13 +65,14 @@ const PUBLISHER = {
   logo: { '@type': 'ImageObject', url: `${SITE}/assets/logo.webp`, width: 150, height: 97 },
 };
 
-function header(activePath) {
-  const blogCurrent = activePath.startsWith('/blog/') ? ' aria-current="page"' : '';
+// The nav bar is deliberately identical to the homepage's original six links —
+// owner decision: new pages are reached through the footer, in-page links and
+// the sitemap, never by adding items to the nav.
+function header() {
   return `  <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a href="/" class="logo">
-        <img src="/assets/logo.webp" alt="Thamco360 — 360° Virtual Tours Bengaluru" class="logo-mark" width="150" height="97">
-        <span class="visually-hidden">Thamco360 — 360° Tours Bengaluru</span>
+        <img src="/assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
       </a>
 
       <button class="nav-toggle" id="navToggle" type="button"
@@ -71,30 +82,18 @@ function header(activePath) {
         <span class="nav-toggle-bar"></span>
       </button>
 
-      <nav class="main-nav" id="mainNav" aria-label="Main">
-        <a href="/" class="nav-a">Home</a>
-        <details class="nav-drop">
-          <summary class="nav-a">Services</summary>
-          <div class="nav-drop-menu">
-            <a href="/#services">360° Virtual Tours</a>
-            <a href="/#services">Google Street View Photography</a>
-            <a href="/#services">Web 3D Walkthroughs</a>
-          </div>
-        </details>
-        <details class="nav-drop">
-          <summary class="nav-a">Locations</summary>
-          <div class="nav-drop-menu">
-            <a href="/360-virtual-tour-indiranagar-bengaluru/">Indiranagar</a>
-          </div>
-        </details>
-        <a href="/blog/" class="nav-a"${blogCurrent}>Blog</a>
+      <nav class="main-nav" id="mainNav">
         <a href="/#portfolio" class="nav-a">Portfolio</a>
+        <a href="/#process" class="nav-a">Process</a>
+        <a href="/#real-estate" class="nav-a">Services</a>
+        <a href="/#faq" class="nav-a">FAQ</a>
+        <a href="/about.html" class="nav-a">About</a>
         <a href="/#contact" class="nav-a">Contact</a>
       </nav>
 
       <div class="header-actions">
-        <a href="${esc(wa('Hi Thamco360! I would like to book a 360° virtual tour shoot.'))}" target="_blank" rel="noopener" class="btn-pill magnetic">
-          <span>Book Shoot (+91 70901 11360)</span>
+        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-pill magnetic">
+          <span>Book Your 360° Virtual Tour</span>
           ${ARROW}
         </a>
       </div>
@@ -103,7 +102,8 @@ function header(activePath) {
 }
 
 function footer() {
-  const guides = posts.slice(0, 5).map((p) => `          <a href="/blog/${p.slug}/">${esc(p.short)}</a>`).join('\n');
+  const guides = posts.slice(0, 4).map((p) => `          <a href="/blog/${p.slug}/">${esc(p.short)}</a>`).join('\n');
+  const svc = services.map((s) => `          <a href="${servicePath(s)}">${esc(s.navLabel)}</a>`).join('\n');
   return `  <a href="${esc(wa('Hi Thamco360! I am interested in a 360° virtual tour.'))}" target="_blank" rel="noopener" class="floating-wa" title="Chat on WhatsApp">
     ${WA_ICON}
   </a>
@@ -119,13 +119,14 @@ function footer() {
 
       <div class="footer-links">
         <div class="fl-col">
+          <h5>Services</h5>
+${svc}
+          <a href="/360-virtual-tour-indiranagar-bengaluru/">Indiranagar</a>
+        </div>
+        <div class="fl-col">
           <h5>Guides</h5>
 ${guides}
           <a href="/blog/">All guides</a>
-        </div>
-        <div class="fl-col">
-          <h5>Locations</h5>
-          <a href="/360-virtual-tour-indiranagar-bengaluru/">Indiranagar</a>
         </div>
         <div class="fl-col">
           <h5>Company</h5>
@@ -149,18 +150,20 @@ ${guides}
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4G2VQCLZDT"></script>
   <script>${GTAG_BODY}</script>
   <script defer src="/clarity.js"></script>
-  <script defer src="/app.js"></script>`;
+  <script defer src="/app.js"></script>
+  <script defer src="/effects.js"></script>`;
 }
 
-function page({ title, description, path, image, imageAlt, ogType, graph, main }) {
+function page({ title, description, path, image, imageAlt, ogType, graph, main, withThree = false }) {
   const url = SITE + path;
+  const three = withThree ? '\n  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>' : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Generated by scripts/build-blog.mjs from scripts/blog-posts.mjs.
-       Edit the content file and rebuild; changes made here are overwritten. -->
+  <!-- Generated by scripts/build-blog.mjs. Edit the content files in
+       scripts/ and rebuild; changes made here are overwritten. -->
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -193,7 +196,7 @@ ${ld({ '@context': 'https://schema.org', '@graph': graph })}
 
   <link rel="stylesheet" href="/styles.css">
 
-  <script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>${three}
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
@@ -214,8 +217,9 @@ ${footer()}
 `;
 }
 
+// ── Shared blocks ─────────────────────────────────────────────────────────
 function card(p, headingTag = 'h2') {
-  return `        <a class="blog-card reveal-up" href="/blog/${p.slug}/">
+  return `        <a class="blog-card" href="/blog/${p.slug}/">
           <span class="blog-card-media"><img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" loading="lazy" width="1200" height="800"></span>
           <span class="blog-card-body">
             <span class="blog-card-cat">${esc(p.category)}</span>
@@ -226,10 +230,45 @@ function card(p, headingTag = 'h2') {
         </a>`;
 }
 
+// Big extruded 3D words. Decorative: aria-hidden, so the repeated words are
+// not read out or counted as page content.
+function band(wordsList) {
+  const styles = ['', 'is-italic', 'is-outline'];
+  const items = [...wordsList, ...wordsList].map((w, i) => `<span class="fx-band-word ${styles[i % 3]}">${esc(w)}</span>`).join('');
+  return `    <section class="fx-band" aria-hidden="true">
+      <div class="fx-band-track">${items}</div>
+    </section>`;
+}
+
+function figure({ src, alt, caption }, { lazy = true } = {}) {
+  return `<figure class="fx-figure">
+          <img class="fx-img" src="${esc(src)}" alt="${esc(alt)}" width="1200" height="750"${lazy ? ' loading="lazy"' : ' fetchpriority="high"'}>
+          <figcaption>${esc(caption)}</figcaption>
+        </figure>`;
+}
+
+function faqBlock(faqs) {
+  return faqs.map((f) => `          <div class="faq-item">
+            <h3>${esc(f.q)}</h3>
+            <p>${esc(f.a)}</p>
+          </div>`).join('\n');
+}
+
+const finalCta = `    <section class="final-cta-section">
+      <div class="inner">
+        <a href="/#portfolio" class="final-cta">
+          <span>View Live Sample Tours</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>`;
+
+// ── Blog post ─────────────────────────────────────────────────────────────
 function renderPost(p) {
   const path = `/blog/${p.slug}/`;
   const url = SITE + path;
   const mins = readMins(p);
+  const gallery = galleries[p.slug] || [];
 
   const graph = [
     {
@@ -237,7 +276,7 @@ function renderPost(p) {
       '@id': `${url}#article`,
       headline: p.h1,
       description: p.description,
-      image: [abs(p.image)],
+      image: [abs(p.image), ...gallery.map((g) => abs(g.src))],
       datePublished: BUILD_DATE,
       dateModified: BUILD_DATE,
       inLanguage: 'en-IN',
@@ -265,30 +304,29 @@ function renderPost(p) {
   ];
 
   const toc = p.sections.map((s) => `            <li><a href="#${s.id}">${esc(s.h2)}</a></li>`).join('\n');
-  const body = p.sections.map((s) => `        <h2 id="${s.id}">${esc(s.h2)}</h2>${s.html}`).join('\n\n');
-  const faqs = p.faqs.map((f) => `          <div class="faq-item">
-            <h3>${esc(f.q)}</h3>
-            <p>${esc(f.a)}</p>
-          </div>`).join('\n');
+  const body = p.sections.map((s) => {
+    const images = gallery.filter((g) => g.after === s.id).map((g) => `\n        ${figure(g)}`).join('');
+    return `        <h2 id="${s.id}">${esc(s.h2)}</h2>${s.html}${images}`;
+  }).join('\n\n');
   const related = p.related.map((slug) => card(bySlug[slug], 'h3')).join('\n');
 
   const main = `  <main>
     <article class="post">
-      <header class="section post-hero">
-        <div class="inner post-inner">
+      <header class="section post-hero fx-hero">
+        <div class="inner post-inner fx-tilt">
           <nav class="crumbs" aria-label="Breadcrumb">
             <a href="/">Home</a><span aria-hidden="true">/</span><a href="/blog/">Blog</a><span aria-hidden="true">/</span><span>${esc(p.short)}</span>
           </nav>
           <p class="section-kicker">${esc(p.category)} · Bengaluru</p>
-          <h1 class="location-h1 post-h1">${esc(p.h1)}</h1>
+          <h1 class="location-h1 post-h1 fx-hero-title fx-pending">${esc(p.h1)}</h1>
           <p class="location-lede">${esc(p.dek)}</p>
           <p class="post-meta">By Thamco360 · <time datetime="${BUILD_DATE}">${humanDate(BUILD_DATE)}</time> · ${mins} min read</p>
         </div>
       </header>
 
       <div class="inner post-inner">
-        <figure class="post-figure">
-          <img src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="1200" height="800" fetchpriority="high">
+        <figure class="post-figure fx-figure">
+          <img class="fx-img" src="${esc(p.image)}" alt="${esc(p.imageAlt)}" width="1200" height="800" fetchpriority="high">
           <figcaption>${esc(p.caption)}</figcaption>
         </figure>
 
@@ -322,11 +360,15 @@ ${body}
             ${ARROW}
           </a>
         </aside>
+      </div>
 
+${band(['Step inside', 'Look around', 'Book the visit'])}
+
+      <div class="inner post-inner">
         <section id="faq" class="post-faq" aria-labelledby="faq-title">
           <h2 id="faq-title">Frequently asked questions</h2>
           <div class="faq-list">
-${faqs}
+${faqBlock(p.faqs)}
           </div>
         </section>
 
@@ -339,19 +381,13 @@ ${related}
       </div>
     </article>
 
-    <section class="final-cta-section">
-      <div class="inner">
-        <a href="/#portfolio" class="final-cta">
-          <span>View Live Sample Tours</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </section>
+${finalCta}
   </main>`;
 
   return page({ title: p.title, description: p.description, path, image: p.image, imageAlt: p.imageAlt, ogType: 'article', graph, main });
 }
 
+// ── Blog index ────────────────────────────────────────────────────────────
 function renderIndex() {
   const path = '/blog/';
   const url = SITE + path;
@@ -383,13 +419,13 @@ function renderIndex() {
   ];
 
   const main = `  <main>
-    <section class="section location-hero">
-      <div class="inner">
+    <section class="section location-hero fx-hero">
+      <div class="inner fx-tilt">
         <nav class="crumbs" aria-label="Breadcrumb">
           <a href="/">Home</a><span aria-hidden="true">/</span><span>Blog</span>
         </nav>
         <p class="section-kicker">Guides · Bengaluru</p>
-        <h1 class="location-h1">How 360° Virtual Tours Help <span class="gradient-text">Bangalore Businesses</span></h1>
+        <h1 class="location-h1 fx-hero-title fx-pending">How 360° Virtual Tours Help <span class="gradient-text">Bangalore Businesses</span></h1>
         <p class="location-lede">Practical guides for resorts, co-working spaces, restaurants, clinics, property, schools, venues and retail — and how a tour on your Google Business Profile turns Maps searches into visits.</p>
       </div>
     </section>
@@ -402,26 +438,203 @@ ${posts.map((p) => card(p)).join('\n')}
       </div>
     </section>
 
-    <section class="final-cta-section">
-      <div class="inner">
-        <a href="/#portfolio" class="final-cta">
-          <span>View Live Sample Tours</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </section>
+${band(['Resorts', 'Workspaces', 'Cafés', 'Clinics', 'Homes', 'Venues'])}
+
+${finalCta}
   </main>`;
 
   return page({ title, description, path, image: OWN_IMAGE, imageAlt: 'A 360° panorama captured by Thamco360 in Bengaluru', ogType: 'website', graph, main });
 }
 
+// ── Service page ──────────────────────────────────────────────────────────
+function renderService(s) {
+  const path = servicePath(s);
+  const url = SITE + path;
+
+  const graph = [
+    {
+      '@type': 'Service',
+      '@id': `${url}#service`,
+      name: s.serviceName,
+      serviceType: s.serviceType,
+      description: s.description,
+      url,
+      image: abs(s.heroImage),
+      provider: PUBLISHER,
+      areaServed: { '@type': 'City', name: 'Bengaluru' },
+      offers: { '@type': 'Offer', priceCurrency: 'INR', priceSpecification: { '@type': 'PriceSpecification', minPrice: 5000, priceCurrency: 'INR' } },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+        { '@type': 'ListItem', position: 2, name: 'Services', item: `${SITE}/#services` },
+        { '@type': 'ListItem', position: 3, name: s.navLabel, item: url },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${url}#faq`,
+      mainEntity: s.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ];
+
+  const points = s.points.map((pt) => `          <div class="svc-point">
+            <h3>${esc(pt.h3)}</h3>
+            <p>${esc(pt.p)}</p>
+          </div>`).join('\n');
+  const steps = s.steps.map((st) => `          <li class="svc-step">
+            <h3>${esc(st.h3)}</h3>
+            <p>${esc(st.p)}</p>
+          </li>`).join('\n');
+  const gallery = s.gallery.map((g) => `          ${figure(g)}`).join('\n');
+  const body = s.sections.map((x) => `        <h2 id="${x.id}">${esc(x.h2)}</h2>${x.html}`).join('\n\n');
+  const related = s.relatedPosts.map((slug) => card(bySlug[slug], 'h3')).join('\n');
+  const others = services.filter((o) => o.slug !== s.slug).map((o) => `          <a class="svc-card" href="${servicePath(o)}">
+            <strong>${esc(o.navLabel)}</strong>
+            <span>${esc(o.cardText)}</span>
+          </a>`).join('\n');
+
+  const pano = s.pano ? `
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="section-header-center">
+          <p class="section-kicker">Try it</p>
+          <h2 class="section-h2 fx-heading">${esc(s.pano.h2)}</h2>
+          <p class="section-p">${esc(s.pano.p)}</p>
+        </div>
+        <div class="pano-frame svc-pano">
+          <canvas class="pano-canvas" data-panorama="${esc(s.pano.src)}" data-touch-pan role="img" aria-label="${esc(s.pano.alt)}"></canvas>
+          <div class="pano-hint" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6L4 12l5 6M15 6l5 6-5 6"/></svg>
+            <span>Drag to look around</span>
+          </div>
+        </div>
+      </div>
+    </section>
+` : '';
+
+  const main = `  <main>
+    <section class="section svc-hero fx-hero">
+      <div class="inner svc-hero-grid">
+        <div class="fx-tilt">
+          <nav class="crumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a><span aria-hidden="true">/</span><a href="/#services">Services</a><span aria-hidden="true">/</span><span>${esc(s.navLabel)}</span>
+          </nav>
+          <p class="section-kicker">${esc(s.kicker)}</p>
+          <h1 class="location-h1 fx-hero-title fx-pending">${s.h1Html}</h1>
+          <p class="location-lede">${esc(s.dek)}</p>
+          <div class="svc-hero-actions">
+            <a href="${esc(wa(s.cta.wa))}" target="_blank" rel="noopener" class="btn-enter-tour magnetic">
+              <span>${esc(s.cta.button)}</span>
+              ${ARROW}
+            </a>
+            <a href="/#portfolio" class="btn-card">See live tours</a>
+          </div>
+        </div>
+        <figure class="svc-hero-media fx-figure">
+          <img class="fx-img" src="${esc(s.heroImage)}" alt="${esc(s.heroAlt)}" width="1200" height="900" fetchpriority="high">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="section-header-center">
+          <p class="section-kicker">Why it works</p>
+          <h2 class="section-h2 fx-heading">${esc(s.pointsTitle)}</h2>
+        </div>
+        <div class="svc-points">
+${points}
+        </div>
+      </div>
+    </section>
+
+${band(s.bandWords)}
+${pano}
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="section-header-center">
+          <p class="section-kicker">How it works</p>
+          <h2 class="section-h2 fx-heading">${esc(s.stepsTitle)}</h2>
+        </div>
+        <ol class="svc-steps">
+${steps}
+        </ol>
+      </div>
+    </section>
+
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="section-header-center">
+          <p class="section-kicker">In the frame</p>
+          <h2 class="section-h2 fx-heading">${esc(s.galleryTitle)}</h2>
+        </div>
+        <div class="svc-gallery">
+${gallery}
+        </div>
+      </div>
+    </section>
+
+    <section class="section svc-section">
+      <div class="inner post-inner">
+        <div class="post-body">
+${body}
+        </div>
+      </div>
+    </section>
+
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="section-header-center">
+          <p class="section-kicker">Read more</p>
+          <h2 class="section-h2 fx-heading">Guides for your industry</h2>
+        </div>
+        <div class="blog-grid blog-grid-compact">
+${related}
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section svc-section svc-faq">
+      <div class="inner post-inner">
+        <div class="post-faq">
+          <h2>Frequently asked questions</h2>
+          <div class="faq-list">
+${faqBlock(s.faqs)}
+          </div>
+        </div>
+        <aside class="post-cta">
+          <div>
+            <h2>${esc(s.cta.title)}</h2>
+            <p>${esc(s.cta.text)}</p>
+          </div>
+          <a href="${esc(wa(s.cta.wa))}" target="_blank" rel="noopener" class="btn-enter-tour magnetic">
+            <span>Get a quote on WhatsApp</span>
+            ${ARROW}
+          </a>
+        </aside>
+        <div class="blog-grid blog-grid-compact">
+${others}
+        </div>
+      </div>
+    </section>
+
+${finalCta}
+  </main>`;
+
+  return page({ title: s.title, description: s.description, path, image: s.heroImage, imageAlt: s.heroAlt, ogType: 'website', graph, main, withThree: Boolean(s.pano) });
+}
+
+// ── Sitemap ───────────────────────────────────────────────────────────────
 function renderSitemap() {
   const entries = [
     { loc: '/', lastmod: BUILD_DATE, changefreq: 'weekly', priority: '1.0', images: [
       ['/assets/img/stitched-360-streamphony.webp', 'Stitched 360° panorama of Streamphony Live, Bengaluru — Thamco360'],
       ['/assets/img/raw-capture-streamphony.webp', 'Raw dual-fisheye 360° capture before stitching — Thamco360'],
     ] },
-    { loc: '/360-virtual-tour-indiranagar-bengaluru/', lastmod: '2026-09-15', changefreq: 'monthly', priority: '0.9' },
+    ...services.map((s) => ({ loc: servicePath(s), lastmod: BUILD_DATE, changefreq: 'monthly', priority: '0.9' })),
+    { loc: '/360-virtual-tour-indiranagar-bengaluru/', lastmod: BUILD_DATE, changefreq: 'monthly', priority: '0.9' },
     { loc: '/blog/', lastmod: BUILD_DATE, changefreq: 'weekly', priority: '0.8' },
     ...posts.map((p) => ({ loc: `/blog/${p.slug}/`, lastmod: BUILD_DATE, changefreq: 'monthly', priority: '0.7' })),
     { loc: '/about.html', lastmod: '2026-09-09', changefreq: 'monthly', priority: '0.6' },
@@ -460,4 +673,5 @@ function write(rel, content) {
 
 for (const p of posts) write(`blog/${p.slug}/index.html`, renderPost(p));
 write('blog/index.html', renderIndex());
+for (const s of services) write(`services/${s.slug}/index.html`, renderService(s));
 write('sitemap.xml', renderSitemap());

@@ -130,7 +130,7 @@ export const posts = [
     description: 'How resorts and hotels in and around Bangalore — Nandi Hills, Devanahalli, Kanakapura Road and the city — use 360° virtual tours to win direct bookings, offsites and weddings.',
     dek: 'Weekend travellers, corporate offsite planners and wedding families all shortlist resorts online. A 360° tour lets them walk your rooms, lawns and halls before they pick up the phone.',
     image: U('photo-1571003123894-1f0594d2b5d9'),
-    imageAlt: 'Representative photo of a resort pool and cottages',
+    imageAlt: 'Representative photo of an infinity pool with cabanas at sunset',
     caption: 'Representative image. Resort tours typically cover room categories, pool, lawns, dining and event spaces.',
     keywords: ['resort virtual tour Bangalore', 'hotel 360 tour Bangalore', 'resorts near Bangalore virtual tour', 'hotel Google Street View photography'],
     takeaways: [
@@ -207,7 +207,7 @@ export const posts = [
     description: 'How co-working operators and office landlords in Koramangala, HSR Layout, Whitefield and Outer Ring Road use 360° virtual tours to fill desks and lease space faster.',
     dek: 'Founders, remote teams and relocating companies shortlist workspaces online — often from another city. A 360° tour lets them check desks, cabins and meeting rooms before booking a visit.',
     image: U('photo-1497366216548-37526070297c'),
-    imageAlt: 'Representative photo of a modern open-plan office',
+    imageAlt: 'Representative photo of a modern office corridor with glass-walled rooms',
     caption: 'Representative image. Workspace tours typically cover hot desks, cabins, meeting rooms, pantry and reception.',
     keywords: ['coworking space virtual tour Bangalore', 'office space 360 tour Bangalore', 'virtual tour for office leasing', 'coworking Google Business Profile'],
     takeaways: [
@@ -278,7 +278,7 @@ export const posts = [
     description: 'How Bangalore restaurants, cafés and pubs use 360° virtual tours on Google Maps to show ambience, seating and private-dining space — and turn searches into table bookings.',
     dek: 'In Indiranagar, Koramangala or Church Street, diners pick where to go from Google Maps. A 360° tour shows them the ambience and seating before they decide.',
     image: U('photo-1517248135467-4c7edcad34c4'),
-    imageAlt: 'Representative photo of a restaurant dining room',
+    imageAlt: 'Representative photo of a modern restaurant interior with set tables',
     caption: 'Representative image. See our live café and live-music venue tours in the Thamco360 portfolio.',
     keywords: ['restaurant virtual tour Bangalore', 'cafe 360 tour Google Maps', 'pub virtual tour Bangalore', 'restaurant Google Business Profile photos'],
     takeaways: [
@@ -347,7 +347,7 @@ export const posts = [
     description: 'How hospitals, diagnostic centres and dental clinics in Bangalore use 360° virtual tours to reassure patients, show hygiene and help people find their way — with patient privacy protected.',
     dek: 'A patient walking into an unfamiliar clinic is often anxious. Letting them see the reception, waiting area and treatment rooms first builds confidence before the appointment.',
     image: U('photo-1588776814546-1ffcf47267a5'),
-    imageAlt: 'Representative photo of a modern dental treatment room',
+    imageAlt: 'Representative photo of a dentist examining a dental X-ray',
     caption: 'Representative image. Thamco360 has published tours for an oncology institute and a dental clinic in Bengaluru.',
     keywords: ['hospital virtual tour Bangalore', 'dental clinic 360 tour Bangalore', 'clinic Google Business Profile tour', 'healthcare virtual tour'],
     takeaways: [
@@ -417,7 +417,7 @@ export const posts = [
     description: 'How builders, brokers and property owners in Bangalore use 360° virtual tours of model flats, villas and rentals to qualify buyers, reach NRI clients and cut wasted site visits.',
     dek: 'From model flats on Sarjapur Road to villas in North Bangalore and rentals in Whitefield, buyers want to walk a home before they travel to see it.',
     image: U('photo-1600585154340-be6161a56a0c'),
-    imageAlt: 'Representative photo of a modern living room',
+    imageAlt: 'Representative photo of a modern two-storey house exterior at dusk',
     caption: 'Representative image. Property tours cover every room, balconies, and shared amenities.',
     keywords: ['real estate virtual tour Bangalore', 'apartment 360 tour Bangalore', 'model flat virtual tour', 'NRI property virtual tour Bangalore'],
     takeaways: [
@@ -487,7 +487,7 @@ export const posts = [
     description: 'How schools, pre-schools and colleges in Bangalore use 360° virtual campus tours to support admissions, show facilities to parents and reach out-of-state students.',
     dek: 'Parents compare schools long before admission season, and college applicants come to Bangalore from across India. A virtual campus tour lets them explore classrooms, labs and grounds from home.',
     image: U('photo-1580582932707-520aed937b7b'),
-    imageAlt: 'Representative photo of a school building',
+    imageAlt: 'Representative photo of an empty classroom',
     caption: 'Representative image. Campus tours typically cover classrooms, labs, library, sports facilities and hostels.',
     keywords: ['school virtual tour Bangalore', 'college campus 360 tour', 'virtual campus tour India', 'preschool virtual tour Bangalore'],
     takeaways: [
@@ -554,7 +554,7 @@ export const posts = [
     description: 'How Bangalore kalyana mantapas, banquet halls, convention centres and farmhouse venues use 360° virtual tours to help couples, families and planners shortlist faster.',
     dek: 'Couples, families abroad and event planners all want to see the hall before they book. A 360° tour shows the stage, dining area and guest capacity in one link.',
     image: U('photo-1519167758481-83f550bb49b3'),
-    imageAlt: 'Representative photo of a decorated banquet hall',
+    imageAlt: 'Representative photo of a banquet hall with round tables and chandeliers',
     caption: 'Representative image. Venue tours usually cover the main hall, stage, dining, rooms and parking.',
     keywords: ['wedding venue virtual tour Bangalore', 'banquet hall 360 tour', 'kalyana mantapa virtual tour', 'event venue Google Maps tour'],
     takeaways: [
@@ -618,7 +618,7 @@ export const posts = [
     description: 'How Bangalore gyms, salons, spas, retail stores and car or furniture showrooms use 360° virtual tours on Google Maps to bring in walk-ins and build trust.',
     dek: 'For gyms, salons and showrooms, the space is part of the product. A 360° tour on Google Maps lets customers check equipment, hygiene and range before they walk in.',
     image: U('photo-1534438327276-14e5300c3a48'),
-    imageAlt: 'Representative photo of a gym floor with equipment',
+    imageAlt: 'Representative photo of a gym with dumbbell racks',
     caption: 'Representative image. Retail and wellness tours cover the floor, equipment, stations and display areas.',
     keywords: ['gym virtual tour Bangalore', 'salon 360 tour Google Maps', 'showroom virtual tour Bangalore', 'retail store virtual tour'],
     takeaways: [

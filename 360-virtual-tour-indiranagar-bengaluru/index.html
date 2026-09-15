@@ -159,17 +159,12 @@
 
   <canvas id="shaderCanvas" class="shader-canvas"></canvas>
 
-  <!-- =====================================================================
-       HEADER — keyword-rich brand line, services + locations dropdowns.
-       Only pages that actually exist are linked: a dropdown full of 404s
-       costs crawl budget and trust, so services point at the homepage
-       sections that describe them until they get pages of their own.
-  ====================================================================== -->
+  <!-- Header: the nav is identical to the homepage's six links by owner
+       decision — nothing is added to the nav bar for this page. -->
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a href="/" class="logo">
-        <img src="/assets/logo.webp" alt="Thamco360 — 360° Virtual Tours Bengaluru" class="logo-mark" width="150" height="97">
-        <span class="visually-hidden">Thamco360 — 360° Tours Bengaluru</span>
+        <img src="/assets/logo.webp" alt="Thamco360 — 360° Photography" class="logo-mark" width="150" height="97">
       </a>
 
       <button class="nav-toggle" id="navToggle" type="button"
@@ -179,30 +174,18 @@
         <span class="nav-toggle-bar"></span>
       </button>
 
-      <nav class="main-nav" id="mainNav" aria-label="Main">
-        <a href="/" class="nav-a">Home</a>
-        <details class="nav-drop">
-          <summary class="nav-a">Services</summary>
-          <div class="nav-drop-menu">
-            <a href="/#services">360° Virtual Tours</a>
-            <a href="/#services">Google Street View Photography</a>
-            <a href="/#services">Web 3D Walkthroughs</a>
-          </div>
-        </details>
-        <details class="nav-drop">
-          <summary class="nav-a">Locations</summary>
-          <div class="nav-drop-menu">
-            <a href="/360-virtual-tour-indiranagar-bengaluru/" aria-current="page">Indiranagar</a>
-          </div>
-        </details>
-        <a href="/blog/" class="nav-a">Blog</a>
+      <nav class="main-nav" id="mainNav">
         <a href="/#portfolio" class="nav-a">Portfolio</a>
-        <a href="#faq" class="nav-a">FAQ</a>
+        <a href="/#process" class="nav-a">Process</a>
+        <a href="/#real-estate" class="nav-a">Services</a>
+        <a href="/#faq" class="nav-a">FAQ</a>
+        <a href="/about.html" class="nav-a">About</a>
+        <a href="/#contact" class="nav-a">Contact</a>
       </nav>
 
       <div class="header-actions">
-        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%27d%20like%20to%20book%20a%20360%C2%B0%20shoot%20in%20Indiranagar." target="_blank" rel="noopener" class="btn-pill magnetic">
-          <span>Book Shoot (+91 70901 11360)</span>
+        <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%20want%20to%20book%20my%20360%C2%B0%20Virtual%20Tour." target="_blank" class="btn-pill magnetic">
+          <span>Book Your 360° Virtual Tour</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
@@ -211,13 +194,13 @@
 
   <main>
     <!-- HERO -->
-    <section class="section location-hero">
-      <div class="inner">
+    <section class="section location-hero fx-hero">
+      <div class="inner fx-tilt">
         <nav class="crumbs" aria-label="Breadcrumb">
           <a href="/">Home</a><span aria-hidden="true">/</span><span>Indiranagar</span>
         </nav>
         <p class="section-kicker">Indiranagar · Bengaluru</p>
-        <h1 class="location-h1">360° Virtual Tours &amp; Google Street View Photography in <span class="gradient-text">Indiranagar, Bengaluru</span></h1>
+        <h1 class="location-h1 fx-hero-title fx-pending">360° Virtual Tours &amp; Google Street View Photography in <span class="gradient-text">Indiranagar, Bengaluru</span></h1>
         <p class="location-lede">Transform your restaurant, retail boutique, clinic, or commercial property into an immersive 8K HDR 3D experience. Let customers walk inside your Indiranagar space directly from Google Search and Google Maps.</p>
         <a href="https://wa.me/917090111360?text=Hi%20Thamco360!%20I%27d%20like%20to%20schedule%20a%20360%C2%B0%20scan%20in%20Indiranagar." target="_blank" rel="noopener" class="btn-enter-tour magnetic location-cta">
           <span>Schedule Scan in Indiranagar</span>
@@ -226,12 +209,40 @@
       </div>
     </section>
 
+    <!-- SPACES WE CAPTURE — images with 3D scroll reveal -->
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="section-header-center">
+          <p class="section-kicker">Cafés · Retail · Clinics</p>
+          <h2 class="section-h2 fx-heading">Indiranagar Spaces We Bring Online</h2>
+        </div>
+        <div class="svc-gallery">
+          <figure class="fx-figure">
+            <img class="fx-img" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=1000&amp;q=80" alt="Representative photo of a modern restaurant interior with set tables" width="1000" height="1250" loading="lazy">
+            <figcaption>Representative image — restaurants, cafés and pubs on 100 Feet Road and 12th Main.</figcaption>
+          </figure>
+          <figure class="fx-figure">
+            <img class="fx-img" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&amp;fit=crop&amp;w=1000&amp;q=80" alt="Representative photo of a salon with styling chairs and mirrors" width="1000" height="1250" loading="lazy">
+            <figcaption>Representative image — salons, boutiques and retail stores.</figcaption>
+          </figure>
+          <figure class="fx-figure">
+            <img class="fx-img" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&amp;fit=crop&amp;w=1000&amp;q=80" alt="Representative photo of a hospital reception desk" width="1000" height="1250" loading="lazy">
+            <figcaption>Representative image — clinics and healthcare practices.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="fx-band" aria-hidden="true">
+      <div class="fx-band-track"><span class="fx-band-word ">Cafés</span><span class="fx-band-word is-italic">Retail</span><span class="fx-band-word is-outline">Clinics</span><span class="fx-band-word ">Cafés</span><span class="fx-band-word is-italic">Retail</span><span class="fx-band-word is-outline">Clinics</span></div>
+    </section>
+
     <!-- DATA TABLE FOR GENERATIVE ENGINE OPTIMIZATION (GEO) -->
     <section class="section geo-comparison-table">
       <div class="inner">
         <div class="section-header-center">
           <p class="section-kicker reveal-up">Side by Side</p>
-          <h2 class="section-h2 reveal-up">Comparing Thamco360 3D Scans vs Standard Photography</h2>
+          <h2 class="section-h2 fx-heading">Comparing Thamco360 3D Scans vs Standard Photography</h2>
           <p class="section-p reveal-up">Generative AI and search engines evaluate properties based on rich media interactive data.</p>
         </div>
 
@@ -278,7 +289,7 @@
       <div class="inner">
         <div class="section-header-center">
           <p class="section-kicker reveal-up">Good to Know</p>
-          <h2 class="section-h2 reveal-up">Frequently Asked Questions — Indiranagar Virtual Tours</h2>
+          <h2 class="section-h2 fx-heading">Frequently Asked Questions — Indiranagar Virtual Tours</h2>
         </div>
 
         <div class="faq-list">
@@ -305,13 +316,37 @@
       <div class="inner">
         <div class="section-header-center">
           <p class="section-kicker reveal-up">Where We Shoot</p>
-          <h2 class="section-h2 reveal-up">Serving Commercial Spaces Across Indiranagar</h2>
+          <h2 class="section-h2 fx-heading">Serving Commercial Spaces Across Indiranagar</h2>
         </div>
         <div class="portfolio-embed reveal-up">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15552.126487938385!2d77.63312955!3d12.9783692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae16a7242d2039%3A0xf832e3ed84b90b7e!2sIndiranagar%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
             width="100%" height="350" style="border:0;" allowfullscreen loading="lazy"
             referrerpolicy="no-referrer-when-downgrade" title="Map of Indiranagar, Bengaluru — Thamco360 service area"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELATED SERVICES & GUIDES — internal links (not in the nav bar) -->
+    <section class="section svc-section">
+      <div class="inner">
+        <div class="section-header-center">
+          <p class="section-kicker">Explore</p>
+          <h2 class="section-h2 fx-heading">Services &amp; Guides for Indiranagar Businesses</h2>
+        </div>
+        <div class="blog-grid blog-grid-compact">
+          <a class="svc-card" href="/services/360-virtual-tours-bengaluru/">
+            <strong>360° Virtual Tours</strong>
+            <span>On-site capture stitched into a walkable tour for Google and your website.</span>
+          </a>
+          <a class="svc-card" href="/services/google-street-view-photography-bengaluru/">
+            <strong>Google Street View Photography</strong>
+            <span>Publish 360° imagery of your premises to your Google Business Profile.</span>
+          </a>
+          <a class="svc-card" href="/blog/360-virtual-tour-restaurants-cafes-bangalore/">
+            <strong>Guide: Restaurants &amp; Cafés</strong>
+            <span>How Bangalore outlets use 360° tours on Google Maps to win table bookings.</span>
+          </a>
         </div>
       </div>
     </section>
@@ -343,13 +378,15 @@
       <div class="footer-links">
         <div class="fl-col">
           <h5>Services</h5>
-          <a href="/#services">360 Virtual Tour</a>
-          <a href="/#services">Google Street View Photography</a>
-          <a href="/#services">Web 3D Development — Immersive</a>
+          <a href="/services/360-virtual-tours-bengaluru/">360° Virtual Tours</a>
+          <a href="/services/google-street-view-photography-bengaluru/">Google Street View Photography</a>
+          <a href="/services/3d-websites-web-walkthroughs-bengaluru/">Websites &amp; Web 3D</a>
         </div>
         <div class="fl-col">
-          <h5>Locations</h5>
-          <a href="/360-virtual-tour-indiranagar-bengaluru/">Indiranagar</a>
+          <h5>Guides</h5>
+          <a href="/blog/google-business-profile-360-virtual-tour-benefits/">Google Business Profile 360° tours</a>
+          <a href="/blog/360-virtual-tour-restaurants-cafes-bangalore/">Restaurants &amp; cafés</a>
+          <a href="/blog/">All guides</a>
         </div>
         <div class="fl-col">
           <h5>Company</h5>
@@ -380,5 +417,6 @@
 </script>
   <script defer src="/clarity.js"></script>
   <script defer src="/app.js"></script>
+  <script defer src="/effects.js"></script>
 </body>
 </html>
