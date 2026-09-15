@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/360-virtual-tour-indiranagar-bengaluru",
+      "destination": "/360-virtual-tour-indiranagar-bengaluru/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallax();
   initJourney();
   initMobileNav();
+  initEmbedShields();
 
   // ScrollTrigger caches pin start/end pixel ranges at creation time.
   // This page has several lazy-loaded images (industries grid, property
@@ -1043,6 +1044,54 @@ function initJourney() {
   }
 }
 
+
+/* ── 17. Embed scroll shields ──
+   A Google Street View / Maps / Panoee iframe is a separate document: once the
+   pointer is over it, the wheel and touch-swipe go to the tour (which uses
+   them to zoom and pan) and never reach this page. With the portfolio stacked
+   full-width, the tours cover most of the screen — so in Chrome the page
+   simply stopped scrolling as soon as a tour slid under the cursor, and on a
+   phone a swipe over a tour panned the tour instead of the page.
+
+   Each embed gets an overlay that lets scrolling pass straight through to the
+   page. Clicking or tapping it hands control to the tour (.embed-live); moving
+   the mouse out, tapping elsewhere, or scrolling the tour off screen gives
+   control back. The CSS pairs this with pointer-events:none on iframes while
+   Lenis is smoothing, so there is no gap even before this runs. */
+function initEmbedShields() {
+  document.querySelectorAll('.portfolio-embed').forEach((embed) => {
+    const frame = embed.querySelector('iframe');
+    if (!frame || embed.querySelector('.embed-shield')) return;
+
+    const holder = document.createElement('div');
+    holder.className = 'embed-frame';
+    frame.parentNode.insertBefore(holder, frame);
+    holder.appendChild(frame);
+
+    const shield = document.createElement('button');
+    shield.type = 'button';
+    shield.className = 'embed-shield';
+    shield.setAttribute('aria-label', `Interact with ${frame.title || 'embedded tour'}`);
+    shield.innerHTML = `<span class="embed-shield-pill">${IS_TOUCH ? 'Tap' : 'Click'} to explore</span>`;
+    holder.appendChild(shield);
+
+    const setLive = (live) => embed.classList.toggle('embed-live', live);
+
+    shield.addEventListener('click', () => setLive(true));
+    embed.addEventListener('mouseleave', () => setLive(false));
+
+    new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) setLive(false);
+    }, { threshold: 0.15 }).observe(embed);
+  });
+
+  // Tap or click anywhere outside a live tour hands scrolling back.
+  document.addEventListener('pointerdown', (e) => {
+    document.querySelectorAll('.portfolio-embed.embed-live').forEach((embed) => {
+      if (!embed.contains(e.target)) embed.classList.remove('embed-live');
+    });
+  });
+}
 
 /* ── 16. Mobile Navigation ──
    Below 768px the nav was display:none with nothing in its place, so a phone

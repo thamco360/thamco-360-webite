@@ -35,6 +35,13 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Horizontal overflow is cut on <html> only. Having overflow-x:hidden on BOTH
+   html and body made <body> a scroll container of its own (a non-visible
+   overflow on one axis forces the other to auto). Chrome then had two nested
+   scrollers competing for the wheel, Lenis drove the wrong one, and every
+   position:sticky inside body stopped sticking. `clip` hides the overflow
+   without creating a scroll container at all; `hidden` stays as the fallback
+   for browsers that predate clip (Safari < 16). */
 html {
   font-family: var(--font-body);
   background: var(--bg);
@@ -42,9 +49,34 @@ html {
   overflow-x: hidden;
 }
 
+@supports (overflow: clip) {
+  html { overflow-x: clip; }
+}
+
 body {
-  overflow-x: hidden;
   line-height: 1.6;
+  background: var(--bg);
+  min-height: 100%;
+}
+
+/* Lenis' own required stylesheet (lenis/dist/lenis.css). Without it Lenis
+   fights CSS smooth-scroll in Chromium, and a stopped instance (menu open)
+   never releases the page on some browsers. */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+.lenis.lenis-smooth .embed-live iframe { pointer-events: auto; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ── Shader Background ─────────────────────────────────────── */
@@ -681,36 +713,217 @@ body {
   }
 
 /* ── PORTFOLIO ─────────────────────────────────────────────── */
+/* One tour per row, full rail width, stacked straight down. The old two-up
+   grid squeezed each Street View to ~460px wide, where Google's own chrome
+   (compass, zoom, level picker, copyright bar) ate a third of the frame. */
 .portfolio-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-  max-width: 1240px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 5vw, 56px);
+  max-width: var(--rail);
   margin: 0 auto;
 }
-.portfolio-grid .portfolio-embed:first-child { grid-column: 1 / -1; }
 
 .portfolio-embed {
-  margin: 0 auto;
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
   border: 1px solid var(--border);
+  background: #17100a;
+  /* Keeps the rounded clip on Safari while the iframe composites. */
+  isolation: isolate;
 }
-.portfolio-embed iframe { display: block; width: 100%; }
+
+.embed-frame { position: relative; }
+
+/* 16:9 window capped to the viewport, so a full-width tour never becomes
+   taller than the screen it is viewed on. The height attribute in the markup
+   stays as the no-CSS fallback. */
+.portfolio-embed iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  min-height: 300px;
+  max-height: 78vh;
+  max-height: 78svh;
+  border: 0;
+}
 
 .portfolio-name {
-  padding: 18px 20px;
+  padding: 18px 24px;
   background: var(--surface);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text);
   border-bottom: 1px solid var(--border);
 }
 
-@media (max-width: 900px) {
-  .portfolio-grid { grid-template-columns: 1fr; }
+/* Scroll shield (initEmbedShields in app.js): transparent, so the tour is
+   fully visible, but it owns the wheel/swipe until someone opts in. */
+.embed-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 0 22px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  touch-action: pan-y;
+}
+
+.embed-shield-pill {
+  padding: 9px 18px;
+  border-radius: 100px;
+  background: rgba(23, 16, 10, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(245, 239, 224, 0.16);
+  color: rgba(245, 239, 224, 0.92);
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: opacity 0.3s var(--ease);
+}
+
+.embed-shield:hover .embed-shield-pill,
+.embed-shield:focus-visible .embed-shield-pill { opacity: 1; background: rgba(23, 16, 10, 0.88); }
+
+.embed-live .embed-shield { display: none; }
+
+@media (max-width: 768px) {
+  .portfolio-embed { border-radius: 14px; }
+  /* A phone in portrait is taller than wide; 4:3 shows far more of the room
+     than a letterboxed 16:9 strip. */
+  .portfolio-embed iframe { aspect-ratio: 4 / 3; min-height: 260px; }
+  .portfolio-name { padding: 14px 18px; font-size: 1.02rem; }
+  .embed-shield { padding-bottom: 14px; }
+}
+
+/* ── LOCATION PAGES (e.g. /360-virtual-tour-indiranagar-bengaluru/) ── */
+.location-hero { padding: 160px 0 56px; }
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.crumbs a { color: var(--accent-ink); text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+
+.location-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 5vw, 4.2rem);
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.012em;
+  max-width: 20ch;
+  margin: 4px 0 22px;
+}
+.location-h1 .gradient-text {
+  font-size: inherit;
+  display: inline;
+  background: linear-gradient(135deg, #a97a1c 0%, #c9962f 50%, #8a6212 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.location-lede {
+  font-size: 1.14rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  max-width: 62ch;
+  margin-bottom: 30px;
+}
+
+.location-cta { text-decoration: none; }
+
+.geo-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 20px 60px rgba(36, 28, 18, 0.1);
+}
+
+.geo-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.geo-table th,
+.geo-table td {
+  padding: 18px 22px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.geo-table thead th {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  background: rgba(201, 150, 47, 0.08);
+}
+.geo-table thead th:nth-child(2) { color: #8a6212; }
+.geo-table tbody th { font-weight: 700; color: var(--text); }
+.geo-table td { color: var(--text-muted); }
+.geo-table tbody td:nth-child(2) { color: var(--text); font-weight: 600; }
+.geo-table tbody tr:last-child th,
+.geo-table tbody tr:last-child td { border-bottom: 0; }
+
+.faq-item p strong { color: var(--text); }
+
+/* Header dropdowns on the location page. <details> so they open with no JS
+   and work with keyboard, touch and screen readers out of the box. */
+.nav-drop { position: relative; }
+.nav-drop > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.nav-drop > summary::-webkit-details-marker { display: none; }
+.nav-drop > summary::after { content: '▾'; font-size: 0.7em; opacity: 0.7; }
+
+.nav-drop-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: -14px;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background: rgba(250, 246, 238, 0.98);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(36, 28, 18, 0.16);
+  z-index: 5;
+}
+.nav-drop-menu a {
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.nav-drop-menu a:hover,
+.nav-drop-menu a[aria-current="page"] { background: rgba(201, 150, 47, 0.12); color: var(--text); }
+
+@media (max-width: 768px) {
+  .location-hero { padding: 120px 0 36px; }
+  .location-lede { font-size: 1.02rem; }
+  .nav-drop { border-bottom: 1px solid rgba(36, 28, 18, 0.08); }
+  .nav-drop > summary { padding: 15px 0; font-size: 1.02rem; width: 100%; }
+  .nav-drop-menu { position: static; min-width: 0; padding: 0 0 10px 12px; background: none; border: 0; box-shadow: none; }
 }
 
 /* ── SERVICE TECH TAGS (Services page industry pills) ──────── */
