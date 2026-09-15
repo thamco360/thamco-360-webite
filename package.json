@@ -2,6 +2,6 @@
   "name": "thamco-360-webite",
   "private": true,
   "dependencies": {
-    "nodemailer": "^6.9.14"
+    "nodemailer": "^10.0.10"
   }
 }
